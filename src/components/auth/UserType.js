@@ -97,27 +97,26 @@ const UserType = () => {
             Otros
           </Button>
         </Stack>
-        <div>
+
+        <Typography
+          variant="subtitle1"
+          style={{ fontSize: "1rem", fontWeight: "lighter" }}
+        >
+          ¿Usted es administrador? {"  "}
           <Typography
-            variant="subtitle1"
-            style={{ fontSize: "1rem", fontWeight: "lighter" }}
+            sx={{
+              textDecoration: "underline",
+              "&:hover": {
+                cursor: "pointer",
+                color: "#800040",
+              },
+            }}
+            display="inline"
+            onClick={() => setPage("admin")}
           >
-            ¿Usted es administrador? {"  "}
-            <Typography
-              sx={{
-                textDecoration: "underline",
-                "&:hover": {
-                  cursor: "pointer",
-                  color: "#800040",
-                },
-              }}
-              display="inline"
-              onClick={() => setPage("admin")}
-            >
-              Entre aqui
-            </Typography>
+            Entre aqui
           </Typography>
-        </div>
+        </Typography>
       </Box>
     </div>
   );
