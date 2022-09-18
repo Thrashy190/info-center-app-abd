@@ -22,7 +22,6 @@ const UserType = () => {
       style={{
         display: "flex",
         justifyContent: "center",
-        alignContent: "center",
         width: "100%",
         minHeight: "100vh",
       }}
@@ -34,7 +33,6 @@ const UserType = () => {
           width: "75%",
           boxShadow: 4,
           borderRadius: "16px",
-          justifyContent: "center",
           py: "3em",
           my: "3em",
         }}
@@ -43,7 +41,7 @@ const UserType = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-around",
+            justifyContent: "center",
             alignItems: "center",
           }}
         >
@@ -54,7 +52,14 @@ const UserType = () => {
               width: "15%",
             }}
           ></img>
-          <div sx={{ display: "flex" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Typography style={{ fontSize: "1.8rem", fontWeight: "lighter" }}>
               Instituto Tecnologico de Saltillo
             </Typography>
@@ -97,26 +102,33 @@ const UserType = () => {
             Otros
           </Button>
         </Stack>
-
-        <Typography
-          variant="subtitle1"
-          style={{ fontSize: "1rem", fontWeight: "lighter" }}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          ¿Usted es administrador? {"  "}
           <Typography
-            sx={{
-              textDecoration: "underline",
-              "&:hover": {
-                cursor: "pointer",
-                color: "#800040",
-              },
-            }}
-            display="inline"
-            onClick={() => setPage("admin")}
+            variant="subtitle1"
+            style={{ fontSize: "1rem", fontWeight: "lighter" }}
           >
-            Entre aqui
+            ¿Usted es administrador? {"  "}
+            <Typography
+              sx={{
+                textDecoration: "underline",
+                "&:hover": {
+                  cursor: "pointer",
+                  color: "#800040",
+                },
+              }}
+              display="inline"
+              onClick={() => setPage("admin")}
+            >
+              Entre aqui
+            </Typography>
           </Typography>
-        </Typography>
+        </div>
       </Box>
     </div>
   );

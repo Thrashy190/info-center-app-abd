@@ -1,4 +1,10 @@
-import React, { Fragment, createContext, useState, useContext } from "react";
+import React, {
+  Fragment,
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+} from "react";
 import Notification from "../helpers/Notification";
 import firebase from "../utils/firebase";
 
@@ -14,7 +20,7 @@ const UserProvider = ({ children }) => {
     type: "",
   });
 
-  function signUpWithEmailPasswordStudent(email, password) {
+  const signUpWithEmailPassword = (email, password, data, type) => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -25,20 +31,73 @@ const UserProvider = ({ children }) => {
           type: "success",
         });
         setCurrentUser(userCredential.user.uid);
-        // ...
       })
       .catch((error) => {
         setNotify({
           isOpen: true,
-          message: "Hubo un error intente nuevamente en otro momento",
+          message: "Hubo un error al crear usuario",
           type: "error",
         });
-        // ..
       });
-    // [END auth_signup_password]
-  }
+  };
 
-  const values = { currentUser, signUpWithEmailPasswordStudent };
+  const login = (email, password, type) => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        setNotify({
+          isOpen: true,
+          message: "Se inicio sesion correctamente",
+          type: "success",
+        });
+      })
+      .catch((error) => {
+        // setNotify({
+        //   isOpen: true,
+        //   message: "Hubo un error al iniciar sesión",
+        //   type: "error",
+        // });
+      });
+  };
+
+  // const logout = () => {
+  //   firebase
+  //     .auth()
+  //     .signOut()
+  //     .then(() => {
+  //       setCurrentUser(null);
+  //       setNotify({
+  //         isOpen: true,
+  //         message: "Sesión terminada correctamente",
+  //         type: "success",
+  //       });
+  //       logOutUser();
+  //     })
+  //     .catch(() => {
+  //       setNotify({
+  //         isOpen: true,
+  //         message: "Error al momento de cerrar sesión intentalo mas tarde",
+  //         type: "error",
+  //       });
+  //     });
+  // };
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        currentUser(user.uid);
+        // ...
+      } else {
+        // User is signed out
+        // ...
+      }
+    });
+  }, [currentUser]);
+
+  const values = { currentUser, signUpWithEmailPassword, login };
 
   return (
     <Fragment>

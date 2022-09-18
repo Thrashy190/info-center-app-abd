@@ -7,130 +7,35 @@ import Logo from "../../../assets/shared/its.png";
 import { useParams } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
-
-const StudentLogin = () => {
-  return (
-    <Stack
-      spacing={4}
-      sx={{ py: "2em" }}
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-      }}
-    >
-      <TextField
-        id="numControl"
-        label="Numero de control"
-        variant="outlined"
-        sx={{ width: "80%" }}
-      />
-      <TextField
-        id="password"
-        label="Contraseña"
-        variant="outlined"
-        sx={{ width: "80%", fontSize: "1.5rem" }}
-      />
-    </Stack>
-  );
-};
-
-const EmployeeLogin = () => {
-  return (
-    <Stack
-      spacing={4}
-      sx={{ py: "2em" }}
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-      }}
-    >
-      <TextField
-        id="numEmpleado"
-        label="Numero de empleado"
-        variant="outlined"
-        sx={{ width: "80%" }}
-      />
-      <TextField
-        id="password"
-        label="Contraseña"
-        variant="outlined"
-        sx={{ width: "80%", fontSize: "1.5rem" }}
-      />
-    </Stack>
-  );
-};
-
-const OtherLogin = () => {
-  return (
-    <Stack
-      spacing={4}
-      sx={{ py: "2em" }}
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-      }}
-    >
-      <TextField
-        id="email"
-        label="Correo electronico"
-        variant="outlined"
-        sx={{ width: "80%" }}
-      />
-      <TextField
-        id="password"
-        label="Contraseña"
-        variant="outlined"
-        sx={{ width: "80%", fontSize: "1.5rem" }}
-      />
-    </Stack>
-  );
-};
-
-const AdminLogin = () => {
-  return (
-    <Stack
-      spacing={4}
-      sx={{ py: "2em" }}
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-      }}
-    >
-      <TextField
-        id="email"
-        label="Correo electronico"
-        variant="outlined"
-        sx={{ width: "80%" }}
-      />
-      <TextField
-        id="password"
-        label="Contraseña"
-        variant="outlined"
-        sx={{ width: "80%", fontSize: "1.5rem" }}
-      />
-    </Stack>
-  );
-};
+import { useAuth } from "../../../context/UserProvider";
 
 const Login = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [pageLogin, setPageLogin] = useState(0);
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  };
 
   useEffect(() => {
     if (pageLogin) {
       navigate("/register/" + pageLogin);
     }
   }, [pageLogin, navigate]);
+
+  const logIn = () => {
+    console.log(loginData.email);
+    login(loginData.email, loginData.password);
+    navigate("/dashboard");
+  };
 
   return (
     <div
@@ -159,6 +64,7 @@ const Login = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <img
@@ -168,7 +74,14 @@ const Login = () => {
               width: "15%",
             }}
           ></img>
-          <div sx={{ display: "flex" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Typography style={{ fontSize: "1.8rem", fontWeight: "lighter" }}>
               Centro de información
             </Typography>
@@ -191,15 +104,39 @@ const Login = () => {
             </Typography>
           </div>
 
-          {id === "student" ? (
-            <StudentLogin />
-          ) : id === "employees" ? (
-            <EmployeeLogin />
-          ) : id === "other" ? (
-            <OtherLogin />
-          ) : id === "admin" ? (
-            <AdminLogin />
-          ) : null}
+          <Stack
+            spacing={4}
+            sx={{ py: "2em" }}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <TextField
+              id="email"
+              label="Email"
+              variant="outlined"
+              name="email"
+              type="email"
+              value={loginData.email}
+              onChange={(e) => {
+                handleChange(e);
+              }}
+              sx={{ width: "80%", fontSize: "1.5rem" }}
+            />
+            <TextField
+              id="password"
+              label="Contraseña"
+              variant="outlined"
+              name="Password"
+              type="password"
+              value={loginData.Password}
+              onChange={handleChange}
+              sx={{ width: "80%", fontSize: "1.5rem" }}
+            />
+          </Stack>
 
           {id !== "admin" ? (
             <div>
@@ -246,6 +183,7 @@ const Login = () => {
             <Button
               variant="contained"
               style={{ width: "20%", fontSize: "1rem" }}
+              onClick={logIn}
             >
               Entrar
             </Button>
