@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useAuth } from "../../../context/UserProvider";
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../context/UserProvider';
 
 //mui
-import Button from "@mui/material/Button";
-import Box from "@mui/system/Box";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
+import Button from '@mui/material/Button';
+import Box from '@mui/system/Box';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
 
 //assets
-import Logo from "../../../assets/shared/its.png";
+import Logo from '../../../assets/shared/its.png';
 
 //componentes
-import TextFieldRegister from "./RegisterTypes/TextFieldRegister";
+import TextFieldRegister from './RegisterTypes/TextFieldRegister';
 
 //Firebase
 import { addDoc, collection } from "firebase/firestore";
@@ -25,25 +25,25 @@ const Register = () => {
 
   const [baseData, setBaseData] = useState({
     type: id,
-    name: "",
-    lastNameFather: "",
-    lastNameMother: "",
-    phone: "",
-    email: "",
-    gender: "",
-    password: "",
-    repeatPassword: "",
+    name: '',
+    lastNameFather: '',
+    lastNameMother: '',
+    phone: '',
+    email: '',
+    gender: '',
+    password: '',
+    repeatPassword: '',
   });
 
   const [studentData, setStudentData] = useState({
-    numControl: "",
-    career: "",
-    semester: "",
+    numControl: '',
+    career: '',
+    semester: '',
   });
 
   const [employeeData, setEmployeeDatas] = useState({
-    numEmployee: "",
-    department: "",
+    numEmployee: '',
+    department: '',
   });
 
   const [errorValidation, setErrorValidation] = useState({
@@ -62,19 +62,19 @@ const Register = () => {
   });
 
   const [errorText, setErrorText] = useState({
-    name: "Solo pudes ingresar texto",
-    lastNameFather: "Solo pudes ingresar texto",
-    lastNameMother: "Solo pudes ingresar texto",
-    phone: "El telefono solo puede tener numeros",
-    email: "Correo incorrecto",
-    gender: "No puede estar vacio el campo",
-    password: "No puede estar vacio el campo",
-    repeatPassword: "No puede estar vacio el campo",
-    numControl: "",
-    career: "No puede estar vacio el campo",
-    semester: "No puede estar vacio el campo",
-    numEmployee: "",
-    department: "No puede estar vacio el campo",
+    name: 'Solo pudes ingresar texto',
+    lastNameFather: 'Solo pudes ingresar texto',
+    lastNameMother: 'Solo pudes ingresar texto',
+    phone: 'El telefono solo puede tener numeros',
+    email: 'Correo incorrecto',
+    gender: 'No puede estar vacio el campo',
+    password: 'No puede estar vacio el campo',
+    repeatPassword: 'No puede estar vacio el campo',
+    numControl: '',
+    career: 'No puede estar vacio el campo',
+    semester: 'No puede estar vacio el campo',
+    numEmployee: '',
+    department: 'No puede estar vacio el campo',
   });
 
   const handleError = (e, text, validation) => {
@@ -102,14 +102,14 @@ const Register = () => {
 
   useEffect(() => {
     if (pageRegister) {
-      navigate("/login/" + pageRegister);
+      navigate('/login/' + pageRegister);
     }
   }, [pageRegister, navigate]);
 
   const createUser = async () => {
     const email = baseData.email;
     const password = baseData.password;
-    if (id === "student") {
+    if (id === 'student') {
       console.log({ ...baseData, ...studentData });
       signUpWithEmailPassword(
         email,
@@ -149,63 +149,63 @@ const Register = () => {
   return (
     <div
       style={{
-        display: "flex",
-        justifyContent: "center",
-        alignContent: "center",
-        width: "100%",
-        minHeight: "100vh",
+        display: 'flex',
+        justifyContent: 'center',
+        alignContent: 'center',
+        width: '100%',
+        minHeight: '100vh',
       }}
     >
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: "75%",
-          boxShadow: 4,
-          borderRadius: "16px",
-          justifyContent: "center",
-          py: "3em",
-          my: "3em",
+          display: 'flex',
+          flexDirection: 'column',
+          width: '75%',
+          boxShadow: 2,
+          borderRadius: '16px',
+          justifyContent: 'center',
+          py: '3em',
+          my: '3em',
         }}
       >
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
           <img
             src={Logo}
             alt="Logo its"
             style={{
-              width: "15%",
+              width: '15%',
             }}
           ></img>
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
-            <Typography style={{ fontSize: "1.8rem", fontWeight: "lighter" }}>
+            <Typography style={{ fontSize: '1.8rem', fontWeight: 'lighter' }}>
               Centro de información
             </Typography>
             <Typography
               variant="h1"
-              style={{ fontSize: "2.5rem", fontWeight: "bold" }}
+              style={{ fontSize: '2.5rem', fontWeight: 'bold' }}
             >
               Registro de
-              {id === "student"
-                ? " Alumnos"
-                : id === "employees"
-                ? " Empleados"
-                : id === "other"
-                ? " Externos"
+              {id === 'student'
+                ? ' Alumnos'
+                : id === 'employees'
+                ? ' Empleados'
+                : id === 'other'
+                ? ' Externos'
                 : () => {
-                    navigate("*");
+                    navigate('*');
                   }}
             </Typography>
           </div>
@@ -226,15 +226,15 @@ const Register = () => {
           <div>
             <Typography
               variant="subtitle1"
-              style={{ fontSize: "1rem", fontWeight: "lighter" }}
+              style={{ fontSize: '1rem', fontWeight: 'lighter' }}
             >
-              ¿Ya tiene una cuenta?{"  "}
+              ¿Ya tiene una cuenta?{'  '}
               <Typography
                 sx={{
-                  textDecoration: "underline",
-                  "&:hover": {
-                    cursor: "pointer",
-                    color: "#800040",
+                  textDecoration: 'underline',
+                  '&:hover': {
+                    cursor: 'pointer',
+                    color: '#800040',
                   },
                 }}
                 display="inline"
@@ -247,12 +247,12 @@ const Register = () => {
           <Grid
             container
             spacing={3}
-            sx={{ py: "2em" }}
+            sx={{ py: '2em' }}
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "90%",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '90%',
             }}
           >
             <Grid
@@ -260,15 +260,15 @@ const Register = () => {
               xs={10}
               md={4}
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
               <Button
                 size="large"
                 variant="outlined"
-                style={{ fontSize: "1rem" }}
+                style={{ fontSize: '1rem' }}
                 onClick={() => navigate(-1)}
               >
                 Volver
@@ -279,15 +279,15 @@ const Register = () => {
               xs={10}
               md={4}
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
               <Button
                 size="large"
                 variant="contained"
-                style={{ fontSize: "1rem" }}
+                style={{ fontSize: '1rem' }}
                 onClick={() => createUser()}
               >
                 Registrarme

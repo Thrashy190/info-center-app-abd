@@ -1,35 +1,35 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { BrowserRouter } from "react-router-dom";
-import UserProvider from "./context/UserProvider";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { BrowserRouter } from 'react-router-dom';
+import UserProvider from './context/UserProvider';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#800040",
+      main: '#800040',
     },
     secondary: {
-      main: "#3B3D78",
+      main: '#3B3D78',
     },
     neutral: {
-      main: "#ffffff",
-      contrastText: "#5D6BE4",
+      main: '#ffffff',
+      contrastText: '#5D6BE4',
     },
   },
 });
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <UserProvider>
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
+  <BrowserRouter>
+    <UserProvider>
+      <ThemeProvider theme={theme}>
         <React.StrictMode>
           <App />
         </React.StrictMode>
-      </BrowserRouter>
-    </ThemeProvider>
-  </UserProvider>
+      </ThemeProvider>
+    </UserProvider>
+  </BrowserRouter>
 );
