@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from 'react';
+//import Button from '@mui/material/Button';
+//import { useAuth } from '../../context/UserProvider';
+import SideBar from './components/SideBar';
 
-function DashBoard() {
+const DashBoard = () => {
+  //const { logout } = useAuth();
+
   return (
-    <div>
-      <div>
-        <h1>Este es el dashboard</h1>
-      </div>
-    </div>
+    <>
+      <SideBar></SideBar>
+    </>
   );
-}
+};
 
 export default DashBoard;

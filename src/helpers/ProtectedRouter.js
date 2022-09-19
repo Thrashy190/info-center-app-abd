@@ -1,24 +1,11 @@
-import React from "react";
-import { Redirect, Route } from "react-router-dom";
-import { useAuth } from "../context/UserProvider";
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../context/UserProvider';
 
-const ProtectedRoute = ({ component: Component, path, ...rest }) => {
+const ProtectedRoute = () => {
   const { currentUser } = useAuth();
-
-  return (
-    <Route
-      {...rest}
-      render={(props) => {
-        return currentUser ? (
-          <>
-            <Component {...props} {...rest} />
-          </>
-        ) : (
-          <Redirect to="/usertype" />
-        );
-      }}
-    ></Route>
-  );
+  console.log(currentUser);
+  return currentUser ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default ProtectedRoute;
