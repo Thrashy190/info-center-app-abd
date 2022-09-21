@@ -1,7 +1,7 @@
 const regexEmail = "/^[a-zA-Z0-9]+@[a-zA-Z0-9]+.[A-Za-z]+$/";
-const regexNumber = "/^d+$/";
+//const regexNumber = "/^d+$/";
 const regexChar = "/^[a-zA-ZÀ-ÿ]+(s*[a-zA-ZÀ-ÿ]*)*[a-zA-ZÀ-ÿ]+$/";
-const regexAlphaNumeric = "/^[0-9a-zA-Z]+$/";
+//const regexAlphaNumeric = "/^[0-9a-zA-Z]+$/";
 
 export const validateEmail = (email, e, handleError) => {
   console.log("gola");
