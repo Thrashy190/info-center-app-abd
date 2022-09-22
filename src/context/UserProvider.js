@@ -7,6 +7,8 @@ import React, {
 } from 'react';
 import Notification from '../helpers/Notification';
 import firebase from '../utils/firebase';
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../utils/firebase";
 import { useNavigate } from 'react-router-dom';
 
 const UserContext = createContext();
@@ -32,13 +34,28 @@ const UserProvider = ({ children }) => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         setCurrentUser(userCredential.user.uid);
         setNotify({
           isOpen: true,
           message: 'Se creo la cuenta de alumno correctamente',
           type: 'success',
         });
+        if (type == 'student') {
+          const newAlumno = await addDoc(collection(db, "alumnos"), {
+            data,
+          });
+        } else {
+          if (type == "employees") {
+            const newEmployee = await addDoc(collection(db, "docente"), {
+              data
+            });
+          } else {
+            const newOther = await addDoc(collection(db, "otros"), {
+              data
+            });
+          }
+        }
         navigate('/dashboard/inicio');
       })
       .catch((error) => {

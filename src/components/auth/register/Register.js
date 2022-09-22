@@ -15,8 +15,6 @@ import Logo from '../../../assets/shared/its.png';
 import TextFieldRegister from './RegisterTypes/TextFieldRegister';
 
 //Firebase
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "../../../utils/firebase";
 
 const Register = () => {
   const { id } = useParams();
@@ -117,11 +115,6 @@ const Register = () => {
         { ...baseData, ...studentData },
         id
       );
-      const newAlumno = await addDoc(collection(db, "alumnos"), {
-        baseData,
-        studentData,
-      });
-      console.log("=========", newAlumno.id);
     } else if (id === "employees") {
       console.log({ ...baseData, ...employeeData });
       signUpWithEmailPassword(
@@ -130,19 +123,10 @@ const Register = () => {
         { ...baseData, ...employeeData },
         id
       );
-      const newEmployee = await addDoc(collection(db, "docente"), {
-        baseData,
-        studentData,
-      });
-      console.log("=========", newEmployee.id);
+      
     } else if (id === "other") {
       console.log(baseData);
       signUpWithEmailPassword(email, password, baseData, id);
-      const newOther = await addDoc(collection(db, "otros"), {
-        baseData,
-        studentData,
-      });
-      console.log("=========", newOther.id);
     }
   };
 
