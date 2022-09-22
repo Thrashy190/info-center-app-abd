@@ -20,13 +20,13 @@ const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const [notify, setNotify] = useState({
     isOpen: false,
-    message: '',
-    type: '',
+    message: "",
+    type: "",
   });
 
   const logOutUser = () => {
     return {
-      type: 'LOGOUT_USER',
+      type: "LOGOUT_USER",
     };
   };
 
@@ -38,9 +38,10 @@ const UserProvider = ({ children }) => {
         setCurrentUser(userCredential.user.uid);
         setNotify({
           isOpen: true,
-          message: 'Se creo la cuenta de alumno correctamente',
-          type: 'success',
+          message: "Se creo la cuenta de alumno correctamente",
+          type: "success",
         });
+<<<<<<< HEAD
         if (type == 'student') {
           const newAlumno = await addDoc(collection(db, "alumnos"), {
             data,
@@ -57,12 +58,15 @@ const UserProvider = ({ children }) => {
           }
         }
         navigate('/dashboard/inicio');
+=======
+        navigate("/dashboard/inicio");
+>>>>>>> ed44ac193661dadb445fd880918825c144407a65
       })
       .catch((error) => {
         setNotify({
           isOpen: true,
-          message: 'Hubo un error al crear usuario',
-          type: 'error',
+          message: "Hubo un error al crear usuario",
+          type: "error",
         });
       });
   };
@@ -75,16 +79,16 @@ const UserProvider = ({ children }) => {
         setCurrentUser(userCredential.user.uid);
         setNotify({
           isOpen: true,
-          message: 'Se inicio sesion correctamente',
-          type: 'success',
+          message: "Se inicio sesion correctamente",
+          type: "success",
         });
-        navigate('/dashboard/inicio');
+        navigate("/dashboard/inicio");
       })
       .catch((error) => {
         setNotify({
           isOpen: true,
-          message: 'Hubo un error al iniciar sesión',
-          type: 'error',
+          message: "Hubo un error al iniciar sesión",
+          type: "error",
         });
       });
   };
@@ -97,17 +101,17 @@ const UserProvider = ({ children }) => {
         setCurrentUser(null);
         setNotify({
           isOpen: true,
-          message: 'Sesión terminada correctamente',
-          type: 'success',
+          message: "Sesión terminada correctamente",
+          type: "success",
         });
         logOutUser();
-        navigate('/usertype');
+        navigate("/usertype");
       })
       .catch(() => {
         setNotify({
           isOpen: true,
-          message: 'Error al momento de cerrar sesión intentalo mas tarde',
-          type: 'error',
+          message: "Error al momento de cerrar sesión intentalo mas tarde",
+          type: "error",
         });
       });
   };
@@ -122,6 +126,7 @@ const UserProvider = ({ children }) => {
       } else {
         // User is signed out
         // ...
+        setCurrentUser(null);
       }
     });
   }, [currentUser]);
@@ -131,7 +136,7 @@ const UserProvider = ({ children }) => {
   return (
     <Fragment>
       <UserContext.Provider value={values}>{children}</UserContext.Provider>
-      <Notification notify={notify} setNotify={setNotify} position={'top'} />
+      <Notification notify={notify} setNotify={setNotify} position={"top"} />
     </Fragment>
   );
 };
