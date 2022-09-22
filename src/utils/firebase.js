@@ -1,5 +1,5 @@
-// import { initializeApp } from "firebase/app";
-// import { getFirestore } from "firebase/firestore/lite";
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc } from "firebase/firestore"
 // import { getAuth } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
@@ -16,8 +16,8 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-// const app = initializeApp(firebaseConfig);
-// export const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
 // export const auth = getAuth(app);
 
 export default firebase;
