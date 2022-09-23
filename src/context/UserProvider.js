@@ -4,12 +4,18 @@ import React, {
   useState,
   useContext,
   useEffect,
-} from 'react';
-import Notification from '../helpers/Notification';
-import firebase from '../utils/firebase';
-import { addDoc, collection } from "firebase/firestore";
+} from "react";
+import Notification from "../helpers/Notification";
+import firebase from "../utils/firebase";
+import {
+  addDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../utils/firebase";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const UserContext = createContext();
 
@@ -41,26 +47,64 @@ const UserProvider = ({ children }) => {
           message: "Se creo la cuenta de alumno correctamente",
           type: "success",
         });
-<<<<<<< HEAD
-        if (type == 'student') {
+        const {
+          name,
+          lastNameFather,
+          lastNameMother,
+          phone,
+          email,
+          gender,
+          password,
+        } = data;
+
+        if (type === "student") {
+          const {
+            career,
+            numControl,
+            semester
+          } = data;
           const newAlumno = await addDoc(collection(db, "alumnos"), {
-            data,
+            name,
+            lastNameFather,
+            lastNameMother,
+            phone,
+            email,
+            gender,
+            password,
+            career,
+            numControl,
+            semester
           });
         } else {
-          if (type == "employees") {
+          if (type === "employees") {
+            const {
+              numEmployee,
+              department
+            } = data;
             const newEmployee = await addDoc(collection(db, "docente"), {
-              data
+              name,
+              lastNameFather,
+              lastNameMother,
+              phone,
+              email,
+              gender,
+              password,
+              numEmployee,
+              department
             });
           } else {
             const newOther = await addDoc(collection(db, "otros"), {
-              data
+              name,
+              lastNameFather,
+              lastNameMother,
+              phone,
+              email,
+              gender,
+              password,
             });
           }
         }
-        navigate('/dashboard/inicio');
-=======
         navigate("/dashboard/inicio");
->>>>>>> ed44ac193661dadb445fd880918825c144407a65
       })
       .catch((error) => {
         setNotify({
@@ -142,3 +186,40 @@ const UserProvider = ({ children }) => {
 };
 
 export default UserProvider;
+
+const searchAll = async (type) => {
+  const q = query(collection(db, type));
+
+  const querySnapShot = await getDocs(q);
+  querySnapShot.forEach((doc) => {
+    console.log(doc.id, doc.data());
+  });
+};
+
+const searchBook = async (data) => {
+  const bookReference = collection(db, "libros");
+  const q = query(bookReference, where("nombre", "==", data));
+
+  console.log("======", q);
+};
+
+const searchUser = async (type, input, data) => {
+  const userReference = collection(db, type);
+  const q = query(userReference, where(input, "==", data));
+
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log(doc.id, " => ", doc.data());
+  });
+};
+
+//Metodo para añadir informacion a una collecion, este metodo recibe
+//los datos, y la collecion donde se introducira
+const addDataToCollection = async (data, type) => {
+  await addDoc(collection(db, type), {
+    data,
+  });
+};
+
+export { searchAll, searchBook, addDataToCollection, searchUser };
