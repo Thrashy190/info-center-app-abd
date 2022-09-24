@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import SideBar from "./components/SideBar";
-import "../../App.css";
+import React, { useState } from 'react';
+import SideBar from '../shared/SideBar';
+import '../../App.css';
 
 import {
   Grid,
@@ -12,49 +12,49 @@ import {
   Select,
   FormControl,
   InputLabel,
-} from "@mui/material";
+} from '@mui/material';
 
 const Content = () => {
   const dummyData = [
     {
-      nombre: "Calculo I",
-      volumen: "2",
-      fecha_publicacion: "23/12/2002",
-      editorial: "dwfwdcwde",
-      categoria: "Exactas",
+      nombre: 'Calculo I',
+      volumen: '2',
+      fecha_publicacion: '23/12/2002',
+      editorial: 'dwfwdcwde',
+      categoria: 'Exactas',
     },
     {
-      nombre: "Calculo II",
-      volumen: "1",
-      fecha_publicacion: "23/12/2002",
-      editorial: "wdwbqwbdw",
-      categoria: "Exactas",
+      nombre: 'Calculo II',
+      volumen: '1',
+      fecha_publicacion: '23/12/2002',
+      editorial: 'wdwbqwbdw',
+      categoria: 'Exactas',
     },
     {
-      nombre: "Calculo III",
-      volumen: "2",
-      fecha_publicacion: "23/12/2002",
-      editorial: "wkjdcbowd",
-      categoria: "Exactas",
+      nombre: 'Calculo III',
+      volumen: '2',
+      fecha_publicacion: '23/12/2002',
+      editorial: 'wkjdcbowd',
+      categoria: 'Exactas',
     },
     {
-      nombre: "Estatica",
-      volumen: "3",
-      fecha_publicacion: "23/12/2002",
-      editorial: "wdñkpnpwdkcnp",
-      categoria: "Mecanica",
+      nombre: 'Estatica',
+      volumen: '3',
+      fecha_publicacion: '23/12/2002',
+      editorial: 'wdñkpnpwdkcnp',
+      categoria: 'Mecanica',
     },
     {
-      nombre: "Dinamica",
-      volumen: "4",
-      fecha_publicacion: "23/12/2002",
-      editorial: "wdkcijowidcj",
-      categoria: "Mecanica",
+      nombre: 'Dinamica',
+      volumen: '4',
+      fecha_publicacion: '23/12/2002',
+      editorial: 'wdkcijowidcj',
+      categoria: 'Mecanica',
     },
   ];
 
-  const [typeSearch, setTypeSearch] = useState("Libros");
-  const [category, setCategory] = useState("Exactas");
+  const [typeSearch, setTypeSearch] = useState('Libros');
+  const [category, setCategory] = useState('Exactas');
   const [year, setYear] = useState(2022);
 
   return (
@@ -63,13 +63,13 @@ const Content = () => {
         <SideBar></SideBar>
       </Grid>
       <Grid item xs={12} md={10}>
-        <div style={{ padding: "50px" }}>
-          <div style={{ paddingBottom: "20px" }}>
-            <Typography sx={{ fontSize: "1.8rem", fontWeight: "bold" }}>
+        <div style={{ padding: '50px' }}>
+          <div style={{ paddingBottom: '20px' }}>
+            <Typography sx={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
               Contenido de la plataforma
             </Typography>
           </div>
-          <Grid sx={{ pb: "30px" }} container item spacing={2}>
+          <Grid sx={{ pb: '30px' }} container item spacing={2}>
             <Grid item xs={12} md={10}>
               <TextField fullWidth label="Ingrese la busqueda" />
             </Grid>
@@ -77,9 +77,9 @@ const Content = () => {
               item
               xs={12}
               md={2}
-              style={{ display: "flex", alignContent: "center" }}
+              style={{ display: 'flex', alignContent: 'center' }}
             >
-              <Button variant="contained" style={{ width: "100%" }}>
+              <Button variant="contained" style={{ width: '100%' }}>
                 Buscar
               </Button>
             </Grid>
@@ -90,7 +90,7 @@ const Content = () => {
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Tipo</InputLabel>
                 <Select
-                  defaultValue={"Libros"}
+                  defaultValue={'Libros'}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="typeSearch"
@@ -100,13 +100,13 @@ const Content = () => {
                     setTypeSearch(e.target.value);
                   }}
                 >
-                  <MenuItem value={"Libros"}>Libros</MenuItem>
-                  <MenuItem value={"Autores"}>Autores</MenuItem>
-                  <MenuItem value={"Editoriales"}>Editoriales</MenuItem>
+                  <MenuItem value={'Libros'}>Libros</MenuItem>
+                  <MenuItem value={'Autores'}>Autores</MenuItem>
+                  <MenuItem value={'Editoriales'}>Editoriales</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
-            {typeSearch === "Libros" ? (
+            {typeSearch === 'Libros' ? (
               <>
                 <Grid item xs={12} md={2}>
                   <FormControl fullWidth>
@@ -123,9 +123,9 @@ const Content = () => {
                         setCategory(e.target.value);
                       }}
                     >
-                      <MenuItem value={"Exactas"}>Exactas</MenuItem>
-                      <MenuItem value={"blabla"}>blabla</MenuItem>
-                      <MenuItem value={"blablabla"}>blablablac</MenuItem>
+                      <MenuItem value={'Exactas'}>Exactas</MenuItem>
+                      <MenuItem value={'blabla'}>blabla</MenuItem>
+                      <MenuItem value={'blablabla'}>blablablac</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
@@ -155,10 +155,10 @@ const Content = () => {
           </Grid>
           <div
             style={{
-              width: "100%",
-              marginTop: "40px",
-              height: "450px",
-              overflow: "auto",
+              width: '100%',
+              marginTop: '40px',
+              height: '450px',
+              overflow: 'auto',
             }}
           >
             {dummyData.map((val, key) => {
@@ -167,20 +167,20 @@ const Content = () => {
                   key={key}
                   sx={{
                     boxShadow: 2,
-                    mb: "20px",
-                    py: "20px",
-                    px: "10px",
-                    borderRadius: "5px",
-                    display: "flex",
-                    justifyContent: "space-between",
+                    mb: '20px',
+                    py: '20px',
+                    px: '10px',
+                    borderRadius: '5px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
                   }}
                 >
-                  <div style={{ paddingLeft: "30px" }}>
+                  <div style={{ paddingLeft: '30px' }}>
                     <Typography>Nombre: {val.nombre}</Typography>
                     <Typography>Editorial: {val.editorial}</Typography>
                     <Typography>Categoria: {val.categoria}</Typography>
                   </div>
-                  <div style={{ paddingRight: "30px" }}>
+                  <div style={{ paddingRight: '30px' }}>
                     <Typography>
                       Fecha de publicacion: {val.fecha_publicacion}
                     </Typography>

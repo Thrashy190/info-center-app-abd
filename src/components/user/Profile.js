@@ -1,7 +1,7 @@
-import React from "react";
-import SideBar from "./components/SideBar";
-import "../../App.css";
-import { Grid } from "@mui/material";
+import React from 'react';
+import SideBar from '../shared/SideBar';
+import '../../App.css';
+import { Grid } from '@mui/material';
 
 const Profile = () => {
   return (

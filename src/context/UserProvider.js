@@ -4,18 +4,12 @@ import React, {
   useState,
   useContext,
   useEffect,
-} from "react";
-import Notification from "../helpers/Notification";
-import firebase from "../utils/firebase";
-import {
-  addDoc,
-  collection,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
-import { db } from "../utils/firebase";
-import { useNavigate } from "react-router-dom";
+} from 'react';
+import Notification from '../helpers/Notification';
+import firebase from '../utils/firebase';
+import { addDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '../utils/firebase';
+import { useNavigate } from 'react-router-dom';
 
 const UserContext = createContext();
 
@@ -23,16 +17,17 @@ export const useAuth = () => useContext(UserContext);
 
 const UserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
+  const [loginType, setLoginType] = useState();
   const navigate = useNavigate();
   const [notify, setNotify] = useState({
     isOpen: false,
-    message: "",
-    type: "",
+    message: '',
+    type: '',
   });
 
   const logOutUser = () => {
     return {
-      type: "LOGOUT_USER",
+      type: 'LOGOUT_USER',
     };
   };
 
@@ -44,8 +39,8 @@ const UserProvider = ({ children }) => {
         setCurrentUser(userCredential.user.uid);
         setNotify({
           isOpen: true,
-          message: "Se creo la cuenta de alumno correctamente",
-          type: "success",
+          message: 'Se creo la cuenta de alumno correctamente',
+          type: 'success',
         });
         const {
           name,
@@ -57,13 +52,9 @@ const UserProvider = ({ children }) => {
           password,
         } = data;
 
-        if (type === "student") {
-          const {
-            career,
-            numControl,
-            semester
-          } = data;
-          const newAlumno = await addDoc(collection(db, "alumnos"), {
+        if (type === 'student') {
+          const { career, numControl, semester } = data;
+          const newAlumno = await addDoc(collection(db, 'alumnos'), {
             name,
             lastNameFather,
             lastNameMother,
@@ -73,15 +64,12 @@ const UserProvider = ({ children }) => {
             password,
             career,
             numControl,
-            semester
+            semester,
           });
         } else {
-          if (type === "employees") {
-            const {
-              numEmployee,
-              department
-            } = data;
-            const newEmployee = await addDoc(collection(db, "docente"), {
+          if (type === 'employees') {
+            const { numEmployee, department } = data;
+            const newEmployee = await addDoc(collection(db, 'docente'), {
               name,
               lastNameFather,
               lastNameMother,
@@ -90,10 +78,10 @@ const UserProvider = ({ children }) => {
               gender,
               password,
               numEmployee,
-              department
+              department,
             });
           } else {
-            const newOther = await addDoc(collection(db, "otros"), {
+            const newOther = await addDoc(collection(db, 'otros'), {
               name,
               lastNameFather,
               lastNameMother,
@@ -104,18 +92,18 @@ const UserProvider = ({ children }) => {
             });
           }
         }
-        navigate("/dashboard/inicio");
+        navigate('/dashboard/inicio');
       })
       .catch((error) => {
         setNotify({
           isOpen: true,
-          message: "Hubo un error al crear usuario",
-          type: "error",
+          message: 'Hubo un error al crear usuario',
+          type: 'error',
         });
       });
   };
 
-  const login = (email, password) => {
+  const login = (email, password, type) => {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
@@ -123,16 +111,18 @@ const UserProvider = ({ children }) => {
         setCurrentUser(userCredential.user.uid);
         setNotify({
           isOpen: true,
-          message: "Se inicio sesion correctamente",
-          type: "success",
+          message: 'Se inicio sesion correctamente',
+          type: 'success',
         });
-        navigate("/dashboard/inicio");
+        type === 'admin'
+          ? navigate('/admin/dashboard/inicio')
+          : navigate('/dashboard/inicio');
       })
       .catch((error) => {
         setNotify({
           isOpen: true,
-          message: "Hubo un error al iniciar sesión",
-          type: "error",
+          message: 'Hubo un error al iniciar sesión',
+          type: 'error',
         });
       });
   };
@@ -145,17 +135,17 @@ const UserProvider = ({ children }) => {
         setCurrentUser(null);
         setNotify({
           isOpen: true,
-          message: "Sesión terminada correctamente",
-          type: "success",
+          message: 'Sesión terminada correctamente',
+          type: 'success',
         });
         logOutUser();
-        navigate("/usertype");
+        navigate('/usertype');
       })
       .catch(() => {
         setNotify({
           isOpen: true,
-          message: "Error al momento de cerrar sesión intentalo mas tarde",
-          type: "error",
+          message: 'Error al momento de cerrar sesión intentalo mas tarde',
+          type: 'error',
         });
       });
   };
@@ -175,12 +165,18 @@ const UserProvider = ({ children }) => {
     });
   }, [currentUser]);
 
-  const values = { currentUser, signUpWithEmailPassword, login, logout };
+  const values = {
+    currentUser,
+    signUpWithEmailPassword,
+    login,
+    logout,
+    loginType,
+  };
 
   return (
     <Fragment>
       <UserContext.Provider value={values}>{children}</UserContext.Provider>
-      <Notification notify={notify} setNotify={setNotify} position={"top"} />
+      <Notification notify={notify} setNotify={setNotify} position={'top'} />
     </Fragment>
   );
 };
@@ -197,20 +193,20 @@ const searchAll = async (type) => {
 };
 
 const searchBook = async (data) => {
-  const bookReference = collection(db, "libros");
-  const q = query(bookReference, where("nombre", "==", data));
+  const bookReference = collection(db, 'libros');
+  const q = query(bookReference, where('nombre', '==', data));
 
-  console.log("======", q);
+  console.log('======', q);
 };
 
 const searchUser = async (type, input, data) => {
   const userReference = collection(db, type);
-  const q = query(userReference, where(input, "==", data));
+  const q = query(userReference, where(input, '==', data));
 
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, " => ", doc.data());
+    console.log(doc.id, ' => ', doc.data());
   });
 };
 

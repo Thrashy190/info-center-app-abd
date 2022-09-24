@@ -32,7 +32,7 @@ const Login = () => {
   }, [pageLogin, navigate]);
 
   const logIn = () => {
-    login(loginData.email, loginData.password);
+    login(loginData.email, loginData.password, id);
   };
 
   return (

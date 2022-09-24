@@ -3,19 +3,17 @@ import SideBar from '../shared/SideBar';
 import '../../App.css';
 import { Grid } from '@mui/material';
 
-const Lendings = () => {
+const HomeAdmin = () => {
   return (
     <Grid container className="App">
       <Grid item xs={12} md={2}>
-        <SideBar></SideBar>
+        <SideBar type={'admin'}></SideBar>
       </Grid>
-      <Grid item>
-        <div xs={12} md={10}>
-          Prestamos
-        </div>
+      <Grid item xs={12} md={10}>
+        <div style={{ padding: '50px' }}>Home admin</div>
       </Grid>
     </Grid>
   );
 };
 
-export default Lendings;
+export default HomeAdmin;
