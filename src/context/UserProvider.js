@@ -7,9 +7,12 @@ import React, {
 } from 'react';
 import Notification from '../helpers/Notification';
 import firebase from '../utils/firebase';
-import { addDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { addDoc, collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
+import { PasswordOutlined } from '@mui/icons-material';
+import { User } from '../models/User';
+import { Books } from '../models/Books';
 
 const UserContext = createContext();
 
@@ -244,30 +247,137 @@ const UserProvider = ({ children }) => {
 export default UserProvider;
 
 const searchAll = async (type) => {
-  const q = query(collection(db, type));
+  try {
+    const bookConverter = {
+      toFirestore: (book) => {
+        return {
+          nombre: book.nombre,
+          categoria: book.categoria,
+          editorial: book.editorial,
+          volumen: book.volumen,
+          fecha_publicacion: book.fecha_publicacion,
+        };
+      },
+      fromFirestore: (snapshot, options) => {
+        const book = snapshot.data(options);
+        return new Books(book.nombre, book.categoria, book.editorial, book.volumen, book.fecha_publicacion);
+      }
+    };
 
-  const querySnapShot = await getDocs(q);
-  querySnapShot.forEach((doc) => {
-    console.log(doc.id, doc.data());
-  });
+    const bookReference = collection(db, type);
+    const q = query(bookReference);
+    var id;
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (doc) => {
+      id = doc.id;
+    });
+
+    const ref = doc(db, type, id).withConverter(bookConverter);
+    const docSnap = await getDoc(ref);
+    if (docSnap.exists()) {
+      // Convert to book object
+      const book = docSnap.data();
+      // Use a book instance method
+      console.log(book.toString());
+    } else {
+      console.log("No such document!");
+    }
+
+
+  } catch (error) {
+    console.log(error);
+  };
 };
 
-const searchBook = async (data) => {
-  const bookReference = collection(db, 'libros');
-  const q = query(bookReference, where('nombre', '==', data));
+const searchBook = async (input, data) => {
+  try {
+    const bookConverter = {
+      toFirestore: (book) => {
+        return {
+          nombre: book.nombre,
+          categoria: book.categoria,
+          editorial: book.editorial,
+          volumen: book.volumen,
+          fecha_publicacion: book.fecha_publicacion,
+        };
+      },
+      fromFirestore: (snapshot, options) => {
+        const book = snapshot.data(options);
+        return new Books(book.nombre, book.categoria, book.editorial, book.volumen, book.fecha_publicacion);
+      }
+    };
 
-  console.log('======', q);
+    const bookReference = collection(db, 'libros');
+    const q = query(bookReference, where(input, '==', data));
+    var id;
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      id = doc.id;
+    });
+
+    const ref = doc(db, "libros", id).withConverter(bookConverter);
+    const docSnap = await getDoc(ref);
+    if (docSnap.exists()) {
+      // Convert to book object
+      const book = docSnap.data();
+      // Use a book instance method
+      console.log(book.toString());
+    } else {
+      console.log("No such document!");
+    }
+
+
+  } catch (error) {
+    console.log(error);
+  };
 };
 
 const searchUser = async (type, input, data) => {
-  const userReference = collection(db, type);
-  const q = query(userReference, where(input, '==', data));
+  try {
+    const userConverter = {
+      toFirestore: (user) => {
+        return {
+          name: user.name,
+          lastNameFather: user.lastNameFather,
+          lastNameMother: user.lastNameMother,
+          phone: user.phone,
+          email: user.email,
+          gender: user.gender,
+          password: user.password,
+        };
+      },
+      fromFirestore: (snapshot, options) => {
+        const user = snapshot.data(options);
+        return new User(user.name, user.lastNameFather, user.lastNameMother, user.phone, user.email, user.gender, user.password);
+      }
+    };
 
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, ' => ', doc.data());
-  });
+    const userReference = collection(db, type);
+    const q = query(userReference, where(input, '==', data));
+    var id;
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      id = doc.id;
+    });
+
+    const ref = doc(db, "alumnos", id).withConverter(userConverter);
+    const docSnap = await getDoc(ref);
+    if (docSnap.exists()) {
+      // Convert to user object
+      const user = docSnap.data();
+      // Use a user instance method
+      console.log(user.toString());
+    } else {
+      console.log("No such document!");
+    }
+
+  } catch (error) {
+    console.log(error);
+  };
+
 };
 
 //Metodo para añadir informacion a una collecion, este metodo recibe
@@ -277,5 +387,9 @@ const addDataToCollection = async (data, type) => {
     data,
   });
 };
+
+const deletFromCollection = async(type, id) => {
+  await deleteDoc(doc(db, type, id));
+}
 
 export { searchAll, searchBook, addDataToCollection, searchUser };
