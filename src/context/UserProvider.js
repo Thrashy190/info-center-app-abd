@@ -150,6 +150,65 @@ const UserProvider = ({ children }) => {
       });
   };
 
+  const getUserAdmissions = () => {};
+
+  // const addUserAdmissions = async (data) => {
+  //   const newEmployee = await addDoc(collection(db, 'ingreso'), {});
+  // };
+
+  const getUsers = async () => {
+    const studentReference = collection(db, 'alumnos');
+    const employeeReference = collection(db, 'docentes');
+    const otherReference = collection(db, 'alumnos');
+
+    getDocs(studentReference)
+      .then((snapshot) => {
+        let students = [];
+        snapshot.docs.map((doc) => {
+          students.push({ ...doc.data(), id: doc.id });
+        });
+        console.log(students);
+      })
+      .catch((err) => {
+        console.log('Hubo un error al traer los datos');
+      });
+
+    getDocs(employeeReference)
+      .then((snapshot) => {
+        let employees = [];
+        snapshot.docs.map((doc) => {
+          employees.push({ ...doc.data(), id: doc.id });
+        });
+        console.log(employees);
+      })
+      .catch((err) => {
+        console.log('Hubo un error al traer los datos');
+      });
+
+    getDocs(otherReference)
+      .then((snapshot) => {
+        let others = [];
+        snapshot.docs.map((doc) => {
+          others.push({ ...doc.data(), id: doc.id });
+        });
+        console.log(others);
+      })
+      .catch((err) => {
+        console.log('Hubo un error al traer los datos');
+      });
+
+    // const students = query(studentReference, where('nombre', '!=', ''));
+    // const employees = query(employeeReference, where('nombre', '==', true));
+    // const others = query(otherReference, where('nombre', '==', true));
+    // console.log(students);
+    // const querySnapshot = await getDocs(students);
+    // console.log(querySnapshot);
+
+    // console.log('======', students);
+    // console.log('======', employees);
+    // console.log('======', others);
+  };
+
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -167,10 +226,11 @@ const UserProvider = ({ children }) => {
 
   const values = {
     currentUser,
+    loginType,
     signUpWithEmailPassword,
     login,
     logout,
-    loginType,
+    getUsers,
   };
 
   return (
