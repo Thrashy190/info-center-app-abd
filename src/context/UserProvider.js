@@ -162,7 +162,7 @@ const UserProvider = ({ children }) => {
   const getUsers = async () => {
     const studentReference = collection(db, 'alumnos');
     const employeeReference = collection(db, 'docentes');
-    const otherReference = collection(db, 'alumnos');
+    const otherReference = collection(db, 'otros');
 
     getDocs(studentReference)
       .then((snapshot) => {
@@ -363,7 +363,7 @@ const searchUser = async (type, input, data) => {
       id = doc.id;
     });
 
-    const ref = doc(db, "alumnos", id).withConverter(userConverter);
+    const ref = doc(db, type, id).withConverter(userConverter);
     const docSnap = await getDoc(ref);
     if (docSnap.exists()) {
       // Convert to user object
