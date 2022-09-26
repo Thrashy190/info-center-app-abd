@@ -16,6 +16,8 @@ import Lendings from './components/user/Lendings';
 import HomeAdmin from './components/admin/HomeAdmin';
 import ContentAdmin from './components/admin/content/ContentAdmin';
 import AddContent from './components/admin/content/AddContent';
+import LendingAdmin from './components/admin/Prestamos/LendingsAdmin';
+import EnterAdmin from './components/admin/Ingresos/EnterAdmin';
 
 //ruta protegida ususarios
 import ProtectedRoute from './helpers/ProtectedRouter';
@@ -49,8 +51,8 @@ function App() {
             element={<AddContent />}
           />
 
-          <Route path="/admin/dashboard/prestamos" element={<HomeAdmin />} />
-          <Route path="/admin/dashboard/ingresos" element={<HomeAdmin />} />
+          <Route path="/admin/dashboard/prestamos" element={<LendingAdmin />} />
+          <Route path="/admin/dashboard/ingresos" element={<EnterAdmin />} />
           <Route path="/admin/dashboard/perfil" element={<HomeAdmin />} />
         </Route>
       </Routes>

@@ -13,9 +13,12 @@ import {
   FormControl,
   InputLabel,
 } from '@mui/material';
+import { searchAll, searchUser } from '../../context/UserProvider';
 
+searchAll('libros');
 const Content = () => {
-  const dummyData = [
+  const dummyData = 
+  [
     {
       nombre: 'Calculo I',
       volumen: '2',
