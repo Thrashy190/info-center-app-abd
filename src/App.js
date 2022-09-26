@@ -1,26 +1,26 @@
-import './App.css';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import "./App.css";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 //auth
-import Login from './components/auth/login/Login';
-import UserType from './components/auth/UserType';
-import Register from './components/auth/register/Register';
+import Login from "./components/auth/login/Login";
+import UserType from "./components/auth/UserType";
+import Register from "./components/auth/register/Register";
 
 //DAshboard user
-import Home from './components/user/Home';
-import Content from './components/user/Content';
-import Profile from './components/user/Profile';
-import Lendings from './components/user/Lendings';
+import Home from "./components/user/Home";
+import Content from "./components/user/Content";
+import Profile from "./components/user/Profile";
+import Lendings from "./components/user/Lendings";
 
 //Dashboard admin
-import HomeAdmin from './components/admin/HomeAdmin';
-import ContentAdmin from './components/admin/content/ContentAdmin';
-import AddContent from './components/admin/content/AddContent';
-import LendingAdmin from './components/admin/Prestamos/LendingsAdmin';
-import EnterAdmin from './components/admin/Ingresos/EnterAdmin';
+import HomeAdmin from "./components/admin/HomeAdmin";
+import ContentAdmin from "./components/admin/content/ContentAdmin";
+import AddContent from "./components/admin/content/AddContent";
+import LendingAdmin from "./components/admin/Prestamos/LendingsAdmin";
+import EnterAdmin from "./components/admin/Ingresos/EnterAdmin";
 
 //ruta protegida ususarios
-import ProtectedRoute from './helpers/ProtectedRouter';
+import ProtectedRoute from "./helpers/ProtectedRouter";
 
 function App() {
   return (

@@ -4,15 +4,24 @@ import React, {
   useState,
   useContext,
   useEffect,
-} from 'react';
-import Notification from '../helpers/Notification';
-import firebase from '../utils/firebase';
-import { addDoc, collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
-import { db } from '../utils/firebase';
-import { useNavigate } from 'react-router-dom';
-import { PasswordOutlined } from '@mui/icons-material';
-import { User } from '../models/User';
-import { Books } from '../models/Books';
+} from "react";
+import Notification from "../helpers/Notification";
+import firebase from "../utils/firebase";
+import {
+  addDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+  deleteDoc,
+} from "firebase/firestore";
+import { db } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
+import { PasswordOutlined } from "@mui/icons-material";
+import { User } from "../models/User";
+import { Books } from "../models/Books";
 
 const UserContext = createContext();
 
@@ -24,13 +33,13 @@ const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const [notify, setNotify] = useState({
     isOpen: false,
-    message: '',
-    type: '',
+    message: "",
+    type: "",
   });
 
   const logOutUser = () => {
     return {
-      type: 'LOGOUT_USER',
+      type: "LOGOUT_USER",
     };
   };
 
@@ -42,8 +51,8 @@ const UserProvider = ({ children }) => {
         setCurrentUser(userCredential.user.uid);
         setNotify({
           isOpen: true,
-          message: 'Se creo la cuenta de alumno correctamente',
-          type: 'success',
+          message: "Se creo la cuenta de alumno correctamente",
+          type: "success",
         });
         const {
           name,
@@ -55,9 +64,9 @@ const UserProvider = ({ children }) => {
           password,
         } = data;
 
-        if (type === 'student') {
+        if (type === "student") {
           const { career, numControl, semester } = data;
-          const newAlumno = await addDoc(collection(db, 'alumnos'), {
+          const newAlumno = await addDoc(collection(db, "alumnos"), {
             name,
             lastNameFather,
             lastNameMother,
@@ -70,9 +79,9 @@ const UserProvider = ({ children }) => {
             semester,
           });
         } else {
-          if (type === 'employees') {
+          if (type === "employees") {
             const { numEmployee, department } = data;
-            const newEmployee = await addDoc(collection(db, 'docente'), {
+            const newEmployee = await addDoc(collection(db, "docente"), {
               name,
               lastNameFather,
               lastNameMother,
@@ -84,7 +93,7 @@ const UserProvider = ({ children }) => {
               department,
             });
           } else {
-            const newOther = await addDoc(collection(db, 'otros'), {
+            const newOther = await addDoc(collection(db, "otros"), {
               name,
               lastNameFather,
               lastNameMother,
@@ -95,13 +104,13 @@ const UserProvider = ({ children }) => {
             });
           }
         }
-        navigate('/dashboard/inicio');
+        navigate("/dashboard/inicio");
       })
       .catch((error) => {
         setNotify({
           isOpen: true,
-          message: 'Hubo un error al crear usuario',
-          type: 'error',
+          message: "Hubo un error al crear usuario",
+          type: "error",
         });
       });
   };
@@ -114,18 +123,18 @@ const UserProvider = ({ children }) => {
         setCurrentUser(userCredential.user.uid);
         setNotify({
           isOpen: true,
-          message: 'Se inicio sesion correctamente',
-          type: 'success',
+          message: "Se inicio sesion correctamente",
+          type: "success",
         });
-        type === 'admin'
-          ? navigate('/admin/dashboard/inicio')
-          : navigate('/dashboard/inicio');
+        type === "admin"
+          ? navigate("/admin/dashboard/inicio")
+          : navigate("/dashboard/inicio");
       })
       .catch((error) => {
         setNotify({
           isOpen: true,
-          message: 'Hubo un error al iniciar sesión',
-          type: 'error',
+          message: "Hubo un error al iniciar sesión",
+          type: "error",
         });
       });
   };
@@ -138,79 +147,78 @@ const UserProvider = ({ children }) => {
         setCurrentUser(null);
         setNotify({
           isOpen: true,
-          message: 'Sesión terminada correctamente',
-          type: 'success',
+          message: "Sesión terminada correctamente",
+          type: "success",
         });
         logOutUser();
-        navigate('/usertype');
+        navigate("/usertype");
       })
       .catch(() => {
         setNotify({
           isOpen: true,
-          message: 'Error al momento de cerrar sesión intentalo mas tarde',
-          type: 'error',
+          message: "Error al momento de cerrar sesión intentalo mas tarde",
+          type: "error",
         });
       });
   };
 
-  const getUserAdmissions = () => {};
+  //const getUserAdmissions = () => {};
 
   // const addUserAdmissions = async (data) => {
   //   const newEmployee = await addDoc(collection(db, 'ingreso'), {});
   // };
 
-  const getUsers = async () => {
-    const studentReference = collection(db, 'alumnos');
-    const employeeReference = collection(db, 'docentes');
-    const otherReference = collection(db, 'alumnos');
+  // const [students, setStudents] = useState([]);
+  // const [others, setOthers] = useState([]);
+  // const [employees, setEmployees] = useState([]);
 
-    getDocs(studentReference)
-      .then((snapshot) => {
-        let students = [];
-        snapshot.docs.map((doc) => {
-          students.push({ ...doc.data(), id: doc.id });
-        });
-        console.log(students);
-      })
-      .catch((err) => {
-        console.log('Hubo un error al traer los datos');
-      });
+  // const getStudents = async () => {
+  //   const studentReference = collection(db, "alumnos");
 
-    getDocs(employeeReference)
-      .then((snapshot) => {
-        let employees = [];
-        snapshot.docs.map((doc) => {
-          employees.push({ ...doc.data(), id: doc.id });
-        });
-        console.log(employees);
-      })
-      .catch((err) => {
-        console.log('Hubo un error al traer los datos');
-      });
+  //   getDocs(studentReference)
+  //     .then((snapshot) => {
+  //       snapshot.docs.map((doc) => {
+  //         setStudents([...students, { ...doc.data(), id: doc.id }]);
+  //       });
+  //       console.log(students);
+  //       return students;
+  //     })
+  //     .catch((err) => {
+  //       console.log("Hubo un error al traer los datos");
+  //     });
 
-    getDocs(otherReference)
-      .then((snapshot) => {
-        let others = [];
-        snapshot.docs.map((doc) => {
-          others.push({ ...doc.data(), id: doc.id });
-        });
-        console.log(others);
-      })
-      .catch((err) => {
-        console.log('Hubo un error al traer los datos');
-      });
+  //   return [students, employees, others];
+  // };
 
-    // const students = query(studentReference, where('nombre', '!=', ''));
-    // const employees = query(employeeReference, where('nombre', '==', true));
-    // const others = query(otherReference, where('nombre', '==', true));
-    // console.log(students);
-    // const querySnapshot = await getDocs(students);
-    // console.log(querySnapshot);
+  // const getEmployees = () => {
+  //   const employeeReference = collection(db, "docentes");
+  //   getDocs(employeeReference)
+  //     .then((snapshot) => {
+  //       snapshot.docs.map((doc) => {
+  //         setEmployees([...employees, { ...doc.data(), id: doc.id }]);
+  //       });
+  //       console.log(employees);
+  //       return employees;
+  //     })
+  //     .catch((err) => {
+  //       console.log("Hubo un error al traer los datos");
+  //     });
+  // };
 
-    // console.log('======', students);
-    // console.log('======', employees);
-    // console.log('======', others);
-  };
+  // const getOther = () => {
+  //   const otherReference = collection(db, "alumnos");
+  //   getDocs(otherReference)
+  //     .then((snapshot) => {
+  //       snapshot.docs.map((doc) => {
+  //         setOthers([...others, { ...doc.data(), id: doc.id }]);
+  //       });
+  //       console.log(others);
+  //       return others;
+  //     })
+  //     .catch((err) => {
+  //       console.log("Hubo un error al traer los datos");
+  //     });
+  // };
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -218,6 +226,7 @@ const UserProvider = ({ children }) => {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         setCurrentUser(user.uid);
+
         // ...
       } else {
         // User is signed out
@@ -233,13 +242,12 @@ const UserProvider = ({ children }) => {
     signUpWithEmailPassword,
     login,
     logout,
-    getUsers,
   };
 
   return (
     <Fragment>
       <UserContext.Provider value={values}>{children}</UserContext.Provider>
-      <Notification notify={notify} setNotify={setNotify} position={'top'} />
+      <Notification notify={notify} setNotify={setNotify} position={"top"} />
     </Fragment>
   );
 };
@@ -260,8 +268,14 @@ const searchAll = async (type) => {
       },
       fromFirestore: (snapshot, options) => {
         const book = snapshot.data(options);
-        return new Books(book.nombre, book.categoria, book.editorial, book.volumen, book.fecha_publicacion);
-      }
+        return new Books(
+          book.nombre,
+          book.categoria,
+          book.editorial,
+          book.volumen,
+          book.fecha_publicacion
+        );
+      },
     };
 
     const bookReference = collection(db, type);
@@ -283,11 +297,9 @@ const searchAll = async (type) => {
     } else {
       console.log("No such document!");
     }
-
-
   } catch (error) {
     console.log(error);
-  };
+  }
 };
 
 const searchBook = async (input, data) => {
@@ -304,12 +316,18 @@ const searchBook = async (input, data) => {
       },
       fromFirestore: (snapshot, options) => {
         const book = snapshot.data(options);
-        return new Books(book.nombre, book.categoria, book.editorial, book.volumen, book.fecha_publicacion);
-      }
+        return new Books(
+          book.nombre,
+          book.categoria,
+          book.editorial,
+          book.volumen,
+          book.fecha_publicacion
+        );
+      },
     };
 
-    const bookReference = collection(db, 'libros');
-    const q = query(bookReference, where(input, '==', data));
+    const bookReference = collection(db, "libros");
+    const q = query(bookReference, where(input, "==", data));
     var id;
 
     const querySnapshot = await getDocs(q);
@@ -327,11 +345,9 @@ const searchBook = async (input, data) => {
     } else {
       console.log("No such document!");
     }
-
-
   } catch (error) {
     console.log(error);
-  };
+  }
 };
 
 const searchUser = async (type, input, data) => {
@@ -350,12 +366,20 @@ const searchUser = async (type, input, data) => {
       },
       fromFirestore: (snapshot, options) => {
         const user = snapshot.data(options);
-        return new User(user.name, user.lastNameFather, user.lastNameMother, user.phone, user.email, user.gender, user.password);
-      }
+        return new User(
+          user.name,
+          user.lastNameFather,
+          user.lastNameMother,
+          user.phone,
+          user.email,
+          user.gender,
+          user.password
+        );
+      },
     };
 
     const userReference = collection(db, type);
-    const q = query(userReference, where(input, '==', data));
+    const q = query(userReference, where(input, "==", data));
     var id;
 
     const querySnapshot = await getDocs(q);
@@ -373,11 +397,9 @@ const searchUser = async (type, input, data) => {
     } else {
       console.log("No such document!");
     }
-
   } catch (error) {
     console.log(error);
-  };
-
+  }
 };
 
 //Metodo para añadir informacion a una collecion, este metodo recibe
@@ -388,8 +410,8 @@ const addDataToCollection = async (data, type) => {
   });
 };
 
-const deletFromCollection = async(type, id) => {
+const deletFromCollection = async (type, id) => {
   await deleteDoc(doc(db, type, id));
-}
+};
 
 export { searchAll, searchBook, addDataToCollection, searchUser };
