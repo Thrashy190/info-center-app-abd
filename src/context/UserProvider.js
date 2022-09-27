@@ -258,7 +258,7 @@ const UserProvider = ({ children }) => {
 
 export default UserProvider;
 
-const searchAll = async (type) => {
+const searchAllBooks = async (type) => {
   try {
     const bookConverter = {
       toFirestore: (book) => {
@@ -420,4 +420,4 @@ const deletFromCollection = async (type, id) => {
   await deleteDoc(doc(db, type, id));
 };
 
-export { searchAll, searchBook, addDataToCollection, searchUser };
+export { searchAllBooks, searchBook, addDataToCollection, searchUser };
