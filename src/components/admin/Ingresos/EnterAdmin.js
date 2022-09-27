@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import SideBar from "../../shared/SideBar";
-import "../../../App.css";
+import React, { useState, useEffect } from 'react';
+import SideBar from '../../shared/SideBar';
+import '../../../App.css';
 import {
   Grid,
   Button,
@@ -11,108 +11,123 @@ import {
   FormControl,
   InputLabel,
   Box,
-} from "@mui/material";
-import { useAuth } from "../../../context/UserProvider";
+  Autocomplete,
+} from '@mui/material';
+import { useAuth } from '../../../context/UserProvider';
 
 const EnterAdmin = () => {
-  const { getStudents } = useAuth();
+  const { getStudents, getEmployees, addAdmissionToInfoCenter } = useAuth();
 
-  //const [data, setData] = useState([]);
+  const [studentsList, setStudentsList] = useState([]);
+  const [employeesList, setEmployeesList] = useState([]);
 
-  const [user, setUser] = useState("A");
-  const ingresos = [
-    {
-      id: "C19051632",
-      fecha_ingreso: "23/07/32",
-      tipo_user: "student",
-      genero: "Hombre",
-    },
-    {
-      id: "1231",
-      fecha_ingreso: "23/07/32",
-      tipo_user: "employee",
-      genero: "Hombre",
-    },
-    {
-      id: "C19051632",
-      fecha_ingreso: "23/07/32",
-      tipo_user: "student",
-      genero: "Hombre",
-    },
-    {
-      id: "C19051632",
-      fecha_ingreso: "23/07/32",
-      tipo_user: "student",
-      genero: "Hombre",
-    },
-    {
-      id: "C19051632",
-      fecha_ingreso: "23/07/32",
-      tipo_user: "student",
-      genero: "Hombre",
-    },
-  ];
+  const [userType, setUserType] = useState('S');
+
+  const [ingresos, setIngresos] = useState([]);
+
+  const [user, setUser] = useState({
+    fecha: Math.floor(new Date() / 1000),
+    tipo: userType,
+    id: '',
+  });
 
   const UserText = (text) => {
-    return text === "student"
-      ? "Estudiante"
-      : text === "employee"
-      ? "Empleado"
-      : "Otros";
+    return text === 'student'
+      ? 'Estudiante'
+      : text === 'employee'
+      ? 'Empleado'
+      : 'Otros';
+  };
+
+  const getData = async () => {
+    setStudentsList(await getStudents());
+    setEmployeesList(await getEmployees());
+  };
+
+  const handleChange = (newValue) => {
+    setUser({
+      ...user,
+      ['id']: studentsList.filter((data) => data.numControl === newValue).id,
+    });
+  };
+
+  const addEnter = () => {
+    console.log(user);
+    addAdmissionToInfoCenter(user);
   };
 
   useEffect(() => {
-    //setData(getEmployees());
-    let data = getStudents();
-    console.log("======", getStudents());
+    getData();
   }, []);
 
   return (
     <Grid container className="App">
       <Grid item xs={12} md={2}>
-        <SideBar type={"admin"}></SideBar>
+        <SideBar type={'admin'}></SideBar>
       </Grid>
       <Grid item xs={12} md={10}>
-        <div style={{ padding: "40px" }}>
-          <Grid sx={{ pb: "30px" }} container item spacing={2}>
+        <div style={{ padding: '40px' }}>
+          <Grid sx={{ pb: '30px' }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: "1.8rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
                 Ingresos al centro de informacion
               </Typography>
             </Grid>
           </Grid>
-          <Grid sx={{ pb: "30px" }} container item spacing={2}>
+          <Grid sx={{ pb: '30px' }} container item spacing={2}>
             <Grid item xs={12} md={3}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Ususario</InputLabel>
                 <Select
-                  defaultValue={"A"}
+                  defaultValue={'S'}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Usuarios"
                   name="user"
-                  value={user}
+                  value={userType}
                   onChange={(e) => {
-                    setUser(e.target.value);
+                    setUserType(e.target.value);
                   }}
                 >
-                  <MenuItem value={"A"}>Alumnos</MenuItem>
-                  <MenuItem value={"W"}>Empleados</MenuItem>
+                  <MenuItem value={'S'}>Alumnos</MenuItem>
+                  <MenuItem value={'E'}>Empleados</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
           </Grid>
-          <Grid sx={{ pb: "30px" }} container item spacing={2}>
-            {user === "A" ? (
+          <Grid sx={{ pb: '30px' }} container item spacing={2}>
+            {userType === 'S' ? (
               <>
                 <Grid item xs={12} md={4}>
-                  <TextField fullWidth label="Numero de control" />
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-student"
+                    value={user.numControl}
+                    onChange={(e, newValue) => {
+                      handleChange(newValue);
+                    }}
+                    options={studentsList.map((option) => option.numControl)}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Numero de control" />
+                    )}
+                  />
                 </Grid>
               </>
-            ) : user === "W" ? (
+            ) : userType === 'E' ? (
               <>
                 <Grid item xs={12} md={4}>
-                  <TextField fullWidth label="Numero de empleado" />
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-employee"
+                    value={user.numControl}
+                    onChange={(e, newValue) => {
+                      handleChange(newValue);
+                    }}
+                    options={employeesList.map((option) => option.numEmpleado)}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Numero de empleado" />
+                    )}
+                  />
                 </Grid>
               </>
             ) : (
@@ -126,26 +141,32 @@ const EnterAdmin = () => {
               item
               xs={12}
               md={3}
-              style={{ display: "flex", alignContent: "center" }}
+              style={{ display: 'flex', alignContent: 'center' }}
             >
-              <Button variant="contained" style={{ width: "100%" }}>
+              <Button
+                variant="contained"
+                style={{ width: '100%' }}
+                onClick={() => {
+                  addEnter();
+                }}
+              >
                 Agregar
               </Button>
             </Grid>
           </Grid>
-          <Grid sx={{ pb: "20px" }} container item spacing={2}>
+          <Grid sx={{ pb: '20px' }} container item spacing={2}>
             <Grid item xs={12} md={4}>
-              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
                 Lista de ingresos
               </Typography>
             </Grid>
           </Grid>
           <div
             style={{
-              width: "100%",
-              marginTop: "40px",
-              height: "500px",
-              overflow: "auto",
+              width: '100%',
+              marginTop: '40px',
+              height: '500px',
+              overflow: 'auto',
             }}
           >
             {ingresos.map((data, key) => {
@@ -154,47 +175,47 @@ const EnterAdmin = () => {
                   key={key}
                   sx={{
                     boxShadow: 2,
-                    mb: "20px",
-                    py: "20px",
-                    px: "10px",
-                    borderRadius: "5px",
+                    mb: '20px',
+                    py: '20px',
+                    px: '10px',
+                    borderRadius: '5px',
                   }}
                 >
                   <div
                     style={{
-                      paddingLeft: "30px",
-                      display: "flex",
-                      direction: "row",
-                      justifyContent: "space-around",
+                      paddingLeft: '30px',
+                      display: 'flex',
+                      direction: 'row',
+                      justifyContent: 'space-around',
                     }}
                   >
-                    <Typography sx={{ fontSize: "1.2rem" }}>
+                    <Typography sx={{ fontSize: '1.2rem' }}>
                       <Typography
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                        sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
                       >
                         Identificador:
                       </Typography>
                       {data.id}
                     </Typography>
-                    <Typography sx={{ fontSize: "1.2rem" }}>
+                    <Typography sx={{ fontSize: '1.2rem' }}>
                       <Typography
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                        sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
                       >
                         Fecha de ingreso:
                       </Typography>
                       {data.fecha_ingreso}
                     </Typography>
-                    <Typography sx={{ fontSize: "1.2rem" }}>
+                    <Typography sx={{ fontSize: '1.2rem' }}>
                       <Typography
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                        sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
                       >
                         Tipo de usuario:
                       </Typography>
                       {UserText(data.tipo_user)}
                     </Typography>
-                    <Typography sx={{ fontSize: "1.2rem" }}>
+                    <Typography sx={{ fontSize: '1.2rem' }}>
                       <Typography
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                        sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
                       >
                         Genero:
                       </Typography>
@@ -204,6 +225,15 @@ const EnterAdmin = () => {
                 </Box>
               );
             })}
+            {ingresos.length <= 0 ? (
+              <Grid container item spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <Typography sx={{ fontWeight: 'light' }}>
+                    No hay ningun ingreso por el momento
+                  </Typography>
+                </Grid>
+              </Grid>
+            ) : null}
           </div>
         </div>
       </Grid>
