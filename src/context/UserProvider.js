@@ -265,7 +265,7 @@ const UserProvider = ({ children }) => {
 
 export default UserProvider;
 
-const searchAll = async (type) => {
+const searchAllBooks = async (type) => {
   try {
     const bookConverter = {
       toFirestore: (book) => {
@@ -291,22 +291,24 @@ const searchAll = async (type) => {
 
     const bookReference = collection(db, type);
     const q = query(bookReference);
-    var id;
+    let id = [];
 
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach(async (doc) => {
-      id = doc.id;
+      id.push(doc.id);
     });
 
-    const ref = doc(db, type, id).withConverter(bookConverter);
-    const docSnap = await getDoc(ref);
-    if (docSnap.exists()) {
-      // Convert to book object
-      const book = docSnap.data();
-      // Use a book instance method
-      console.log(book.toString());
-    } else {
-      console.log('No such document!');
+    for (let i = 0; i < id.length; i++) {
+      const ref = doc(db, type, id[i]).withConverter(bookConverter);
+      const docSnap = await getDoc(ref);
+      if (docSnap.exists()) {
+        // Convert to book object
+        const book = docSnap.data();
+        // Use a book instance method
+        console.log(book.toString());
+      } else {
+        console.log('No such document!');
+      }
     }
   } catch (error) {
     console.log(error);
@@ -425,4 +427,4 @@ const deletFromCollection = async (type, id) => {
   await deleteDoc(doc(db, type, id));
 };
 
-export { searchAll, searchBook, addDataToCollection, searchUser };
+export { searchAllBooks, searchBook, addDataToCollection, searchUser };
