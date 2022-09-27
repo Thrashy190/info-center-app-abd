@@ -15,9 +15,9 @@ import {
 import { useAuth } from "../../../context/UserProvider";
 
 const EnterAdmin = () => {
-  //const { getStudents } = useAuth();
+  const { getStudents } = useAuth();
 
-  const [data, setData] = useState([]);
+  //const [data, setData] = useState([]);
 
   const [user, setUser] = useState("A");
   const ingresos = [
@@ -61,10 +61,11 @@ const EnterAdmin = () => {
       : "Otros";
   };
 
-  // useEffect(() => {
-  //   setData(getStudents());
-  //   console.log(data);
-  // }, []);
+  useEffect(() => {
+    //setData(getEmployees());
+    let data = getStudents();
+    console.log("======", getStudents());
+  }, []);
 
   return (
     <Grid container className="App">
@@ -97,7 +98,6 @@ const EnterAdmin = () => {
                 >
                   <MenuItem value={"A"}>Alumnos</MenuItem>
                   <MenuItem value={"W"}>Empleados</MenuItem>
-                  <MenuItem value={"O"}>Otros</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

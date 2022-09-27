@@ -21,6 +21,7 @@ const LendingAdmin = () => {
       nombre: "Calculo 1",
     },
   ]);
+  const [libro, setLibro] = useState("");
 
   const prestamos = [
     {
@@ -30,6 +31,10 @@ const LendingAdmin = () => {
       empleado: "current user",
     },
   ];
+
+  const handleAddLibro = () => {
+    setLibros([...libros, { nombre: libro }]);
+  };
 
   const onDeleteBloque = (bloque) => {
     const copia = [...libros];
@@ -91,7 +96,14 @@ const LendingAdmin = () => {
 
           <Grid sx={{ pb: "30px" }} container item spacing={2}>
             <Grid item xs={12} md={3}>
-              <TextField fullWidth label="Libros" />
+              <TextField
+                fullWidth
+                label="Libros"
+                value={libro}
+                onChange={(e) => {
+                  setLibro(e.target.value);
+                }}
+              />
             </Grid>
 
             <Grid
@@ -100,7 +112,13 @@ const LendingAdmin = () => {
               md={3}
               style={{ display: "flex", alignContent: "center" }}
             >
-              <Button variant="contained" style={{ width: "100%" }}>
+              <Button
+                variant="contained"
+                style={{ width: "100%" }}
+                onClick={() => {
+                  handleAddLibro();
+                }}
+              >
                 Agregar libro
               </Button>
             </Grid>
@@ -114,11 +132,19 @@ const LendingAdmin = () => {
             </Grid>
           </Grid>
 
-          <Grid sx={{ pb: "20px" }} container item spacing={2}>
-            <Grid item xs={12} md={2}>
+          <Grid sx={{ pb: "20px" }} container item>
+            <Grid
+              item
+              xs={12}
+              md={12}
+              spacing={2}
+              sx={{ display: "flex", direction: "row" }}
+            >
               {libros.map((data, key) => {
                 return (
-                  <div
+                  <Grid
+                    xs={12}
+                    md={2}
                     key={key}
                     style={{
                       display: "flex",
@@ -128,14 +154,27 @@ const LendingAdmin = () => {
                       textAlign: "center",
                       borderRadius: "10px",
                       padding: "10px",
+                      marginRight: "10px",
                     }}
                   >
                     <Typography>{data.nombre}</Typography>
-                    <CloseIcon style={{ cursor: "pointer" }}></CloseIcon>
-                  </div>
+                    <CloseIcon
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        onDeleteBloque(data);
+                      }}
+                    ></CloseIcon>
+                  </Grid>
                 );
               })}
             </Grid>
+            {libros.length <= 0 ? (
+              <Grid item xs={12} md={4}>
+                <Typography sx={{ fontWeight: "light" }}>
+                  Agregar libros
+                </Typography>
+              </Grid>
+            ) : null}
           </Grid>
 
           <Grid sx={{ pb: "20px" }} container item spacing={2}>

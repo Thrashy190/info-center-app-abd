@@ -168,36 +168,39 @@ const UserProvider = ({ children }) => {
   //   const newEmployee = await addDoc(collection(db, 'ingreso'), {});
   // };
 
-  // const [students, setStudents] = useState([]);
+  //const [students, setStudents] = useState([]);
   // const [others, setOthers] = useState([]);
-  // const [employees, setEmployees] = useState([]);
+  //const [employees, setEmployees] = useState([]);
 
-  // const getStudents = async () => {
-  //   const studentReference = collection(db, "alumnos");
+  const getStudents = async () => {
+    const studentReference = collection(db, "alumnos");
+    let students = [];
+    await getDocs(studentReference)
+      .then((snapshot) => {
+        snapshot.docs.forEach((doc) => {
+          //console.log("====", doc.id);
+          students.push({ ...doc.data(), id: doc.id });
+          //setStudents([...students, { ...doc.data(), id: doc.id }]);
+          console.log(students);
+        });
+        console.log("===", students);
+        return students;
+      })
+      .catch((err) => {
+        console.log("Hubo un error al traer los datos");
+      });
+  };
 
-  //   getDocs(studentReference)
-  //     .then((snapshot) => {
-  //       snapshot.docs.map((doc) => {
-  //         setStudents([...students, { ...doc.data(), id: doc.id }]);
-  //       });
-  //       console.log(students);
-  //       return students;
-  //     })
-  //     .catch((err) => {
-  //       console.log("Hubo un error al traer los datos");
-  //     });
-
-  //   return [students, employees, others];
-  // };
-
-  // const getEmployees = () => {
+  // const getEmployees = async () => {
   //   const employeeReference = collection(db, "docentes");
-  //   getDocs(employeeReference)
+  //   await getDocs(employeeReference)
   //     .then((snapshot) => {
-  //       snapshot.docs.map((doc) => {
+  //       console.log("====", snapshot);
+  //       snapshot.docs.forEach((doc) => {
+  //         console.log("hola", doc);
   //         setEmployees([...employees, { ...doc.data(), id: doc.id }]);
   //       });
-  //       console.log(employees);
+  //       //console.log(employees);
   //       return employees;
   //     })
   //     .catch((err) => {
@@ -242,6 +245,7 @@ const UserProvider = ({ children }) => {
     signUpWithEmailPassword,
     login,
     logout,
+    getStudents,
   };
 
   return (
