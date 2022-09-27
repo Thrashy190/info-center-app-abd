@@ -13,9 +13,9 @@ import {
   FormControl,
   InputLabel,
 } from '@mui/material';
-import { searchAll, searchUser } from '../../context/UserProvider';
+import { searchAllBooks, searchUser } from '../../context/UserProvider';
 
-searchAll('libros');
+searchUser('alumnos', 'name', 'Daniel');
 const Content = () => {
   const dummyData = 
   [
