@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import SideBar from '../../shared/SideBar';
-import '../../../App.css';
+import React, { useState } from "react";
+import SideBar from "../../shared/SideBar";
+import "../../../App.css";
 import {
   Grid,
   Button,
@@ -11,70 +11,55 @@ import {
   FormControl,
   InputLabel,
   Box,
-} from '@mui/material';
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 const LendingAdmin = () => {
-  const [user, setUser] = useState('A');
-  const ingresos = [
+  const [user, setUser] = useState("A");
+  const [libros, setLibros] = useState([
     {
-      id: 'C19051632',
-      fecha_ingreso: '23/07/32',
-      tipo_user: 'student',
-      tipo_ingreso: 'Presencial',
+      nombre: "Calculo 1",
     },
+  ]);
+
+  const prestamos = [
     {
-      id: '1231',
-      fecha_ingreso: '23/07/32',
-      tipo_user: 'employee',
-      tipo_ingreso: 'Presencial',
-    },
-    {
-      id: 'C19051632',
-      fecha_ingreso: '23/07/32',
-      tipo_user: 'student',
-      tipo_ingreso: 'Presencial',
-    },
-    {
-      id: 'C19051632',
-      fecha_ingreso: '23/07/32',
-      tipo_user: 'student',
-      tipo_ingreso: 'Presencial',
-    },
-    {
-      id: 'C19051632',
-      fecha_ingreso: '23/07/32',
-      tipo_user: 'student',
-      tipo_ingreso: 'Presencial',
+      usuario: "C19051632",
+      fecha_prestamo: "23/07/2022",
+      fecha_devolucion: "26/07/2022",
+      empleado: "current user",
     },
   ];
 
-  const UserText = (text) => {
-    return text === 'student'
-      ? 'Estudiante'
-      : text === 'employee'
-      ? 'Empleado'
-      : 'Otros';
+  const onDeleteBloque = (bloque) => {
+    const copia = [...libros];
+    let indiceABorrar = copia.findIndex(
+      (block) => bloque.nombre === block.nombre
+    );
+    copia.splice(indiceABorrar, 1);
+    setLibros(copia);
   };
+
   return (
     <Grid container className="App">
       <Grid item xs={12} md={2}>
-        <SideBar type={'admin'}></SideBar>
+        <SideBar type={"admin"}></SideBar>
       </Grid>
       <Grid item xs={12} md={10}>
-        <div style={{ padding: '40px' }}>
-          <Grid sx={{ pb: '30px' }} container item spacing={2}>
+        <div style={{ padding: "40px" }}>
+          <Grid sx={{ pb: "30px" }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
+              <Typography sx={{ fontSize: "1.8rem", fontWeight: "bold" }}>
                 Prestamos de libros
               </Typography>
             </Grid>
           </Grid>
-          <Grid sx={{ pb: '30px' }} container item spacing={2}>
+          <Grid sx={{ pb: "30px" }} container item spacing={2}>
             <Grid item xs={12} md={3}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Ususario</InputLabel>
                 <Select
-                  defaultValue={'A'}
+                  defaultValue={"A"}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Usuarios"
@@ -84,122 +69,141 @@ const LendingAdmin = () => {
                     setUser(e.target.value);
                   }}
                 >
-                  <MenuItem value={'A'}>Alumnos</MenuItem>
-                  <MenuItem value={'W'}>Empleados</MenuItem>
-                  <MenuItem value={'O'}>Otros</MenuItem>
+                  <MenuItem value={"A"}>Alumnos</MenuItem>
+                  <MenuItem value={"W"}>Empleados</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
-          </Grid>
-          <Grid sx={{ pb: '30px' }} container item spacing={2}>
-            {user === 'A' ? (
+            {user === "A" ? (
               <>
                 <Grid item xs={12} md={3}>
                   <TextField fullWidth label="Numero de control" />
                 </Grid>
-                <Grid item xs={12} md={3}>
-                  <TextField fullWidth label="Genero" />
-                </Grid>
-                <Grid item xs={12} md={3}>
-                  <TextField fullWidth label="Especialidad" />
-                </Grid>
               </>
-            ) : user === 'W' ? (
+            ) : (
               <>
                 <Grid item xs={12} md={3}>
                   <TextField fullWidth label="Numero de empleado" />
                 </Grid>
-                <Grid item xs={12} md={3}>
-                  <TextField fullWidth label="Genero" />
-                </Grid>
-                <Grid item xs={12} md={3}>
-                  <TextField fullWidth label="Area" />
-                </Grid>
-              </>
-            ) : (
-              <>
-                <Grid item xs={12} md={4}>
-                  <TextField fullWidth label="Genero" />
-                </Grid>
               </>
             )}
+          </Grid>
+
+          <Grid sx={{ pb: "30px" }} container item spacing={2}>
+            <Grid item xs={12} md={3}>
+              <TextField fullWidth label="Libros" />
+            </Grid>
+
             <Grid
               item
               xs={12}
               md={3}
-              style={{ display: 'flex', alignContent: 'center' }}
+              style={{ display: "flex", alignContent: "center" }}
             >
-              <Button variant="contained" style={{ width: '100%' }}>
-                Agregar
+              <Button variant="contained" style={{ width: "100%" }}>
+                Agregar libro
               </Button>
             </Grid>
           </Grid>
-          <Grid sx={{ pb: '20px' }} container item spacing={2}>
+
+          <Grid sx={{ pb: "20px" }} container item spacing={2}>
             <Grid item xs={12} md={4}>
-              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
-                Lista de ingresos
+              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+                Libros
+              </Typography>
+            </Grid>
+          </Grid>
+
+          <Grid sx={{ pb: "20px" }} container item spacing={2}>
+            <Grid item xs={12} md={2}>
+              {libros.map((data, key) => {
+                return (
+                  <div
+                    key={key}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-around",
+                      direction: "row",
+                      border: "2px solid black",
+                      textAlign: "center",
+                      borderRadius: "10px",
+                      padding: "10px",
+                    }}
+                  >
+                    <Typography>{data.nombre}</Typography>
+                    <CloseIcon style={{ cursor: "pointer" }}></CloseIcon>
+                  </div>
+                );
+              })}
+            </Grid>
+          </Grid>
+
+          <Grid sx={{ pb: "20px" }} container item spacing={2}>
+            <Grid item xs={12} md={4}>
+              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+                Lista de prestamos
               </Typography>
             </Grid>
           </Grid>
           <div
             style={{
-              width: '100%',
-              marginTop: '40px',
-              height: '500px',
-              overflow: 'auto',
+              width: "100%",
+              marginTop: "40px",
+              height: "500px",
+              overflow: "auto",
             }}
           >
-            {ingresos.map((data, key) => {
+            {prestamos.map((data, key) => {
               return (
                 <Box
                   key={key}
                   sx={{
                     boxShadow: 2,
-                    mb: '20px',
-                    py: '20px',
-                    px: '10px',
-                    borderRadius: '5px',
+                    mb: "20px",
+                    py: "20px",
+                    px: "10px",
+                    borderRadius: "5px",
                   }}
                 >
                   <div
                     style={{
-                      paddingLeft: '30px',
-                      display: 'flex',
-                      direction: 'row',
-                      justifyContent: 'space-around',
+                      paddingLeft: "30px",
+                      display: "flex",
+                      direction: "row",
+                      justifyContent: "space-around",
                     }}
                   >
-                    <Typography sx={{ fontSize: '1.2rem' }}>
+                    <Typography sx={{ fontSize: "1.2rem" }}>
                       <Typography
-                        sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
+                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
                       >
                         Identificador:
                       </Typography>
-                      {data.id}
+                      {data.usuario}
                     </Typography>
-                    <Typography sx={{ fontSize: '1.2rem' }}>
+                    <Typography sx={{ fontSize: "1.2rem" }}>
                       <Typography
-                        sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
+                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
                       >
-                        Fecha de ingreso:
+                        Fecha del prestamos:
                       </Typography>
-                      {data.fecha_ingreso}
+                      {data.fecha_prestamo}
                     </Typography>
-                    <Typography sx={{ fontSize: '1.2rem' }}>
+                    <Typography sx={{ fontSize: "1.2rem" }}>
                       <Typography
-                        sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
+                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
                       >
-                        Tipo de usuario:
+                        Fecha de devolucion:
                       </Typography>
-                      {UserText(data.tipo_user)}
+                      {data.fecha_devolucion}
                     </Typography>
-                    <Typography sx={{ fontSize: '1.2rem' }}>
+                    <Typography sx={{ fontSize: "1.2rem" }}>
                       <Typography
-                        sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}
+                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
                       >
-                        Tipo de ingreso:
+                        Empleado que hizo el prestamo:
                       </Typography>
-                      {data.tipo_ingreso}
+                      {data.empleado}
                     </Typography>
                   </div>
                 </Box>
