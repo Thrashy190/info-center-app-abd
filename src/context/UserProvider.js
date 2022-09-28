@@ -16,7 +16,8 @@ import {
   doc,
   getDoc,
   deleteDoc,
-  updateDoc
+  updateDoc,
+  setDoc
 } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
@@ -279,7 +280,7 @@ const UserProvider = ({ children }) => {
   //     .catch((err) => {
   //       console.log("Hubo un error al traer los datos");
   //     });
-  };
+  // };
 
   const addAdmissionToInfoCenter = async (data, type) => {
     console.log(data);
@@ -318,7 +319,7 @@ const UserProvider = ({ children }) => {
         setCurrentUser(null);
       }
     });
-  , [currentUser]);
+  }, [currentUser]);
 
   const values = {
     currentUser,
@@ -419,7 +420,7 @@ const searchBook = async (input, data) => {
   }
 };
 
-const searchUser = async (type, input, data) => {
+const searchUser = async (type, input, id, data) => {
   try {
     const userConverter = {
       toFirestore: (user) => {
@@ -447,14 +448,16 @@ const searchUser = async (type, input, data) => {
       },
     };
 
-    const userReference = collection(db, type);
-    const q = query(userReference, where(input, "==", data));
-    var id;
+    if (id === null) {
+      const userReference = collection(db, type);
+      const q = query(userReference, where(input, "==", data));
+      var id;
 
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      id = doc.id;
-    });
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        id = doc.id;
+      });
+    }
 
     const ref = doc(db, type, id).withConverter(userConverter);
     const docSnap = await getDoc(ref);
@@ -471,17 +474,50 @@ const searchUser = async (type, input, data) => {
   }
 };
 
-const updateCollection = async(type, id, input, data) => {
-  const ref = db.collection(type).doc(id);
-  // Set the 'capital' field of the city
-  const res = await ref.updateDoc({input: data});
+const seachAutores = async (input, data, id) => {
+  let autores = [];
+  if (id === null) {
+    const autoresRef = doc(db, "autores");
+    const q = query(autoresRef, where(input, "==", data));
+    var id;
 
-  if(res){
-    console.log('Success');
-  }else{
-    console.log('Fail');
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      id = doc.id;
+      autores.push({ ...doc.data(), id: doc.id });
+    });
   }
+
+  
+  return autores;
 };
+
+
+const searchEditorial = async (input, data, id) => {
+  let editorial = [];
+  if (id === null) {
+    const editorialRef = doc(db, "editorial");
+    const q = query(editorialRef, where(input, "==", data));
+    var id;
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      id = doc.id;
+      editorial.push({ ...doc.data(), id: doc.id });
+    });
+  }
+
+  
+  return editorial;
+};
+
+const updateCollection = async (type, id, input, data) => {
+  const ref = doc(db, type, id);
+  await updateDoc(ref, {
+    input: data,
+  });
+};
+
 //Metodo para añadir informacion a una collecion, este metodo recibe
 //los datos, y la collecion donde se introducira
 const addDataToCollection = async (data, type) => {
@@ -491,7 +527,7 @@ const addDataToCollection = async (data, type) => {
 };
 
 const deletFromCollection = async (type, id) => {
-  await deleteDoc(doc(db, type, id)); 
+  await deleteDoc(doc(db, type, id));
 };
 
 export { searchAllBooks, searchBook, addDataToCollection, searchUser, deletFromCollection, updateCollection };
