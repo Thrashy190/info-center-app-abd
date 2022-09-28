@@ -168,9 +168,10 @@ const UserProvider = ({ children }) => {
   //   const newEmployee = await addDoc(collection(db, 'ingreso'), {});
   // };
 
-  //const [students, setStudents] = useState([]);
-  // const [others, setOthers] = useState([]);
-  //const [employees, setEmployees] = useState([]);
+  const getUsers = async () => {
+    const studentReference = collection(db, 'alumnos');
+    const employeeReference = collection(db, 'docentes');
+    const otherReference = collection(db, 'otros');
 
   const getStudents = async () => {
     const studentReference = collection(db, "alumnos");
@@ -317,7 +318,7 @@ const UserProvider = ({ children }) => {
         setCurrentUser(null);
       }
     });
-  , [currentUser]);
+  }, [currentUser]);
 
   const values = {
     currentUser,
