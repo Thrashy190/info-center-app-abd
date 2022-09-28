@@ -4,9 +4,9 @@ import React, {
   useState,
   useContext,
   useEffect,
-} from 'react';
-import Notification from '../helpers/Notification';
-import firebase from '../utils/firebase';
+} from "react";
+import Notification from "../helpers/Notification";
+import firebase from "../utils/firebase";
 import {
   addDoc,
   collection,
@@ -16,12 +16,12 @@ import {
   doc,
   getDoc,
   deleteDoc,
-} from 'firebase/firestore';
-import { db } from '../utils/firebase';
-import { useNavigate } from 'react-router-dom';
-import { PasswordOutlined } from '@mui/icons-material';
-import { User } from '../models/User';
-import { Books } from '../models/Books';
+} from "firebase/firestore";
+import { db } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
+import { PasswordOutlined } from "@mui/icons-material";
+import { User } from "../models/User";
+import { Books } from "../models/Books";
 
 const UserContext = createContext();
 
@@ -33,13 +33,13 @@ const UserProvider = ({ children }) => {
   const navigate = useNavigate();
   const [notify, setNotify] = useState({
     isOpen: false,
-    message: '',
-    type: '',
+    message: "",
+    type: "",
   });
 
   const logOutUser = () => {
     return {
-      type: 'LOGOUT_USER',
+      type: "LOGOUT_USER",
     };
   };
 
@@ -51,8 +51,8 @@ const UserProvider = ({ children }) => {
         setCurrentUser(userCredential.user.uid);
         setNotify({
           isOpen: true,
-          message: 'Se creo la cuenta de alumno correctamente',
-          type: 'success',
+          message: "Se creo la cuenta de alumno correctamente",
+          type: "success",
         });
         const {
           name,
@@ -64,9 +64,9 @@ const UserProvider = ({ children }) => {
           password,
         } = data;
 
-        if (type === 'student') {
+        if (type === "student") {
           const { career, numControl, semester } = data;
-          const newAlumno = await addDoc(collection(db, 'alumnos'), {
+          const newAlumno = await addDoc(collection(db, "alumnos"), {
             name,
             lastNameFather,
             lastNameMother,
@@ -79,9 +79,9 @@ const UserProvider = ({ children }) => {
             semester,
           });
         } else {
-          if (type === 'employees') {
+          if (type === "employees") {
             const { numEmployee, department } = data;
-            const newEmployee = await addDoc(collection(db, 'docente'), {
+            const newEmployee = await addDoc(collection(db, "docente"), {
               name,
               lastNameFather,
               lastNameMother,
@@ -93,7 +93,7 @@ const UserProvider = ({ children }) => {
               department,
             });
           } else {
-            const newOther = await addDoc(collection(db, 'otros'), {
+            const newOther = await addDoc(collection(db, "otros"), {
               name,
               lastNameFather,
               lastNameMother,
@@ -104,13 +104,13 @@ const UserProvider = ({ children }) => {
             });
           }
         }
-        navigate('/dashboard/inicio');
+        navigate("/dashboard/inicio");
       })
       .catch((error) => {
         setNotify({
           isOpen: true,
-          message: 'Hubo un error al crear usuario',
-          type: 'error',
+          message: "Hubo un error al crear usuario",
+          type: "error",
         });
       });
   };
@@ -123,18 +123,18 @@ const UserProvider = ({ children }) => {
         setCurrentUser(userCredential.user.uid);
         setNotify({
           isOpen: true,
-          message: 'Se inicio sesion correctamente',
-          type: 'success',
+          message: "Se inicio sesion correctamente",
+          type: "success",
         });
-        type === 'admin'
-          ? navigate('/admin/dashboard/inicio')
-          : navigate('/dashboard/inicio');
+        type === "admin"
+          ? navigate("/admin/dashboard/inicio")
+          : navigate("/dashboard/inicio");
       })
       .catch((error) => {
         setNotify({
           isOpen: true,
-          message: 'Hubo un error al iniciar sesión',
-          type: 'error',
+          message: "Hubo un error al iniciar sesión",
+          type: "error",
         });
       });
   };
@@ -147,17 +147,17 @@ const UserProvider = ({ children }) => {
         setCurrentUser(null);
         setNotify({
           isOpen: true,
-          message: 'Sesión terminada correctamente',
-          type: 'success',
+          message: "Sesión terminada correctamente",
+          type: "success",
         });
         logOutUser();
-        navigate('/usertype');
+        navigate("/usertype");
       })
       .catch(() => {
         setNotify({
           isOpen: true,
-          message: 'Error al momento de cerrar sesión intentalo mas tarde',
-          type: 'error',
+          message: "Error al momento de cerrar sesión intentalo mas tarde",
+          type: "error",
         });
       });
   };
@@ -168,13 +168,12 @@ const UserProvider = ({ children }) => {
   //   const newEmployee = await addDoc(collection(db, 'ingreso'), {});
   // };
 
-  const getUsers = async () => {
-    const studentReference = collection(db, 'alumnos');
-    const employeeReference = collection(db, 'docentes');
-    const otherReference = collection(db, 'otros');
+  //const [students, setStudents] = useState([]);
+  // const [others, setOthers] = useState([]);
+  //const [employees, setEmployees] = useState([]);
 
   const getStudents = async () => {
-    const studentReference = collection(db, 'alumnos');
+    const studentReference = collection(db, "alumnos");
     let students = [];
     try {
       const studentsSnap = await getDocs(studentReference);
@@ -190,7 +189,7 @@ const UserProvider = ({ children }) => {
   };
 
   const getEmployees = async () => {
-    const employeeReference = collection(db, 'empleado');
+    const employeeReference = collection(db, "empleado");
 
     let employees = [];
     try {
@@ -201,6 +200,66 @@ const UserProvider = ({ children }) => {
         });
       }
       return employees;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getOneUserInfo = (doc) => {
+    if (doc.data().tipoIngreso === "S") {
+      // const studentRef = collection(db, "alumnos").doc(doc.data().idUsuario);
+      // studentRef
+      //   .get()
+      //   .then((doc) => {
+      //     if (doc.exists) {
+      //       console.log("Document data:", doc.data());
+      //       return doc.data();
+      //     } else {
+      //       // doc.data() will be undefined in this case
+      //       console.log("No such document!");
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log("Error getting document:", error);
+      //   });
+      console.log("hola s");
+    }
+
+    if (doc.data().tipoIngreso === "E") {
+      //   const employeeRef = collection(db, "empleado").doc(doc.data().idUsuario);
+      //   employeeRef
+      //     .get()
+      //     .then((doc) => {
+      //       if (doc.exists) {
+      //         console.log("Document data:", doc.data());
+      //         return doc.data();
+      //       } else {
+      //         // doc.data() will be undefined in this case
+      //         console.log("No such document!");
+      //       }
+      //     })
+      //     .catch((error) => {
+      //       console.log("Error getting document:", error);
+      //     });
+      // }
+      console.log("hola E");
+    }
+  };
+
+  const getAdmissions = async () => {
+    const ingresosRef = collection(db, "ingreso");
+
+    let ingresos = [];
+
+    try {
+      const ingresosSnap = await getDocs(ingresosRef);
+      if (ingresosSnap.docs.length > 0) {
+        ingresosSnap.forEach((doc) => {
+          console.log(doc.data());
+          ingresos.push({ ...doc.data(), id: doc.id });
+        });
+      }
+      return ingresos;
     } catch (error) {
       console.log(error);
     }
@@ -221,12 +280,27 @@ const UserProvider = ({ children }) => {
   //     });
   };
 
-  const addAdmissionToInfoCenter = async (data) => {
-    await addDoc(collection(db, 'ingreso'), {
-      idUsuario: data.id,
-      fechaIngreso: data.fecha,
-      tipoIngreso: data.tipo,
-    });
+  const addAdmissionToInfoCenter = async (data, type) => {
+    console.log(data);
+    try {
+      await addDoc(collection(db, "ingreso"), {
+        idUsuario: data.id,
+        fechaIngreso: Math.floor(new Date() / 1000),
+        tipoIngreso: type,
+      });
+      setNotify({
+        isOpen: true,
+        message: "Ingreso agregado correctamente",
+        type: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      setNotify({
+        isOpen: true,
+        message: "Error al momento de agregar un ingreso",
+        type: "error",
+      });
+    }
   };
 
   useEffect(() => {
@@ -243,7 +317,7 @@ const UserProvider = ({ children }) => {
         setCurrentUser(null);
       }
     });
-  }, [currentUser]);
+  , [currentUser]);
 
   const values = {
     currentUser,
@@ -254,12 +328,14 @@ const UserProvider = ({ children }) => {
     // getStudents,
     // getEmployees,
     addAdmissionToInfoCenter,
+    getAdmissions,
+    getBooks,
   };
 
   return (
     <Fragment>
       <UserContext.Provider value={values}>{children}</UserContext.Provider>
-      <Notification notify={notify} setNotify={setNotify} position={'top'} />
+      <Notification notify={notify} setNotify={setNotify} position={"top"} />
     </Fragment>
   );
 };
@@ -308,7 +384,7 @@ const searchAllBooks = async (type) => {
         // Use a book instance method
         console.log(book.toString());
       } else {
-        console.log('No such document!');
+        console.log("No such document!");
       }
     }
   } catch (error) {
@@ -327,7 +403,7 @@ const searchBook = async (input, data) => {
       id = doc.id;
     });
 
-    const ref = doc(db, 'libros', id).withConverter(bookConverter);
+    const ref = doc(db, "libros", id).withConverter(bookConverter);
     const docSnap = await getDoc(ref);
     if (docSnap.exists()) {
       // Convert to book object
@@ -335,7 +411,7 @@ const searchBook = async (input, data) => {
       // Use a book instance method
       console.log(book.toString());
     } else {
-      console.log('No such document!');
+      console.log("No such document!");
     }
   } catch (error) {
     console.log(error);
@@ -371,7 +447,7 @@ const searchUser = async (type, input, data) => {
     };
 
     const userReference = collection(db, type);
-    const q = query(userReference, where(input, '==', data));
+    const q = query(userReference, where(input, "==", data));
     var id;
 
     const querySnapshot = await getDocs(q);
@@ -387,7 +463,7 @@ const searchUser = async (type, input, data) => {
       // Use a user instance method
       console.log(user.toString());
     } else {
-      console.log('No such document!');
+      console.log("No such document!");
     }
   } catch (error) {
     console.log(error);
