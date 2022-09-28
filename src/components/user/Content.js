@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { searchAllBooks, searchUser } from '../../context/UserProvider';
 
-// searchAll('libros');
+searchUser('alumnos', 'name', 'Daniel');
 const Content = () => {
   const dummyData = 
   [
