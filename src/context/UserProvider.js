@@ -17,7 +17,6 @@ import {
   getDoc,
   deleteDoc,
   updateDoc,
-  setDoc
 } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
@@ -225,8 +224,9 @@ const UserProvider = ({ children }) => {
       //   .catch((error) => {
       //     console.log("Error getting document:", error);
       //   });
+      }
       console.log("hola s");
-    }
+    
 
     if (doc.data().tipoIngreso === "E") {
       //   const employeeRef = collection(db, "empleado").doc(doc.data().idUsuario);
@@ -244,7 +244,7 @@ const UserProvider = ({ children }) => {
       //     .catch((error) => {
       //       console.log("Error getting document:", error);
       //     });
-      // }
+      }
       console.log("hola E");
     }
   };
@@ -332,7 +332,7 @@ const UserProvider = ({ children }) => {
     // getEmployees,
     addAdmissionToInfoCenter,
     getAdmissions,
-    getBooks,
+    // getBooks,
   };
 
   return (
@@ -400,6 +400,7 @@ const searchBook = async (input, data) => {
     const bookReference = collection(db, 'libros');
     const q = query(bookReference, where(input, '==', data));
     var id;
+    let book = [];
 
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -409,10 +410,11 @@ const searchBook = async (input, data) => {
     const ref = doc(db, "libros", id).withConverter(bookConverter);
     const docSnap = await getDoc(ref);
     if (docSnap.exists()) {
-      // Convert to book object
-      const book = docSnap.data();
       // Use a book instance method
       console.log(book.toString());
+      // Convert to book object
+      book.push({...docSnap.data(), id: docSnap.id});
+      return book;
     } else {
       console.log("No such document!");
     }
@@ -421,7 +423,7 @@ const searchBook = async (input, data) => {
   }
 };
 
-const searchUser = async (type, input, id, data) => {
+const searchUser = async (type, input, data, id) => {
   try {
     const userConverter = {
       toFirestore: (user) => {
@@ -449,10 +451,9 @@ const searchUser = async (type, input, id, data) => {
       },
     };
 
-    if (id === null) {
+    if (id !== null) {
       const userReference = collection(db, type);
       const q = query(userReference, where(input, "==", data));
-      var id;
 
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
@@ -515,7 +516,7 @@ const searchEditorial = async (input, data, id) => {
 const updateCollection = async (type, id, input, data) => {
   const ref = doc(db, type, id);
   await updateDoc(ref, {
-    input: data,
+    [ input]: data,
   });
 };
 
