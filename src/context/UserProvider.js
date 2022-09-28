@@ -16,6 +16,7 @@ import {
   doc,
   getDoc,
   deleteDoc,
+  updateDoc
 } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
@@ -499,6 +500,17 @@ const searchUser = async (type, input, data) => {
   }
 };
 
+const updateCollection = async(type, id, input, data) => {
+  const ref = db.collection(type).doc(id);
+  // Set the 'capital' field of the city
+  const res = await ref.updateDoc({input: data});
+
+  if(res){
+    console.log('Success');
+  }else{
+    console.log('Fail');
+  }
+};
 //Metodo para añadir informacion a una collecion, este metodo recibe
 //los datos, y la collecion donde se introducira
 const addDataToCollection = async (data, type) => {
@@ -508,7 +520,7 @@ const addDataToCollection = async (data, type) => {
 };
 
 const deletFromCollection = async (type, id) => {
-  await deleteDoc(doc(db, type, id));
+  await deleteDoc(doc(db, type, id)); 
 };
 
-export { searchAllBooks, searchBook, addDataToCollection, searchUser };
+export { searchAllBooks, searchBook, addDataToCollection, searchUser, deletFromCollection, updateCollection };
