@@ -18,6 +18,7 @@ import {
   deleteDoc,
   updateDoc,
   setDoc,
+  orderBy,
 } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
@@ -174,6 +175,22 @@ const UserProvider = ({ children }) => {
   // const [others, setOthers] = useState([]);
   //const [employees, setEmployees] = useState([]);
 
+  const getBooks = async () => {
+    const booksRef = collection(db, "libros");
+    let books = [];
+    try {
+      const booksSnap = await getDocs(booksRef);
+      if (booksSnap.docs.length > 0) {
+        booksSnap.forEach((doc) => {
+          books.push({ ...doc.data(), id: doc.id });
+        });
+      }
+      return books;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getStudents = async () => {
     const studentReference = collection(db, "alumnos");
     let students = [];
@@ -210,11 +227,13 @@ const UserProvider = ({ children }) => {
   const getAdmissions = async () => {
     const ingresosRef = collection(db, "ingreso");
 
+    const q = query(collection(db, "ingreso"), orderBy("fechaIngreso", "desc"));
+
     let ingresos = [];
     let docRef = {};
 
     try {
-      const ingresosSnap = await getDocs(ingresosRef);
+      const ingresosSnap = await getDocs(q);
       if (ingresosSnap.docs.length > 0) {
         ingresosSnap.forEach(async (docItem) => {
           if (docItem.data().tipoIngreso === "S") {
@@ -239,23 +258,71 @@ const UserProvider = ({ children }) => {
   };
 
   const getLendings = async () => {
-    //cosnt lendings
+    const prestamosRef = collection(db, "prestamo");
+
+    let prestamos = [];
+    let docRef = {};
+    let bookRef = [];
+
+    try {
+      const prestamosSnap = await getDocs(prestamosRef);
+      if (prestamosSnap.docs.length > 0) {
+        prestamosSnap.forEach(async (docItem) => {
+          if (docItem.data().userType === "S") {
+            docRef = doc(db, "alumnos", docItem.data().idUsuario);
+          } else {
+            docRef = doc(db, "empleado", docItem.data().idUsuario);
+          }
+          let userSnap = await getDoc(docRef);
+          docItem.data().booksList.map((data) => {
+            bookRef.push(doc(db, "libros", data));
+          });
+
+          prestamos.push({
+            ...docItem.data(),
+            id: docItem.id,
+            name: userSnap.data().name,
+            ...bookRef,
+          });
+        });
+      }
+      console.log(prestamos);
+      return prestamos;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  // const getOther = () => {
-  //   const otherReference = collection(db, "alumnos");
-  //   getDocs(otherReference)
-  //     .then((snapshot) => {
-  //       snapshot.docs.map((doc) => {
-  //         setOthers([...others, { ...doc.data(), id: doc.id }]);
-  //       });
-  //       console.log(others);
-  //       return others;
-  //     })
-  //     .catch((err) => {
-  //       console.log("Hubo un error al traer los datos");
-  //     });
-  // };
+  const addLendings = async (user, lista, type) => {
+    let books = lista.map((data) => {
+      return data.id;
+    });
+
+    try {
+      await addDoc(collection(db, "prestamo"), {
+        idUsuario: user.id,
+        fechaPrestamo: Math.floor(new Date() / 1000),
+        fechaDevolucion: Math.floor(
+          new Date().setDate(new Date().getDate() + 5) / 1000
+        ),
+        empleado: currentUser,
+        booksList: books,
+        userType: type,
+      });
+      setNotify({
+        isOpen: true,
+        message: "Prestamo creado correctamente",
+        type: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      setNotify({
+        isOpen: true,
+        message: "Error al momento de crear el prestamo",
+        type: "error",
+      });
+    }
+  };
 
   const addAdmissionToInfoCenter = async (data, type) => {
     console.log(data);
@@ -302,11 +369,13 @@ const UserProvider = ({ children }) => {
     signUpWithEmailPassword,
     login,
     logout,
-    // getStudents,
-    // getEmployees,
+    getStudents,
+    getEmployees,
     addAdmissionToInfoCenter,
     getAdmissions,
     getBooks,
+    addLendings,
+    getLendings,
   };
 
   return (
