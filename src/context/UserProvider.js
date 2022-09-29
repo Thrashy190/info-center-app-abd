@@ -171,99 +171,56 @@ const UserProvider = ({ children }) => {
   //   const newEmployee = await addDoc(collection(db, 'ingreso'), {});
   // };
 
-  const getUsers = async () => {
-    const studentReference = collection(db, 'alumnos');
-    const employeeReference = collection(db, 'docentes');
-    const otherReference = collection(db, 'otros');
+  //const [students, setStudents] = useState([]);
+  // const [others, setOthers] = useState([]);
+  //const [employees, setEmployees] = useState([]);
 
-    const getBooks = async () => {
-      const booksRef = collection(db, "libros");
-      let books = [];
-      try {
-        const booksSnap = await getDocs(booksRef);
-        if (booksSnap.docs.length > 0) {
-          booksSnap.forEach((doc) => {
-            books.push({ ...doc.data(), id: doc.id });
-          });
-        }
-        return books;
-      } catch (error) {
-        console.log(error);
+  const getBooks = async () => {
+    const booksRef = collection(db, "libros");
+    let books = [];
+    try {
+      const booksSnap = await getDocs(booksRef);
+      if (booksSnap.docs.length > 0) {
+        booksSnap.forEach((doc) => {
+          books.push({ ...doc.data(), id: doc.id });
+        });
       }
-    };
+      return books;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    const getStudents = async () => {
-      const studentReference = collection(db, "alumnos");
-      let students = [];
-      try {
-        const studentsSnap = await getDocs(studentReference);
-        if (studentsSnap.docs.length > 0) {
-          studentsSnap.forEach((doc) => {
-            students.push({ ...doc.data(), id: doc.id });
-          });
-        }
-        return students;
-      } catch (error) {
-        console.log(error);
+  const getStudents = async () => {
+    const studentReference = collection(db, "alumnos");
+    let students = [];
+    try {
+      const studentsSnap = await getDocs(studentReference);
+      if (studentsSnap.docs.length > 0) {
+        studentsSnap.forEach((doc) => {
+          students.push({ ...doc.data(), id: doc.id });
+        });
       }
-    };
+      return students;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    const getEmployees = async () => {
-      const employeeReference = collection(db, "empleado");
+  const getEmployees = async () => {
+    const employeeReference = collection(db, "empleado");
 
-      let employees = [];
-      try {
-        const employeesSnap = await getDocs(employeeReference);
-        if (employeesSnap.docs.length > 0) {
-          employeesSnap.forEach((doc) => {
-            employees.push({ ...doc.data(), id: doc.id });
-          });
-        }
-        return employees;
-      } catch (error) {
-        console.log(error);
+    let employees = [];
+    try {
+      const employeesSnap = await getDocs(employeeReference);
+      if (employeesSnap.docs.length > 0) {
+        employeesSnap.forEach((doc) => {
+          employees.push({ ...doc.data(), id: doc.id });
+        });
       }
-    };
-
-    const getOneUserInfo = (doc) => {
-      if (doc.data().tipoIngreso === "S") {
-        // const studentRef = collection(db, "alumnos").doc(doc.data().idUsuario);
-        // studentRef
-        //   .get()
-        //   .then((doc) => {
-        //     if (doc.exists) {
-        //       console.log("Document data:", doc.data());
-        //       return doc.data();
-        //     } else {
-        //       // doc.data() will be undefined in this case
-        //       console.log("No such document!");
-        //     }
-        //   })
-        //   .catch((error) => {
-        //     console.log("Error getting document:", error);
-        //   });
-      }
-      console.log("hola s");
-
-
-      if (doc.data().tipoIngreso === "E") {
-        //   const employeeRef = collection(db, "empleado").doc(doc.data().idUsuario);
-        //   employeeRef
-        //     .get()
-        //     .then((doc) => {
-        //       if (doc.exists) {
-        //         console.log("Document data:", doc.data());
-        //         return doc.data();
-        //       } else {
-        //         // doc.data() will be undefined in this case
-        //         console.log("No such document!");
-        //       }
-        //     })
-        //     .catch((error) => {
-        //       console.log("Error getting document:", error);
-        //     });
-      }
-      console.log("hola E");
+      return employees;
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -417,6 +374,8 @@ const UserProvider = ({ children }) => {
     addAdmissionToInfoCenter,
     getAdmissions,
     getBooks,
+    addLendings,
+    getLendings,
   };
 
   return (
@@ -604,40 +563,42 @@ const updateCollection = async (type, id, input, data) => {
 //Metodo para añadir informacion a una collecion, este metodo recibe
 //los datos, y la collecion donde se introducira
 const addAutor = async (data) => {
-  name = data.name,
-    lastNameFather = data.lastNameFather,
-    lastNameMother = data.lastNameMother,
-    nationality = data.nationality,
-    email = data.email,
-    gender = data.gender,
-    password = data.password,
-    birthday = data.birthday,
-    await addDoc(collection(db, 'autores'), {
-      name,
-      lastNameFather,
-      lastNameMother,
-      nationality,
-      email,
-      gender,
-      password,
-      birthday,
-    }
-    );
+  const { name,
+    lastNameFather,
+    lastNameMother,
+    nationality,
+    email,
+    gender,
+    password,
+    birthday,
+  } = data;
+  await addDoc(collection(db, 'autores'), {
+    name,
+    lastNameFather,
+    lastNameMother,
+    nationality,
+    email,
+    gender,
+    password,
+    birthday,
+  }
+  );
 };
 
 const addBook = async (data) => {
-  name = data.name,
-    categoria = data.categoria,
-    editoria = data.editoria,
-    fecha_publicacion = data.fecha_publicacion,
-    volumen = data.volumen,
-    await addDoc(collection(db, 'libros'), {
-      name,
-      categoria,
-      editoria,
-      fecha_publicacion,
-      volumen,
-    });
+  const {
+    name,
+    categoria,
+    editoria,
+    fecha_publicacion,
+    volumen, } = data;
+  await addDoc(collection(db, 'libros'), {
+    name,
+    categoria,
+    editoria,
+    fecha_publicacion,
+    volumen,
+  });
 };
 const addCategoria = async (name) => {
   await addDoc(collection(db, 'categorias'), {
@@ -645,14 +606,15 @@ const addCategoria = async (name) => {
   });
 };
 const addEditorial = async (data) => {
-  name = data.name,
-    email = data.email,
-    phone = data.phone,
-    await addDoc(collection(db, 'editorial'), {
-      name,
-      email,
-      phone,
-    });
+  const {
+    name,
+    email,
+    phone, } = data;
+  await addDoc(collection(db, 'editorial'), {
+    name,
+    email,
+    phone,
+  });
 };
 
 const deletFromCollection = async (type, id) => {
