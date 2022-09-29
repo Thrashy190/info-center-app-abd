@@ -16,6 +16,8 @@ import {
   doc,
   getDoc,
   deleteDoc,
+  updateDoc,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
@@ -162,21 +164,15 @@ const UserProvider = ({ children }) => {
       });
   };
 
-  const getBooks = async () => {
-    const booksRef = collection(db, "libros");
-    let books = [];
-    try {
-      const booksSnap = await getDocs(booksRef);
-      if (booksSnap.docs.length > 0) {
-        booksSnap.forEach((doc) => {
-          books.push({ ...doc.data(), id: doc.id });
-        });
-      }
-      return books;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //const getUserAdmissions = () => {};
+
+  // const addUserAdmissions = async (data) => {
+  //   const newEmployee = await addDoc(collection(db, 'ingreso'), {});
+  // };
+
+  //const [students, setStudents] = useState([]);
+  // const [others, setOthers] = useState([]);
+  //const [employees, setEmployees] = useState([]);
 
   const getStudents = async () => {
     const studentReference = collection(db, "alumnos");
@@ -306,8 +302,8 @@ const UserProvider = ({ children }) => {
     signUpWithEmailPassword,
     login,
     logout,
-    getStudents,
-    getEmployees,
+    // getStudents,
+    // getEmployees,
     addAdmissionToInfoCenter,
     getAdmissions,
     getBooks,
@@ -323,30 +319,30 @@ const UserProvider = ({ children }) => {
 
 export default UserProvider;
 
+const bookConverter = {
+  toFirestore: (book) => {
+    return {
+      nombre: book.nombre,
+      categoria: book.categoria,
+      editorial: book.editorial,
+      volumen: book.volumen,
+      fecha_publicacion: book.fecha_publicacion,
+    };
+  },
+  fromFirestore: (snapshot, options) => {
+    const book = snapshot.data(options);
+    return new Books(
+      book.nombre,
+      book.categoria,
+      book.editorial,
+      book.volumen,
+      book.fecha_publicacion
+    );
+  },
+};
+
 const searchAllBooks = async (type) => {
   try {
-    const bookConverter = {
-      toFirestore: (book) => {
-        return {
-          nombre: book.nombre,
-          categoria: book.categoria,
-          editorial: book.editorial,
-          volumen: book.volumen,
-          fecha_publicacion: book.fecha_publicacion,
-        };
-      },
-      fromFirestore: (snapshot, options) => {
-        const book = snapshot.data(options);
-        return new Books(
-          book.nombre,
-          book.categoria,
-          book.editorial,
-          book.volumen,
-          book.fecha_publicacion
-        );
-      },
-    };
-
     const bookReference = collection(db, type);
     const q = query(bookReference);
     let id = [];
@@ -375,28 +371,6 @@ const searchAllBooks = async (type) => {
 
 const searchBook = async (input, data) => {
   try {
-    const bookConverter = {
-      toFirestore: (book) => {
-        return {
-          nombre: book.nombre,
-          categoria: book.categoria,
-          editorial: book.editorial,
-          volumen: book.volumen,
-          fecha_publicacion: book.fecha_publicacion,
-        };
-      },
-      fromFirestore: (snapshot, options) => {
-        const book = snapshot.data(options);
-        return new Books(
-          book.nombre,
-          book.categoria,
-          book.editorial,
-          book.volumen,
-          book.fecha_publicacion
-        );
-      },
-    };
-
     const bookReference = collection(db, "libros");
     const q = query(bookReference, where(input, "==", data));
     var id;
@@ -421,7 +395,7 @@ const searchBook = async (input, data) => {
   }
 };
 
-const searchUser = async (type, input, data) => {
+const searchUser = async (type, input, id, data) => {
   try {
     const userConverter = {
       toFirestore: (user) => {
@@ -449,16 +423,18 @@ const searchUser = async (type, input, data) => {
       },
     };
 
-    const userReference = collection(db, type);
-    const q = query(userReference, where(input, "==", data));
-    var id;
+    if (id === null) {
+      const userReference = collection(db, type);
+      const q = query(userReference, where(input, "==", data));
+      var id;
 
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      id = doc.id;
-    });
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        id = doc.id;
+      });
+    }
 
-    const ref = doc(db, "alumnos", id).withConverter(userConverter);
+    const ref = doc(db, type, id).withConverter(userConverter);
     const docSnap = await getDoc(ref);
     if (docSnap.exists()) {
       // Convert to user object
@@ -473,6 +449,47 @@ const searchUser = async (type, input, data) => {
   }
 };
 
+const seachAutores = async (input, data, id) => {
+  let autores = [];
+  if (id === null) {
+    const autoresRef = doc(db, "autores");
+    const q = query(autoresRef, where(input, "==", data));
+    var id;
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      id = doc.id;
+      autores.push({ ...doc.data(), id: doc.id });
+    });
+  }
+
+  return autores;
+};
+
+const searchEditorial = async (input, data, id) => {
+  let editorial = [];
+  if (id === null) {
+    const editorialRef = doc(db, "editorial");
+    const q = query(editorialRef, where(input, "==", data));
+    var id;
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      id = doc.id;
+      editorial.push({ ...doc.data(), id: doc.id });
+    });
+  }
+
+  return editorial;
+};
+
+const updateCollection = async (type, id, input, data) => {
+  const ref = doc(db, type, id);
+  await updateDoc(ref, {
+    input: data,
+  });
+};
+
 //Metodo para añadir informacion a una collecion, este metodo recibe
 //los datos, y la collecion donde se introducira
 const addDataToCollection = async (data, type) => {
@@ -485,4 +502,11 @@ const deletFromCollection = async (type, id) => {
   await deleteDoc(doc(db, type, id));
 };
 
-export { searchAllBooks, searchBook, addDataToCollection, searchUser };
+export {
+  searchAllBooks,
+  searchBook,
+  addDataToCollection,
+  searchUser,
+  deletFromCollection,
+  updateCollection,
+};
