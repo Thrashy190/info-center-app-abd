@@ -18,7 +18,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useAuth } from "../../../context/UserProvider";
 
 const LendingAdmin = () => {
-  const { getStudents, getEmployees, getBooks } = useAuth();
+  const { getStudents, getEmployees, getBooks, addLendings, getLendings } =
+    useAuth();
   const [user, setUser] = useState("A");
   const [bookList, setBookList] = useState([]);
 
@@ -26,22 +27,35 @@ const LendingAdmin = () => {
   const [studentsList, setStudentsList] = useState([]);
   const [employeesList, setEmployeesList] = useState([]);
   const [book, setBook] = useState([]);
+  //const [count, setCount] = useState(0);
 
   const [userType, setUserType] = useState("S");
-  const [prestamos, setPrestamos] = useState([]);
+  const [prestamos, setPrestamos] = useState([
+    {
+      idUsuario: "C19051632",
+      fechaPrestamo: 1664461287,
+      fechaDevolucion: 1664893287,
+      empleado: "Num de empleado",
+      booksList: ["Calculo I", "Calculo II"],
+    },
+  ]);
 
   const getData = async () => {
     setStudentsList(await getStudents());
     setEmployeesList(await getEmployees());
     setBookList(await getBooks());
+    //setPrestamos(await getLendings());
   };
 
   useEffect(() => {
     getData();
   }, []);
 
-  const handleAddLibro = (data) => {
-    setSelectedBooks([...selectedBooks, data]);
+  const handleAddLibro = () => {
+    setSelectedBooks([
+      ...selectedBooks,
+      { id: book[0].id, nombre: book[0].nombre },
+    ]);
   };
 
   const onDeleteBloque = (bloque) => {
@@ -51,6 +65,11 @@ const LendingAdmin = () => {
     );
     copia.splice(indiceABorrar, 1);
     setSelectedBooks(copia);
+  };
+
+  const generateLending = () => {
+    addLendings(user[0], selectedBooks, userType);
+    //setCount(count + 1);
   };
 
   return (
@@ -67,7 +86,11 @@ const LendingAdmin = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} md={2}>
-              <Button variant="contained" style={{ width: "100%" }}>
+              <Button
+                variant="contained"
+                style={{ width: "100%" }}
+                onClick={generateLending}
+              >
                 Agregar
               </Button>
             </Grid>
@@ -123,15 +146,15 @@ const LendingAdmin = () => {
                   <Autocomplete
                     disablePortal
                     id="combo-box-employee"
-                    value={user.numEmpleado}
+                    value={user.numEmployee}
                     onChange={(e, newValue) => {
                       setUser(
                         employeesList.filter(
-                          (data) => data.numEmpleado === newValue
+                          (data) => data.numEmployee === newValue
                         )
                       );
                     }}
-                    options={employeesList.map((option) => option.numEmpleado)}
+                    options={employeesList.map((option) => option.numEmployee)}
                     renderInput={(params) => (
                       <TextField {...params} label="Numero de empleado" />
                     )}
@@ -153,7 +176,9 @@ const LendingAdmin = () => {
                 disablePortal
                 id="combo-box-employee"
                 value={bookList.nombre}
-                onChange={(e, newValue) => {}}
+                onChange={(e, newValue) => {
+                  setBook(bookList.filter((data) => data.nombre === newValue));
+                }}
                 options={bookList.map((option) => option.nombre)}
                 renderInput={(params) => (
                   <TextField {...params} label="Libros" />
@@ -169,6 +194,7 @@ const LendingAdmin = () => {
             >
               <Button
                 variant="contained"
+                disabled={selectedBooks.length >= 3 ? true : false}
                 style={{ width: "100%" }}
                 onClick={() => {
                   handleAddLibro();
@@ -274,7 +300,7 @@ const LendingAdmin = () => {
                       >
                         Identificador:
                       </Typography>
-                      {data.usuario}
+                      {data.idUsuario}
                     </Typography>
                     <Typography sx={{ fontSize: "1.2rem" }}>
                       <Typography
@@ -282,7 +308,7 @@ const LendingAdmin = () => {
                       >
                         Fecha del prestamos:
                       </Typography>
-                      {data.fecha_prestamo}
+                      {data.fechaPrestamo}
                     </Typography>
                     <Typography sx={{ fontSize: "1.2rem" }}>
                       <Typography
@@ -290,7 +316,7 @@ const LendingAdmin = () => {
                       >
                         Fecha de devolucion:
                       </Typography>
-                      {data.fecha_devolucion}
+                      {data.fechaDevolucion}
                     </Typography>
                     <Typography sx={{ fontSize: "1.2rem" }}>
                       <Typography

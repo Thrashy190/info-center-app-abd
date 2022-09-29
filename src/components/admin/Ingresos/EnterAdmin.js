@@ -14,6 +14,7 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { useAuth } from "../../../context/UserProvider";
+import { convertUnixToCompleteDate } from "../../../helpers/DateConverter";
 
 const EnterAdmin = () => {
   const { getStudents, getEmployees, addAdmissionToInfoCenter, getAdmissions } =
@@ -111,15 +112,15 @@ const EnterAdmin = () => {
                   <Autocomplete
                     disablePortal
                     id="combo-box-employee"
-                    value={user.numEmpleado}
+                    value={user.numEmployee}
                     onChange={(e, newValue) => {
                       setUser(
                         employeesList.filter(
-                          (data) => data.numEmpleado === newValue
+                          (data) => data.numEmployee === newValue
                         )
                       );
                     }}
-                    options={employeesList.map((option) => option.numEmpleado)}
+                    options={employeesList.map((option) => option.numEmployee)}
                     renderInput={(params) => (
                       <TextField {...params} label="Numero de empleado" />
                     )}
@@ -191,7 +192,9 @@ const EnterAdmin = () => {
                       >
                         Identificador:
                       </Typography>
-                      {data.idUsuario}
+                      {data.tipoIngreso === "S"
+                        ? data.numControl
+                        : data.numEmployee}
                     </Typography>
                     <Typography sx={{ fontSize: "1.2rem" }}>
                       <Typography
@@ -199,24 +202,24 @@ const EnterAdmin = () => {
                       >
                         Fecha de ingreso:
                       </Typography>
-                      {data.fechaIngreso}
+                      {convertUnixToCompleteDate(data.fechaIngreso)}
                     </Typography>
                     <Typography sx={{ fontSize: "1.2rem" }}>
                       <Typography
                         sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
                       >
-                        Tipo de usuario:
+                        {data.tipoIngreso === "S" ? "Carrera:" : "Departamento:"}
                       </Typography>
-                      {UserText(data.tipoIngreso)}
+                      {data.tipoIngreso === "S" ? data.career : data.department}
                     </Typography>
-                    {/* <Typography sx={{ fontSize: "1.2rem" }}>
+                    <Typography sx={{ fontSize: "1.2rem" }}>
                       <Typography
                         sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
                       >
                         Genero:
                       </Typography>
-                      {data.genero}
-                    </Typography> */}
+                      {data.gender}
+                    </Typography>
                   </div>
                 </Box>
               );

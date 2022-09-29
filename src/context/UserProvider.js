@@ -17,6 +17,8 @@ import {
   getDoc,
   deleteDoc,
   updateDoc,
+  setDoc,
+  orderBy,
 } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
@@ -82,7 +84,7 @@ const UserProvider = ({ children }) => {
         } else {
           if (type === "employees") {
             const { numEmployee, department } = data;
-            const newEmployee = await addDoc(collection(db, "docente"), {
+            const newEmployee = await addDoc(collection(db, "empleado"), {
               name,
               lastNameFather,
               lastNameMother,
@@ -174,76 +176,92 @@ const UserProvider = ({ children }) => {
     const employeeReference = collection(db, 'docentes');
     const otherReference = collection(db, 'otros');
 
-  const getStudents = async () => {
-    const studentReference = collection(db, "alumnos");
-    let students = [];
-    try {
-      const studentsSnap = await getDocs(studentReference);
-      if (studentsSnap.docs.length > 0) {
-        studentsSnap.forEach((doc) => {
-          students.push({ ...doc.data(), id: doc.id });
-        });
+    const getBooks = async () => {
+      const booksRef = collection(db, "libros");
+      let books = [];
+      try {
+        const booksSnap = await getDocs(booksRef);
+        if (booksSnap.docs.length > 0) {
+          booksSnap.forEach((doc) => {
+            books.push({ ...doc.data(), id: doc.id });
+          });
+        }
+        return books;
+      } catch (error) {
+        console.log(error);
       }
-      return students;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    };
 
-  const getEmployees = async () => {
-    const employeeReference = collection(db, "empleado");
-
-    let employees = [];
-    try {
-      const employeesSnap = await getDocs(employeeReference);
-      if (employeesSnap.docs.length > 0) {
-        employeesSnap.forEach((doc) => {
-          employees.push({ ...doc.data(), id: doc.id });
-        });
+    const getStudents = async () => {
+      const studentReference = collection(db, "alumnos");
+      let students = [];
+      try {
+        const studentsSnap = await getDocs(studentReference);
+        if (studentsSnap.docs.length > 0) {
+          studentsSnap.forEach((doc) => {
+            students.push({ ...doc.data(), id: doc.id });
+          });
+        }
+        return students;
+      } catch (error) {
+        console.log(error);
       }
-      return employees;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    };
 
-  const getOneUserInfo = (doc) => {
-    if (doc.data().tipoIngreso === "S") {
-      // const studentRef = collection(db, "alumnos").doc(doc.data().idUsuario);
-      // studentRef
-      //   .get()
-      //   .then((doc) => {
-      //     if (doc.exists) {
-      //       console.log("Document data:", doc.data());
-      //       return doc.data();
-      //     } else {
-      //       // doc.data() will be undefined in this case
-      //       console.log("No such document!");
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log("Error getting document:", error);
-      //   });
+    const getEmployees = async () => {
+      const employeeReference = collection(db, "empleado");
+
+      let employees = [];
+      try {
+        const employeesSnap = await getDocs(employeeReference);
+        if (employeesSnap.docs.length > 0) {
+          employeesSnap.forEach((doc) => {
+            employees.push({ ...doc.data(), id: doc.id });
+          });
+        }
+        return employees;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const getOneUserInfo = (doc) => {
+      if (doc.data().tipoIngreso === "S") {
+        // const studentRef = collection(db, "alumnos").doc(doc.data().idUsuario);
+        // studentRef
+        //   .get()
+        //   .then((doc) => {
+        //     if (doc.exists) {
+        //       console.log("Document data:", doc.data());
+        //       return doc.data();
+        //     } else {
+        //       // doc.data() will be undefined in this case
+        //       console.log("No such document!");
+        //     }
+        //   })
+        //   .catch((error) => {
+        //     console.log("Error getting document:", error);
+        //   });
       }
       console.log("hola s");
-    
 
-    if (doc.data().tipoIngreso === "E") {
-      //   const employeeRef = collection(db, "empleado").doc(doc.data().idUsuario);
-      //   employeeRef
-      //     .get()
-      //     .then((doc) => {
-      //       if (doc.exists) {
-      //         console.log("Document data:", doc.data());
-      //         return doc.data();
-      //       } else {
-      //         // doc.data() will be undefined in this case
-      //         console.log("No such document!");
-      //       }
-      //     })
-      //     .catch((error) => {
-      //       console.log("Error getting document:", error);
-      //     });
+
+      if (doc.data().tipoIngreso === "E") {
+        //   const employeeRef = collection(db, "empleado").doc(doc.data().idUsuario);
+        //   employeeRef
+        //     .get()
+        //     .then((doc) => {
+        //       if (doc.exists) {
+        //         console.log("Document data:", doc.data());
+        //         return doc.data();
+        //       } else {
+        //         // doc.data() will be undefined in this case
+        //         console.log("No such document!");
+        //       }
+        //     })
+        //     .catch((error) => {
+        //       console.log("Error getting document:", error);
+        //     });
       }
       console.log("hola E");
     }
@@ -252,36 +270,102 @@ const UserProvider = ({ children }) => {
   const getAdmissions = async () => {
     const ingresosRef = collection(db, "ingreso");
 
+    const q = query(collection(db, "ingreso"), orderBy("fechaIngreso", "desc"));
+
     let ingresos = [];
+    let docRef = {};
 
     try {
-      const ingresosSnap = await getDocs(ingresosRef);
+      const ingresosSnap = await getDocs(q);
       if (ingresosSnap.docs.length > 0) {
-        ingresosSnap.forEach((doc) => {
-          console.log(doc.data());
-          ingresos.push({ ...doc.data(), id: doc.id });
+        ingresosSnap.forEach(async (docItem) => {
+          if (docItem.data().tipoIngreso === "S") {
+            docRef = doc(db, "alumnos", docItem.data().idUsuario);
+          } else {
+            docRef = doc(db, "empleado", docItem.data().idUsuario);
+          }
+          let docSnap = await getDoc(docRef);
+
+          ingresos.push({
+            ...docItem.data(),
+            id: docItem.id,
+            ...docSnap.data(),
+          });
         });
       }
+      console.log(ingresos);
       return ingresos;
     } catch (error) {
       console.log(error);
     }
   };
 
-  // const getOther = () => {
-  //   const otherReference = collection(db, "alumnos");
-  //   getDocs(otherReference)
-  //     .then((snapshot) => {
-  //       snapshot.docs.map((doc) => {
-  //         setOthers([...others, { ...doc.data(), id: doc.id }]);
-  //       });
-  //       console.log(others);
-  //       return others;
-  //     })
-  //     .catch((err) => {
-  //       console.log("Hubo un error al traer los datos");
-  //     });
-  // };
+  const getLendings = async () => {
+    const prestamosRef = collection(db, "prestamo");
+
+    let prestamos = [];
+    let docRef = {};
+    let bookRef = [];
+
+    try {
+      const prestamosSnap = await getDocs(prestamosRef);
+      if (prestamosSnap.docs.length > 0) {
+        prestamosSnap.forEach(async (docItem) => {
+          if (docItem.data().userType === "S") {
+            docRef = doc(db, "alumnos", docItem.data().idUsuario);
+          } else {
+            docRef = doc(db, "empleado", docItem.data().idUsuario);
+          }
+          let userSnap = await getDoc(docRef);
+          docItem.data().booksList.map((data) => {
+            bookRef.push(doc(db, "libros", data));
+          });
+
+          prestamos.push({
+            ...docItem.data(),
+            id: docItem.id,
+            name: userSnap.data().name,
+            ...bookRef,
+          });
+        });
+      }
+      console.log(prestamos);
+      return prestamos;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addLendings = async (user, lista, type) => {
+    let books = lista.map((data) => {
+      return data.id;
+    });
+
+    try {
+      await addDoc(collection(db, "prestamo"), {
+        idUsuario: user.id,
+        fechaPrestamo: Math.floor(new Date() / 1000),
+        fechaDevolucion: Math.floor(
+          new Date().setDate(new Date().getDate() + 5) / 1000
+        ),
+        empleado: currentUser,
+        booksList: books,
+        userType: type,
+      });
+      setNotify({
+        isOpen: true,
+        message: "Prestamo creado correctamente",
+        type: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      setNotify({
+        isOpen: true,
+        message: "Error al momento de crear el prestamo",
+        type: "error",
+      });
+    }
+  };
 
   const addAdmissionToInfoCenter = async (data, type) => {
     console.log(data);
@@ -328,11 +412,11 @@ const UserProvider = ({ children }) => {
     signUpWithEmailPassword,
     login,
     logout,
-    // getStudents,
-    // getEmployees,
+    getStudents,
+    getEmployees,
     addAdmissionToInfoCenter,
     getAdmissions,
-    // getBooks,
+    getBooks,
   };
 
   return (
@@ -397,8 +481,8 @@ const searchAllBooks = async (type) => {
 
 const searchBook = async (input, data) => {
   try {
-    const bookReference = collection(db, 'libros');
-    const q = query(bookReference, where(input, '==', data));
+    const bookReference = collection(db, "libros");
+    const q = query(bookReference, where(input, "==", data));
     var id;
     let book = [];
 
@@ -413,7 +497,7 @@ const searchBook = async (input, data) => {
       // Use a book instance method
       console.log(book.toString());
       // Convert to book object
-      book.push({...docSnap.data(), id: docSnap.id});
+      book.push({ ...docSnap.data(), id: docSnap.id });
       return book;
     } else {
       console.log("No such document!");
@@ -490,10 +574,8 @@ const seachAutores = async (input, data, id) => {
     });
   }
 
-  
   return autores;
 };
-
 
 const searchEditorial = async (input, data, id) => {
   let editorial = [];
@@ -509,27 +591,82 @@ const searchEditorial = async (input, data, id) => {
     });
   }
 
-  
   return editorial;
 };
 
 const updateCollection = async (type, id, input, data) => {
   const ref = doc(db, type, id);
   await updateDoc(ref, {
-    [ input]: data,
+    [input]: data,
   });
 };
 
 //Metodo para añadir informacion a una collecion, este metodo recibe
 //los datos, y la collecion donde se introducira
-const addDataToCollection = async (data, type) => {
-  await addDoc(collection(db, type), {
-    data,
+const addAutor = async (data) => {
+  name = data.name,
+    lastNameFather = data.lastNameFather,
+    lastNameMother = data.lastNameMother,
+    nationality = data.nationality,
+    email = data.email,
+    gender = data.gender,
+    password = data.password,
+    birthday = data.birthday,
+    await addDoc(collection(db, 'autores'), {
+      name,
+      lastNameFather,
+      lastNameMother,
+      nationality,
+      email,
+      gender,
+      password,
+      birthday,
+    }
+    );
+};
+
+const addBook = async (data) => {
+  name = data.name,
+    categoria = data.categoria,
+    editoria = data.editoria,
+    fecha_publicacion = data.fecha_publicacion,
+    volumen = data.volumen,
+    await addDoc(collection(db, 'libros'), {
+      name,
+      categoria,
+      editoria,
+      fecha_publicacion,
+      volumen,
+    });
+};
+const addCategoria = async (name) => {
+  await addDoc(collection(db, 'categorias'), {
+    name,
   });
+};
+const addEditorial = async (data) => {
+  name = data.name,
+    email = data.email,
+    phone = data.phone,
+    await addDoc(collection(db, 'editorial'), {
+      name,
+      email,
+      phone,
+    });
 };
 
 const deletFromCollection = async (type, id) => {
   await deleteDoc(doc(db, type, id));
 };
 
-export { searchAllBooks, searchBook, addDataToCollection, searchUser, deletFromCollection, updateCollection };
+export {
+  searchAllBooks,
+  searchBook,
+  searchUser,
+  deletFromCollection,
+  updateCollection,
+  addAutor,
+  addBook,
+  addCategoria,
+  addEditorial,
+};
