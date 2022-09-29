@@ -191,7 +191,9 @@ const EnterAdmin = () => {
                       >
                         Identificador:
                       </Typography>
-                      {data.idUsuario}
+                      {data.tipoIngreso === "S"
+                        ? data.numControl
+                        : data.numEmpleado}
                     </Typography>
                     <Typography sx={{ fontSize: "1.2rem" }}>
                       <Typography
@@ -209,14 +211,14 @@ const EnterAdmin = () => {
                       </Typography>
                       {UserText(data.tipoIngreso)}
                     </Typography>
-                    {/* <Typography sx={{ fontSize: "1.2rem" }}>
+                    <Typography sx={{ fontSize: "1.2rem" }}>
                       <Typography
                         sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
                       >
                         Genero:
                       </Typography>
-                      {data.genero}
-                    </Typography> */}
+                      {data.gender}
+                    </Typography>
                   </div>
                 </Box>
               );

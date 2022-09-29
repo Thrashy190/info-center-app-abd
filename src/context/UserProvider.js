@@ -81,7 +81,7 @@ const UserProvider = ({ children }) => {
         } else {
           if (type === "employees") {
             const { numEmployee, department } = data;
-            const newEmployee = await addDoc(collection(db, "docente"), {
+            const newEmployee = await addDoc(collection(db, "empleado"), {
               name,
               lastNameFather,
               lastNameMother,
@@ -211,65 +211,39 @@ const UserProvider = ({ children }) => {
     }
   };
 
-  const getOneUserInfo = (doc) => {
-    if (doc.data().tipoIngreso === "S") {
-      // const studentRef = collection(db, "alumnos").doc(doc.data().idUsuario);
-      // studentRef
-      //   .get()
-      //   .then((doc) => {
-      //     if (doc.exists) {
-      //       console.log("Document data:", doc.data());
-      //       return doc.data();
-      //     } else {
-      //       // doc.data() will be undefined in this case
-      //       console.log("No such document!");
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log("Error getting document:", error);
-      //   });
-      console.log("hola s");
-    }
-
-    if (doc.data().tipoIngreso === "E") {
-      //   const employeeRef = collection(db, "empleado").doc(doc.data().idUsuario);
-      //   employeeRef
-      //     .get()
-      //     .then((doc) => {
-      //       if (doc.exists) {
-      //         console.log("Document data:", doc.data());
-      //         return doc.data();
-      //       } else {
-      //         // doc.data() will be undefined in this case
-      //         console.log("No such document!");
-      //       }
-      //     })
-      //     .catch((error) => {
-      //       console.log("Error getting document:", error);
-      //     });
-      // }
-      console.log("hola E");
-    }
-  };
-
   const getAdmissions = async () => {
     const ingresosRef = collection(db, "ingreso");
 
     let ingresos = [];
+    let docRef = {};
 
     try {
       const ingresosSnap = await getDocs(ingresosRef);
       if (ingresosSnap.docs.length > 0) {
-        ingresosSnap.forEach((doc) => {
-          console.log(doc.data());
+        ingresosSnap.forEach(async (docItem) => {
+          if (docItem.data().tipoIngreso === "S") {
+            docRef = doc(db, "alumnos", docItem.data().idUsuario);
+          } else {
+            docRef = doc(db, "empleado", docItem.data().idUsuario);
+          }
+          let docSnap = await getDoc(docRef);
 
-          ingresos.push({ ...doc.data(), id: doc.id });
+          ingresos.push({
+            ...docItem.data(),
+            id: docItem.id,
+            ...docSnap.data(),
+          });
         });
       }
+      console.log(ingresos);
       return ingresos;
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const getLendings = async () => {
+    //cosnt lendings
   };
 
   // const getOther = () => {
