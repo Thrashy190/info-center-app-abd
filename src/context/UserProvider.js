@@ -464,7 +464,7 @@ const searchBook = async (input, data) => {
   }
 };
 
-const searchUser = async (type, input, id, data) => {
+const searchUser = async (type, input, data, id) => {
   try {
     const userConverter = {
       toFirestore: (user) => {
@@ -492,7 +492,7 @@ const searchUser = async (type, input, id, data) => {
       },
     };
 
-    if (id === null) {
+    if (id !== null) {
       const userReference = collection(db, type);
       const q = query(userReference, where(input, "==", data));
       var id;
@@ -561,9 +561,39 @@ const updateCollection = async (type, id, input, data) => {
 
 //Metodo para añadir informacion a una collecion, este metodo recibe
 //los datos, y la collecion donde se introducira
-const addDataToCollection = async (data, type) => {
-  await addDoc(collection(db, type), {
-    data,
+const addAutor = async (name, lastNameFather, lastNameMother, nationality, email, gender, password, birthday) => {
+  await addDoc(collection(db, 'autores'), {
+    name,
+    lastNameFather,
+    lastNameMother,
+    nationality,
+    email,
+    gender,
+    password,
+    birthday,
+  }
+  );
+};
+
+const addBook = async (name, categoria,editoria, fecha_publicacion, volumen,) => {
+  await addDoc(collection(db, 'libros'), {
+    name,
+    categoria,
+    editoria,
+    fecha_publicacion,
+    volumen,
+  });
+};
+const addCategoria = async (name,) => {
+  await addDoc(collection(db, 'categorias'), {
+    name,
+  });
+};
+const addEditorial = async (name, email, phone) => {
+  await addDoc(collection(db, 'editorial'), {
+    name,
+    email,
+    phone,
   });
 };
 
@@ -574,8 +604,11 @@ const deletFromCollection = async (type, id) => {
 export {
   searchAllBooks,
   searchBook,
-  addDataToCollection,
   searchUser,
   deletFromCollection,
   updateCollection,
+  addAutor,
+  addBook,
+  addCategoria,
+  addEditorial,
 };
