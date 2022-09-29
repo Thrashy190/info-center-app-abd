@@ -13,6 +13,7 @@ const AddContent = () => {
   const handleChange = (newValue) => {
     setValue(newValue);
   };
+  
   return (
     <Grid container className="App">
       <Grid item xs={12} md={2}>
@@ -122,7 +123,7 @@ const AddContent = () => {
           <Grid sx={{ py: '20px' }} container item spacing={2}>
             <Grid item xs={12} md={10}>
               <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
-                Agregar editoril
+                Agregar editorial
               </Typography>
             </Grid>
           </Grid>

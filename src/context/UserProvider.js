@@ -174,6 +174,22 @@ const UserProvider = ({ children }) => {
   // const [others, setOthers] = useState([]);
   //const [employees, setEmployees] = useState([]);
 
+  const getBooks = async () => {
+    const booksRef = collection(db, "libros");
+    let books = [];
+    try {
+      const booksSnap = await getDocs(booksRef);
+      if (booksSnap.docs.length > 0) {
+        booksSnap.forEach((doc) => {
+          books.push({ ...doc.data(), id: doc.id });
+        });
+      }
+      return books;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getStudents = async () => {
     const studentReference = collection(db, "alumnos");
     let students = [];
@@ -302,8 +318,8 @@ const UserProvider = ({ children }) => {
     signUpWithEmailPassword,
     login,
     logout,
-    // getStudents,
-    // getEmployees,
+    getStudents,
+    getEmployees,
     addAdmissionToInfoCenter,
     getAdmissions,
     getBooks,
@@ -395,7 +411,7 @@ const searchBook = async (input, data) => {
   }
 };
 
-const searchUser = async (type, input, id, data) => {
+const searchUser = async (type, input, data, id) => {
   try {
     const userConverter = {
       toFirestore: (user) => {
@@ -423,7 +439,7 @@ const searchUser = async (type, input, id, data) => {
       },
     };
 
-    if (id === null) {
+    if (id !== null) {
       const userReference = collection(db, type);
       const q = query(userReference, where(input, "==", data));
       var id;
@@ -492,9 +508,39 @@ const updateCollection = async (type, id, input, data) => {
 
 //Metodo para añadir informacion a una collecion, este metodo recibe
 //los datos, y la collecion donde se introducira
-const addDataToCollection = async (data, type) => {
-  await addDoc(collection(db, type), {
-    data,
+const addAutor = async (name, lastNameFather, lastNameMother, nationality, email, gender, password, birthday) => {
+  await addDoc(collection(db, 'autores'), {
+    name,
+    lastNameFather,
+    lastNameMother,
+    nationality,
+    email,
+    gender,
+    password,
+    birthday,
+  }
+  );
+};
+
+const addBook = async (name, categoria,editoria, fecha_publicacion, volumen,) => {
+  await addDoc(collection(db, 'libros'), {
+    name,
+    categoria,
+    editoria,
+    fecha_publicacion,
+    volumen,
+  });
+};
+const addCategoria = async (name,) => {
+  await addDoc(collection(db, 'categorias'), {
+    name,
+  });
+};
+const addEditorial = async (name, email, phone) => {
+  await addDoc(collection(db, 'editorial'), {
+    name,
+    email,
+    phone,
   });
 };
 
@@ -505,8 +551,11 @@ const deletFromCollection = async (type, id) => {
 export {
   searchAllBooks,
   searchBook,
-  addDataToCollection,
   searchUser,
   deletFromCollection,
   updateCollection,
+  addAutor,
+  addBook,
+  addCategoria,
+  addEditorial,
 };
