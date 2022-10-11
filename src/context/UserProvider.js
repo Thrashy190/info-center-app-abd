@@ -444,6 +444,7 @@ const searchBook = async (input, data) => {
     const bookReference = collection(db, "libros");
     const q = query(bookReference, where(input, "==", data));
     var id;
+    let book = [];
 
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
@@ -453,10 +454,11 @@ const searchBook = async (input, data) => {
     const ref = doc(db, "libros", id).withConverter(bookConverter);
     const docSnap = await getDoc(ref);
     if (docSnap.exists()) {
-      // Convert to book object
-      const book = docSnap.data();
       // Use a book instance method
       console.log(book.toString());
+      // Convert to book object
+      book.push({ ...docSnap.data(), id: docSnap.id });
+      return book;
     } else {
       console.log("No such document!");
     }
@@ -496,7 +498,6 @@ const searchUser = async (type, input, data, id) => {
     if (id !== null) {
       const userReference = collection(db, type);
       const q = query(userReference, where(input, "==", data));
-      var id;
 
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
@@ -556,22 +557,23 @@ const searchEditorial = async (input, data, id) => {
 const updateCollection = async (type, id, input, data) => {
   const ref = doc(db, type, id);
   await updateDoc(ref, {
-    input: data,
+    [input]: data,
   });
 };
 
 //Metodo para añadir informacion a una collecion, este metodo recibe
 //los datos, y la collecion donde se introducira
-const addAutor = async (
-  name,
-  lastNameFather,
-  lastNameMother,
-  nationality,
-  email,
-  gender,
-  password,
-  birthday
-) => {
+const addAutor = async (data) => {
+  const {
+    name,
+    lastNameFather,
+    lastNameMother,
+    nationality,
+    email,
+    gender,
+    password,
+    birthday,
+  } = data;
   await addDoc(collection(db, "autores"), {
     name,
     lastNameFather,
@@ -584,13 +586,8 @@ const addAutor = async (
   });
 };
 
-const addBook = async (
-  name,
-  categoria,
-  editoria,
-  fecha_publicacion,
-  volumen
-) => {
+const addBook = async (data) => {
+  const { name, categoria, editoria, fecha_publicacion, volumen } = data;
   await addDoc(collection(db, "libros"), {
     name,
     categoria,
@@ -604,7 +601,8 @@ const addCategoria = async (name) => {
     name,
   });
 };
-const addEditorial = async (name, email, phone) => {
+const addEditorial = async (data) => {
+  const { name, email, phone } = data;
   await addDoc(collection(db, "editorial"), {
     name,
     email,
