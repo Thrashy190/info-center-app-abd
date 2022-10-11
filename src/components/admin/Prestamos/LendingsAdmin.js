@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useAuth } from "../../../context/UserProvider";
+import { convertUnixToCompleteDate } from "../../../helpers/DateConverter";
 
 const LendingAdmin = () => {
   const { getStudents, getEmployees, getBooks, addLendings, getLendings } =
@@ -27,7 +28,7 @@ const LendingAdmin = () => {
   const [studentsList, setStudentsList] = useState([]);
   const [employeesList, setEmployeesList] = useState([]);
   const [book, setBook] = useState([]);
-  //const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
 
   const [userType, setUserType] = useState("S");
   const [prestamos, setPrestamos] = useState([
@@ -44,12 +45,12 @@ const LendingAdmin = () => {
     setStudentsList(await getStudents());
     setEmployeesList(await getEmployees());
     setBookList(await getBooks());
-    //setPrestamos(await getLendings());
+    setPrestamos(await getLendings());
   };
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [count]);
 
   const handleAddLibro = () => {
     setSelectedBooks([
@@ -69,7 +70,7 @@ const LendingAdmin = () => {
 
   const generateLending = () => {
     addLendings(user[0], selectedBooks, userType);
-    //setCount(count + 1);
+    setCount(count + 1);
   };
 
   return (
@@ -294,37 +295,31 @@ const LendingAdmin = () => {
                       justifyContent: "space-around",
                     }}
                   >
-                    <Typography sx={{ fontSize: "1.2rem" }}>
-                      <Typography
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      >
+                    <Typography sx={{ fontSize: "1rem" }}>
+                      <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
                         Identificador:
                       </Typography>
-                      {data.idUsuario}
+                      {data.userType === "S"
+                        ? data.numControl
+                        : data.numEmployee}
                     </Typography>
-                    <Typography sx={{ fontSize: "1.2rem" }}>
-                      <Typography
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      >
+                    <Typography sx={{ fontSize: "1rem" }}>
+                      <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
                         Fecha del prestamos:
                       </Typography>
-                      {data.fechaPrestamo}
+                      {convertUnixToCompleteDate(data.fechaPrestamo)}
                     </Typography>
-                    <Typography sx={{ fontSize: "1.2rem" }}>
-                      <Typography
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      >
+                    <Typography sx={{ fontSize: "1rem" }}>
+                      <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
                         Fecha de devolucion:
                       </Typography>
-                      {data.fechaDevolucion}
+                      {convertUnixToCompleteDate(data.fechaDevolucion)}
                     </Typography>
-                    <Typography sx={{ fontSize: "1.2rem" }}>
-                      <Typography
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      >
+                    <Typography sx={{ fontSize: "1rem" }}>
+                      <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
                         Empleado que hizo el prestamo:
                       </Typography>
-                      {data.empleado}
+                      {data.name}
                     </Typography>
                   </div>
                 </Box>

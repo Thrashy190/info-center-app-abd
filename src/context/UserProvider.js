@@ -165,16 +165,6 @@ const UserProvider = ({ children }) => {
       });
   };
 
-  //const getUserAdmissions = () => {};
-
-  // const addUserAdmissions = async (data) => {
-  //   const newEmployee = await addDoc(collection(db, 'ingreso'), {});
-  // };
-
-  //const [students, setStudents] = useState([]);
-  // const [others, setOthers] = useState([]);
-  //const [employees, setEmployees] = useState([]);
-
   const getBooks = async () => {
     const booksRef = collection(db, "libros");
     let books = [];
@@ -260,29 +250,40 @@ const UserProvider = ({ children }) => {
   const getLendings = async () => {
     const prestamosRef = collection(db, "prestamo");
 
+    const q = query(
+      collection(db, "prestamo"),
+      orderBy("fechaPrestamo", "desc")
+    );
     let prestamos = [];
     let docRef = {};
-    let bookRef = [];
+
+    //let libros = [];
 
     try {
-      const prestamosSnap = await getDocs(prestamosRef);
+      const prestamosSnap = await getDocs(q);
       if (prestamosSnap.docs.length > 0) {
         prestamosSnap.forEach(async (docItem) => {
+          //libros = [];
           if (docItem.data().userType === "S") {
             docRef = doc(db, "alumnos", docItem.data().idUsuario);
           } else {
             docRef = doc(db, "empleado", docItem.data().idUsuario);
           }
+
           let userSnap = await getDoc(docRef);
-          docItem.data().booksList.map((data) => {
-            bookRef.push(doc(db, "libros", data));
-          });
+
+          // docItem.data().booksList.forEach(async (id) => {
+          //   let bookSnap = await getDoc(doc(db, "libros", id));
+          //   libros.push({ id: bookSnap.id, ...bookSnap.data() });
+          // });
+
+          //console.log(libros);
 
           prestamos.push({
             ...docItem.data(),
+            ...userSnap.data(),
             id: docItem.id,
-            name: userSnap.data().name,
-            ...bookRef,
+            //...libros,
           });
         });
       }
@@ -561,8 +562,17 @@ const updateCollection = async (type, id, input, data) => {
 
 //Metodo para añadir informacion a una collecion, este metodo recibe
 //los datos, y la collecion donde se introducira
-const addAutor = async (name, lastNameFather, lastNameMother, nationality, email, gender, password, birthday) => {
-  await addDoc(collection(db, 'autores'), {
+const addAutor = async (
+  name,
+  lastNameFather,
+  lastNameMother,
+  nationality,
+  email,
+  gender,
+  password,
+  birthday
+) => {
+  await addDoc(collection(db, "autores"), {
     name,
     lastNameFather,
     lastNameMother,
@@ -571,12 +581,17 @@ const addAutor = async (name, lastNameFather, lastNameMother, nationality, email
     gender,
     password,
     birthday,
-  }
-  );
+  });
 };
 
-const addBook = async (name, categoria,editoria, fecha_publicacion, volumen,) => {
-  await addDoc(collection(db, 'libros'), {
+const addBook = async (
+  name,
+  categoria,
+  editoria,
+  fecha_publicacion,
+  volumen
+) => {
+  await addDoc(collection(db, "libros"), {
     name,
     categoria,
     editoria,
@@ -584,13 +599,13 @@ const addBook = async (name, categoria,editoria, fecha_publicacion, volumen,) =>
     volumen,
   });
 };
-const addCategoria = async (name,) => {
-  await addDoc(collection(db, 'categorias'), {
+const addCategoria = async (name) => {
+  await addDoc(collection(db, "categorias"), {
     name,
   });
 };
 const addEditorial = async (name, email, phone) => {
-  await addDoc(collection(db, 'editorial'), {
+  await addDoc(collection(db, "editorial"), {
     name,
     email,
     phone,
