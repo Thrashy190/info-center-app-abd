@@ -601,6 +601,19 @@ const addCategoria = async (name) => {
     name,
   });
 };
+
+const addDepartamento = async (name) => {
+  await addDoc(collection(db, "departamento"), {
+    name,
+  });
+};
+
+const addCarrera = async (name) => {
+  await addDoc(collection(db, "carrera"), {
+    name,
+  });
+};
+
 const addEditorial = async (data) => {
   const { name, email, phone } = data;
   await addDoc(collection(db, "editorial"), {
