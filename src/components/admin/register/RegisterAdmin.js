@@ -149,6 +149,13 @@ const RegisterAdmin = () => {
                 >
                   Administrador
                 </Button>
+                <Button
+                  onClick={() => {
+                    setId("others");
+                  }}
+                >
+                  Otros
+                </Button>
               </ButtonGroup>
             </Grid>
           </Grid>
@@ -160,7 +167,9 @@ const RegisterAdmin = () => {
                   ? "Alumnos"
                   : id === "employees"
                   ? "Empleado"
-                  : "Administrador"}
+                  : id === "admin"
+                  ? "Administrador"
+                  : "Otros"}
               </Typography>
             </Grid>
           </Grid>

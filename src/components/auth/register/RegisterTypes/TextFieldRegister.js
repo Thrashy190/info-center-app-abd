@@ -369,16 +369,6 @@ const TextFieldRegister = ({
           justifyContent: "center",
           alignItems: "center",
         }}
-      ></Grid>
-      <Grid
-        item
-        xs={10}
-        md={2}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
       >
         <Button
           variant="contained"
@@ -391,6 +381,16 @@ const TextFieldRegister = ({
           {showPassword ? "Ocultar" : "Mostrar"}
         </Button>
       </Grid>
+      <Grid
+        item
+        xs={10}
+        md={2}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      ></Grid>
     </Grid>
   );
 };
