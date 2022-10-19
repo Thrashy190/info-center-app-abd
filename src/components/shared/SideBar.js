@@ -1,48 +1,54 @@
-import React from 'react';
-import HomeIcon from '@mui/icons-material/Home';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import LogoutIcon from '@mui/icons-material/Logout';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { useNavigate } from 'react-router-dom';
-import { Typography } from '@mui/material';
-import Logo from '../../assets/shared/its.png';
-import { useAuth } from '../../context/UserProvider';
-import { useLocation } from 'react-router-dom';
+import React from "react";
+import HomeIcon from "@mui/icons-material/Home";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import LogoutIcon from "@mui/icons-material/Logout";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import { useNavigate } from "react-router-dom";
+import { Typography } from "@mui/material";
+import Logo from "../../assets/shared/its.png";
+import { useAuth } from "../../context/UserProvider";
+import { useLocation } from "react-router-dom";
 
 const tabsData = [
-  { title: 'Inicio', icon: <HomeIcon />, link: '/dashboard/inicio' },
+  { title: "Inicio", icon: <HomeIcon />, link: "/dashboard/inicio" },
   {
-    title: 'Contenido',
+    title: "Contenido",
     icon: <LibraryBooksIcon />,
-    link: '/dashboard/contenido',
+    link: "/dashboard/contenido",
   },
-  { title: 'Prestamos', icon: <CheckBoxIcon />, link: '/dashboard/prestamos' },
-  { title: 'Perfil', icon: <AccountBoxIcon />, link: '/dashboard/perfil' },
+  { title: "Prestamos", icon: <CheckBoxIcon />, link: "/dashboard/prestamos" },
+  { title: "Perfil", icon: <AccountBoxIcon />, link: "/dashboard/perfil" },
 ];
 
 const tabsAdminData = [
-  { title: 'Inicio', icon: <HomeIcon />, link: '/admin/dashboard/inicio' },
+  // { title: "Inicio", icon: <HomeIcon />, link: "/admin/dashboard/inicio" },
   {
-    title: 'Contenido',
+    title: "Contenido",
     icon: <LibraryBooksIcon />,
-    link: '/admin/dashboard/contenido',
+    link: "/admin/dashboard/contenido",
   },
   {
-    title: 'Prestamos',
+    title: "Prestamos",
     icon: <CheckBoxIcon />,
-    link: '/admin/dashboard/prestamos',
+    link: "/admin/dashboard/prestamos",
   },
   {
-    title: 'Ingresos',
+    title: "Ingresos",
     icon: <AccessTimeIcon />,
-    link: '/admin/dashboard/ingresos',
+    link: "/admin/dashboard/ingresos",
   },
   {
-    title: 'Perfil',
+    title: "Usuarios",
+    icon: <GroupAddIcon />,
+    link: "/admin/dashboard/registro",
+  },
+  {
+    title: "Perfil",
     icon: <AccountBoxIcon />,
-    link: '/admin/dashboard/perfil',
+    link: "/admin/dashboard/perfil",
   },
 ];
 
@@ -55,22 +61,22 @@ const SideBar = ({ type }) => {
     <div className="SideBar">
       <div
         style={{
-          paddingTop: '20px',
-          display: 'flex',
-          direction: 'column',
-          justifyContent: 'center',
+          paddingTop: "20px",
+          display: "flex",
+          direction: "column",
+          justifyContent: "center",
         }}
       >
         <img src={Logo} alt="Logo its" className="logo"></img>
       </div>
       <ul className="SidebarList">
-        {type === 'admin'
+        {type === "admin"
           ? tabsAdminData.map((val, key) => {
               return (
                 <li
                   key={key}
                   className={
-                    val.link === location.pathname ? 'row active' : 'row'
+                    val.link === location.pathname ? "row active" : "row"
                   }
                   onClick={() => {
                     navigate(val.link);
@@ -86,7 +92,7 @@ const SideBar = ({ type }) => {
                 <li
                   key={key}
                   className={
-                    val.link === location.pathname ? 'row active' : 'row'
+                    val.link === location.pathname ? "row active" : "row"
                   }
                   onClick={() => {
                     navigate(val.link);

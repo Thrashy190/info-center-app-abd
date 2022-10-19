@@ -13,6 +13,7 @@ import {
   Box,
   Divider,
   Autocomplete,
+  LinearProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useAuth } from "../../../context/UserProvider";
@@ -28,18 +29,11 @@ const LendingAdmin = () => {
   const [studentsList, setStudentsList] = useState([]);
   const [employeesList, setEmployeesList] = useState([]);
   const [book, setBook] = useState([]);
-  const [count, setCount] = useState(0);
 
   const [userType, setUserType] = useState("S");
-  const [prestamos, setPrestamos] = useState([
-    {
-      idUsuario: "C19051632",
-      fechaPrestamo: 1664461287,
-      fechaDevolucion: 1664893287,
-      empleado: "Num de empleado",
-      booksList: ["Calculo I", "Calculo II"],
-    },
-  ]);
+  const [prestamos, setPrestamos] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const getData = async () => {
     setStudentsList(await getStudents());
@@ -47,10 +41,6 @@ const LendingAdmin = () => {
     setBookList(await getBooks());
     setPrestamos(await getLendings());
   };
-
-  useEffect(() => {
-    getData();
-  }, [count]);
 
   const handleAddLibro = () => {
     setSelectedBooks([
@@ -70,8 +60,17 @@ const LendingAdmin = () => {
 
   const generateLending = () => {
     addLendings(user[0], selectedBooks, userType);
-    setCount(count + 1);
+    setIsLoading(true);
   };
+
+  useEffect(() => {
+    if (isLoading) {
+      getData().then(() => {
+        setIsLoading(false);
+        console.log(prestamos);
+      });
+    }
+  }, [isLoading]);
 
   return (
     <Grid container className="App">
@@ -117,9 +116,6 @@ const LendingAdmin = () => {
                 </Select>
               </FormControl>
             </Grid>
-          </Grid>
-
-          <Grid sx={{ pb: "30px" }} container item spacing={2}>
             {userType === "S" ? (
               <>
                 <Grid item xs={12} md={4}>
@@ -170,7 +166,6 @@ const LendingAdmin = () => {
               </>
             )}
           </Grid>
-
           <Grid sx={{ pb: "30px" }} container item spacing={2}>
             <Grid item xs={12} md={4}>
               <Autocomplete
@@ -205,7 +200,6 @@ const LendingAdmin = () => {
               </Button>
             </Grid>
           </Grid>
-
           <Grid sx={{ pb: "20px" }} container item spacing={2}>
             <Grid item xs={12} md={4}>
               <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
@@ -213,7 +207,6 @@ const LendingAdmin = () => {
               </Typography>
             </Grid>
           </Grid>
-
           <Grid sx={{ pb: "40px" }} container item>
             <Grid
               item
@@ -258,7 +251,6 @@ const LendingAdmin = () => {
               </Grid>
             ) : null}
           </Grid>
-
           <Divider />
           <Grid sx={{ py: "20px" }} container item spacing={2}>
             <Grid item xs={12} md={4}>
@@ -267,6 +259,7 @@ const LendingAdmin = () => {
               </Typography>
             </Grid>
           </Grid>
+
           <div
             style={{
               width: "100%",
@@ -275,56 +268,69 @@ const LendingAdmin = () => {
               overflow: "auto",
             }}
           >
-            {prestamos.map((data, key) => {
-              return (
-                <Box
-                  key={key}
-                  sx={{
-                    boxShadow: 2,
-                    mb: "20px",
-                    py: "20px",
-                    px: "10px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  <div
-                    style={{
-                      paddingLeft: "30px",
-                      display: "flex",
-                      direction: "row",
-                      justifyContent: "space-around",
+            {isLoading ? (
+              <LinearProgress />
+            ) : (
+              prestamos.map((data, key) => {
+                return (
+                  <Box
+                    key={key}
+                    sx={{
+                      boxShadow: 2,
+                      mb: "20px",
+                      py: "20px",
+                      px: "10px",
+                      borderRadius: "5px",
                     }}
                   >
-                    <Typography sx={{ fontSize: "1rem" }}>
-                      <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
-                        Identificador:
+                    <div
+                      style={{
+                        paddingLeft: "30px",
+                        display: "flex",
+                        direction: "row",
+                        justifyContent: "space-around",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "1rem" }}>
+                        <Typography
+                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                        >
+                          Identificador:
+                        </Typography>
+                        {data.userType === "S"
+                          ? data.numControl
+                          : data.numEmployee}
                       </Typography>
-                      {data.userType === "S"
-                        ? data.numControl
-                        : data.numEmployee}
-                    </Typography>
-                    <Typography sx={{ fontSize: "1rem" }}>
-                      <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
-                        Fecha del prestamos:
+                      <Typography sx={{ fontSize: "1rem" }}>
+                        <Typography
+                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                        >
+                          Fecha del prestamos:
+                        </Typography>
+                        {convertUnixToCompleteDate(data.fechaPrestamo)}
                       </Typography>
-                      {convertUnixToCompleteDate(data.fechaPrestamo)}
-                    </Typography>
-                    <Typography sx={{ fontSize: "1rem" }}>
-                      <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
-                        Fecha de devolucion:
+                      <Typography sx={{ fontSize: "1rem" }}>
+                        <Typography
+                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                        >
+                          Fecha de devolucion:
+                        </Typography>
+                        {convertUnixToCompleteDate(data.fechaDevolucion)}
                       </Typography>
-                      {convertUnixToCompleteDate(data.fechaDevolucion)}
-                    </Typography>
-                    <Typography sx={{ fontSize: "1rem" }}>
-                      <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
-                        Empleado que hizo el prestamo:
+                      <Typography sx={{ fontSize: "1rem" }}>
+                        <Typography
+                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                        >
+                          Empleado que hizo el prestamo:
+                        </Typography>
+                        {data.name}
                       </Typography>
-                      {data.name}
-                    </Typography>
-                  </div>
-                </Box>
-              );
-            })}
+                      <Button variant="contained">Ver libros</Button>
+                    </div>
+                  </Box>
+                );
+              })
+            )}
           </div>
         </div>
       </Grid>

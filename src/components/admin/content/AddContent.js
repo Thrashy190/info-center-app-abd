@@ -1,29 +1,35 @@
-import React from 'react';
-import SideBar from '../../shared/SideBar';
-import { useNavigate } from 'react-router-dom';
-import '../../../App.css';
-import { Grid, TextField, Typography, Button } from '@mui/material';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import dayjs from 'dayjs';
+import React from "react";
+import SideBar from "../../shared/SideBar";
+import { useNavigate } from "react-router-dom";
+import "../../../App.css";
+import {
+  Grid,
+  TextField,
+  Typography,
+  Button,
+  Autocomplete,
+} from "@mui/material";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import dayjs from "dayjs";
 
 const AddContent = () => {
   const navigate = useNavigate();
-  const [value, setValue] = React.useState(dayjs('2022-09-24T21:11:54'));
+  const [value, setValue] = React.useState(dayjs("2022-09-24T21:11:54"));
 
   const handleChange = (newValue) => {
     setValue(newValue);
   };
-  
+
   return (
     <Grid container className="App">
       <Grid item xs={12} md={2}>
-        <SideBar type={'admin'}></SideBar>
+        <SideBar type={"admin"}></SideBar>
       </Grid>
       <Grid item xs={12} md={10}>
-        <div style={{ padding: '50px' }}>
-          <Grid sx={{ pb: '25x' }} container item spacing={2}>
+        <div style={{ padding: "50px" }}>
+          <Grid sx={{ pb: "25x" }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
+              <Typography sx={{ fontSize: "1.8rem", fontWeight: "bold" }}>
                 Agregar contenido
               </Typography>
             </Grid>
@@ -35,9 +41,9 @@ const AddContent = () => {
           </Grid>
 
           {/* Libros */}
-          <Grid sx={{ py: '20px' }} container item spacing={2}>
+          <Grid sx={{ py: "20px" }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
+              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
                 Agregar libros
               </Typography>
             </Grid>
@@ -63,19 +69,22 @@ const AddContent = () => {
               <TextField label="Editorial" />
             </Grid>
             <Grid item>
+              <TextField label="Autores" />
+            </Grid>
+            <Grid item>
               <TextField label="Categoria" />
             </Grid>
-            <Grid item style={{ display: 'flex', alignContent: 'center' }}>
-              <Button variant="contained" style={{ width: '100%' }}>
+            <Grid item style={{ display: "flex", alignContent: "center" }}>
+              <Button variant="contained" style={{ width: "100%" }}>
                 Agregar
               </Button>
             </Grid>
           </Grid>
 
           {/* Autores */}
-          <Grid sx={{ py: '20px' }} container item spacing={2}>
+          <Grid sx={{ py: "20px" }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
+              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
                 Agregar autores
               </Typography>
             </Grid>
@@ -112,17 +121,17 @@ const AddContent = () => {
             <Grid item>
               <TextField label="Telefono" />
             </Grid>
-            <Grid item style={{ display: 'flex', alignContent: 'center' }}>
-              <Button variant="contained" style={{ width: '100%' }}>
+            <Grid item style={{ display: "flex", alignContent: "center" }}>
+              <Button variant="contained" style={{ width: "100%" }}>
                 Agregar
               </Button>
             </Grid>
           </Grid>
 
           {/* Editorial */}
-          <Grid sx={{ py: '20px' }} container item spacing={2}>
+          <Grid sx={{ py: "20px" }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
+              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
                 Agregar editorial
               </Typography>
             </Grid>
@@ -139,16 +148,16 @@ const AddContent = () => {
               <TextField label="Telefono" />
             </Grid>
 
-            <Grid item style={{ display: 'flex', alignContent: 'center' }}>
-              <Button variant="contained" style={{ width: '100%' }}>
+            <Grid item style={{ display: "flex", alignContent: "center" }}>
+              <Button variant="contained" style={{ width: "100%" }}>
                 Agregar
               </Button>
             </Grid>
           </Grid>
           {/* Categorias */}
-          <Grid sx={{ py: '20px' }} container item spacing={2}>
+          <Grid sx={{ py: "20px" }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
+              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
                 Agregar Categorias
               </Typography>
             </Grid>
@@ -159,8 +168,50 @@ const AddContent = () => {
               <TextField label="Nombre de la categoria" />
             </Grid>
 
-            <Grid item style={{ display: 'flex', alignContent: 'center' }}>
-              <Button variant="contained" style={{ width: '100%' }}>
+            <Grid item style={{ display: "flex", alignContent: "center" }}>
+              <Button variant="contained" style={{ width: "100%" }}>
+                Agregar
+              </Button>
+            </Grid>
+          </Grid>
+
+          {/* Carreras */}
+          <Grid sx={{ py: "20px" }} container item spacing={2}>
+            <Grid item xs={12} md={10}>
+              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+                Agregar Carreras
+              </Typography>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2}>
+            <Grid item>
+              <TextField label="Nombre de la Carrera" />
+            </Grid>
+
+            <Grid item style={{ display: "flex", alignContent: "center" }}>
+              <Button variant="contained" style={{ width: "100%" }}>
+                Agregar
+              </Button>
+            </Grid>
+          </Grid>
+
+          {/* Departamentos */}
+          <Grid sx={{ py: "20px" }} container item spacing={2}>
+            <Grid item xs={12} md={10}>
+              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+                Agregar Departamentos
+              </Typography>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2}>
+            <Grid item>
+              <TextField label="Nombre del departamento" />
+            </Grid>
+
+            <Grid item style={{ display: "flex", alignContent: "center" }}>
+              <Button variant="contained" style={{ width: "100%" }}>
                 Agregar
               </Button>
             </Grid>

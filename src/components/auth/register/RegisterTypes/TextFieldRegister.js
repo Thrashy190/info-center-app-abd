@@ -24,7 +24,7 @@ const TextFieldRegister = ({
     <Grid
       container
       spacing={3}
-      sx={{ py: "2em" }}
+      sx={{ py: "1.5em" }}
       style={{
         display: "flex",
         justifyContent: "center",
@@ -369,23 +369,7 @@ const TextFieldRegister = ({
           justifyContent: "center",
           alignItems: "center",
         }}
-      >
-        <TextField
-          id="repeatpassword"
-          label="Repita la contraseña"
-          variant="outlined"
-          name="repeatPassword"
-          type={showPassword ? "text" : "password"}
-          value={baseData.repeatPassword}
-          onChange={handleChange}
-          helperText={
-            errorValidation.repeatPassword ? errorText.repeatPassword : ""
-          }
-          error={errorValidation.repeatPassword}
-          fullWidth
-          sx={{ fontSize: "1.5rem" }}
-        />
-      </Grid>
+      ></Grid>
       <Grid
         item
         xs={10}

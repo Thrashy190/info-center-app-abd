@@ -129,9 +129,7 @@ const UserProvider = ({ children }) => {
           message: "Se inicio sesion correctamente",
           type: "success",
         });
-        type === "admin"
-          ? navigate("/admin/dashboard/inicio")
-          : navigate("/dashboard/inicio");
+        navigate("/admin/dashboard/contenido");
       })
       .catch((error) => {
         setNotify({
@@ -154,7 +152,7 @@ const UserProvider = ({ children }) => {
           type: "success",
         });
         logOutUser();
-        navigate("/usertype");
+        navigate("/login");
       })
       .catch(() => {
         setNotify({
