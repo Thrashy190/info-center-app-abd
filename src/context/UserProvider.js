@@ -96,7 +96,7 @@ const UserProvider = ({ children }) => {
             department,
           });
         }
-        if (id === "admin") {
+        if (type === "admin") {
           const newAdmin = await addDoc(collection(db, "adinistrador"), {
             name,
             lastNameFather,
@@ -106,7 +106,7 @@ const UserProvider = ({ children }) => {
             password,
           });
         } 
-        if (id === "other") {
+        if (type === "other") {
           const newOther = await addDoc(collection(db, "otros"), {
             name,
             lastNameFather,
@@ -397,136 +397,136 @@ return (
 
 export default UserProvider;
 
-const bookConverter = {
-  toFirestore: (book) => {
-    return {
-      nombre: book.nombre,
-      categoria: book.categoria,
-      editorial: book.editorial,
-      volumen: book.volumen,
-      fecha_publicacion: book.fecha_publicacion,
-    };
-  },
-  fromFirestore: (snapshot, options) => {
-    const book = snapshot.data(options);
-    return new Books(
-      book.nombre,
-      book.categoria,
-      book.editorial,
-      book.volumen,
-      book.fecha_publicacion
-    );
-  },
-};
+// const bookConverter = {
+//   toFirestore: (book) => {
+//     return {
+//       nombre: book.nombre,
+//       categoria: book.categoria,
+//       editorial: book.editorial,
+//       volumen: book.volumen,
+//       fecha_publicacion: book.fecha_publicacion,
+//     };
+//   },
+//   fromFirestore: (snapshot, options) => {
+//     const book = snapshot.data(options);
+//     return new Books(
+//       book.nombre,
+//       book.categoria,
+//       book.editorial,
+//       book.volumen,
+//       book.fecha_publicacion
+//     );
+//   },
+// };
 
-const searchAllBooks = async (type) => {
-  try {
-    const bookReference = collection(db, type);
-    const q = query(bookReference);
-    let id = [];
+// const searchAllBooks = async (type) => {
+//   try {
+//     const bookReference = collection(db, type);
+//     const q = query(bookReference);
+//     let id = [];
 
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach(async (doc) => {
-      id.push(doc.id);
-    });
+//     const querySnapshot = await getDocs(q);
+//     querySnapshot.forEach(async (doc) => {
+//       id.push(doc.id);
+//     });
 
-    for (let i = 0; i < id.length; i++) {
-      const ref = doc(db, type, id[i]).withConverter(bookConverter);
-      const docSnap = await getDoc(ref);
-      if (docSnap.exists()) {
-        // Convert to book object
-        const book = docSnap.data();
-        // Use a book instance method
-        console.log(book.toString());
-      } else {
-        console.log("No such document!");
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     for (let i = 0; i < id.length; i++) {
+//       const ref = doc(db, type, id[i]).withConverter(bookConverter);
+//       const docSnap = await getDoc(ref);
+//       if (docSnap.exists()) {
+//         // Convert to book object
+//         const book = docSnap.data();
+//         // Use a book instance method
+//         console.log(book.toString());
+//       } else {
+//         console.log("No such document!");
+//       }
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
-const searchBook = async (input, data) => {
-  try {
-    const bookReference = collection(db, "libros");
-    const q = query(bookReference, where(input, "==", data));
-    var id;
-    let book = [];
+// const searchBook = async (input, data) => {
+//   try {
+//     const bookReference = collection(db, "libros");
+//     const q = query(bookReference, where(input, "==", data));
+//     var id;
+//     let book = [];
 
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      id = doc.id;
-    });
+//     const querySnapshot = await getDocs(q);
+//     querySnapshot.forEach((doc) => {
+//       id = doc.id;
+//     });
 
-    const ref = doc(db, "libros", id).withConverter(bookConverter);
-    const docSnap = await getDoc(ref);
-    if (docSnap.exists()) {
-      // Use a book instance method
-      console.log(book.toString());
-      // Convert to book object
-      book.push({ ...docSnap.data(), id: docSnap.id });
-      return book;
-    } else {
-      console.log("No such document!");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     const ref = doc(db, "libros", id).withConverter(bookConverter);
+//     const docSnap = await getDoc(ref);
+//     if (docSnap.exists()) {
+//       // Use a book instance method
+//       console.log(book.toString());
+//       // Convert to book object
+//       book.push({ ...docSnap.data(), id: docSnap.id });
+//       return book;
+//     } else {
+//       console.log("No such document!");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
-const searchUser = async (type, input, data, id) => {
-  try {
-    const userConverter = {
-      toFirestore: (user) => {
-        return {
-          name: user.name,
-          lastNameFather: user.lastNameFather,
-          lastNameMother: user.lastNameMother,
-          phone: user.phone,
-          email: user.email,
-          gender: user.gender,
-          password: user.password,
-        };
-      },
-      fromFirestore: (snapshot, options) => {
-        const user = snapshot.data(options);
-        return new User(
-          user.name,
-          user.lastNameFather,
-          user.lastNameMother,
-          user.phone,
-          user.email,
-          user.gender,
-          user.password
-        );
-      },
-    };
+// const searchUser = async (type, input, data, id) => {
+//   try {
+//     const userConverter = {
+//       toFirestore: (user) => {
+//         return {
+//           name: user.name,
+//           lastNameFather: user.lastNameFather,
+//           lastNameMother: user.lastNameMother,
+//           phone: user.phone,
+//           email: user.email,
+//           gender: user.gender,
+//           password: user.password,
+//         };
+//       },
+//       fromFirestore: (snapshot, options) => {
+//         const user = snapshot.data(options);
+//         return new User(
+//           user.name,
+//           user.lastNameFather,
+//           user.lastNameMother,
+//           user.phone,
+//           user.email,
+//           user.gender,
+//           user.password
+//         );
+//       },
+//     };
 
-    if (id !== null) {
-      const userReference = collection(db, type);
-      const q = query(userReference, where(input, "==", data));
+//     if (id !== null) {
+//       const userReference = collection(db, type);
+//       const q = query(userReference, where(input, "==", data));
 
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        id = doc.id;
-      });
-    }
+//       const querySnapshot = await getDocs(q);
+//       querySnapshot.forEach((doc) => {
+//         id = doc.id;
+//       });
+//     }
 
-    const ref = doc(db, type, id).withConverter(userConverter);
-    const docSnap = await getDoc(ref);
-    if (docSnap.exists()) {
-      // Convert to user object
-      const user = docSnap.data();
-      // Use a user instance method
-      console.log(user.toString());
-    } else {
-      console.log("No such document!");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     const ref = doc(db, type, id).withConverter(userConverter);
+//     const docSnap = await getDoc(ref);
+//     if (docSnap.exists()) {
+//       // Convert to user object
+//       const user = docSnap.data();
+//       // Use a user instance method
+//       console.log(user.toString());
+//     } else {
+//       console.log("No such document!");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 const seachAutores = async (input, data, id) => {
   let autores = [];
@@ -686,9 +686,6 @@ const deletFromCollection = async (type, id) => {
 };
 
 export {
-  searchAllBooks,
-  searchBook,
-  searchUser,
   deletFromCollection,
   updateCollection,
   addAutor,
