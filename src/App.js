@@ -18,6 +18,8 @@ import ContentAdmin from "./components/admin/content/ContentAdmin";
 import AddContent from "./components/admin/content/AddContent";
 import LendingAdmin from "./components/admin/Prestamos/LendingsAdmin";
 import EnterAdmin from "./components/admin/Ingresos/EnterAdmin";
+import RegisterAdmin from "./components/admin/register/RegisterAdmin";
+import ProfileAdmin from "./components/admin/user/ProfileAdmin";
 
 //ruta protegida ususarios
 import ProtectedRoute from "./helpers/ProtectedRouter";
@@ -32,9 +34,9 @@ function App() {
             return <div>404 pagina no encontrada</div>;
           }}
         />
-        <Route path="/" element={<Navigate to="/usertype" />} />
-        <Route path="/usertype" element={<UserType />} />
-        <Route path="/login/:id" element={<Login />} />
+        <Route path="/" element={<Navigate to="/login" />} />
+        {/* <Route path="/usertype" element={<UserType />} /> */}
+        <Route path="/login" element={<Login />} />
         <Route path="/register/:id" element={<Register />} />
         <Route element={<ProtectedRoute />}>
           {/* rutas normales privadas */}
@@ -44,16 +46,15 @@ function App() {
           <Route path="/dashboard/perfil" element={<Profile />} />
           {/* rutas admin privadas */}
           <Route path="/admin/dashboard/inicio" element={<HomeAdmin />} />
-
           <Route path="/admin/dashboard/contenido" element={<ContentAdmin />} />
           <Route
             path="/admin/dashboard/contenido/agregar"
             element={<AddContent />}
           />
-
           <Route path="/admin/dashboard/prestamos" element={<LendingAdmin />} />
           <Route path="/admin/dashboard/ingresos" element={<EnterAdmin />} />
-          <Route path="/admin/dashboard/perfil" element={<HomeAdmin />} />
+          <Route path="/admin/dashboard/registro" element={<RegisterAdmin />} />
+          <Route path="/admin/dashboard/perfil" element={<ProfileAdmin />} />
         </Route>
       </Routes>
     </div>

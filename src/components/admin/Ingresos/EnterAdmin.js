@@ -12,6 +12,7 @@ import {
   InputLabel,
   Box,
   Autocomplete,
+  LinearProgress,
 } from "@mui/material";
 import { useAuth } from "../../../context/UserProvider";
 import { convertUnixToCompleteDate } from "../../../helpers/DateConverter";
@@ -26,8 +27,9 @@ const EnterAdmin = () => {
   const [userType, setUserType] = useState("S");
 
   const [ingresos, setIngresos] = useState([]);
-  const [count, setCount] = useState(0);
   const [user, setUser] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const UserText = (text) => {
     return text === "S" ? "Estudiante" : text === "E" ? "Empleado" : "Otros";
@@ -37,16 +39,23 @@ const EnterAdmin = () => {
     setStudentsList(await getStudents());
     setEmployeesList(await getEmployees());
     setIngresos(await getAdmissions());
+    await getAdmissions().then((data) => {
+      setIngresos(data);
+    });
   };
 
   const addEnter = () => {
     addAdmissionToInfoCenter(user[0], userType);
-    setCount(count + 1);
+    setIsLoading(true);
   };
 
   useEffect(() => {
-    getData();
-  }, [count]);
+    if (isLoading) {
+      getData().then(() => {
+        setIsLoading(false);
+      });
+    }
+  }, [isLoading]);
 
   return (
     <Grid container className="App">
@@ -166,73 +175,72 @@ const EnterAdmin = () => {
               overflow: "auto",
             }}
           >
-            {ingresos.map((data, key) => {
-              return (
-                <Box
-                  key={key}
-                  sx={{
-                    boxShadow: 2,
-                    mb: "20px",
-                    py: "20px",
-                    px: "10px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  <div
-                    style={{
-                      paddingLeft: "30px",
-                      display: "flex",
-                      direction: "row",
-                      justifyContent: "space-around",
+            {isLoading ? (
+              <LinearProgress />
+            ) : (
+              ingresos.map((data, key) => {
+                return (
+                  <Box
+                    key={key}
+                    sx={{
+                      boxShadow: 2,
+                      mb: "20px",
+                      py: "20px",
+                      px: "10px",
+                      borderRadius: "5px",
                     }}
                   >
-                    <Typography sx={{ fontSize: "1.2rem" }}>
-                      <Typography
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      >
-                        Identificador:
+                    <div
+                      style={{
+                        paddingLeft: "30px",
+                        display: "flex",
+                        direction: "row",
+                        justifyContent: "space-around",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "1rem" }}>
+                        <Typography
+                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                        >
+                          Identificador:
+                        </Typography>
+                        {data.tipoIngreso === "S"
+                          ? data.numControl
+                          : data.numEmployee}
                       </Typography>
-                      {data.tipoIngreso === "S"
-                        ? data.numControl
-                        : data.numEmployee}
-                    </Typography>
-                    <Typography sx={{ fontSize: "1.2rem" }}>
-                      <Typography
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      >
-                        Fecha de ingreso:
+                      <Typography sx={{ fontSize: "1rem" }}>
+                        <Typography
+                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                        >
+                          Fecha de ingreso:
+                        </Typography>
+                        {convertUnixToCompleteDate(data.fechaIngreso)}
                       </Typography>
-                      {convertUnixToCompleteDate(data.fechaIngreso)}
-                    </Typography>
-                    <Typography sx={{ fontSize: "1.2rem" }}>
-                      <Typography
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      >
-                        {data.tipoIngreso === "S" ? "Carrera:" : "Departamento:"}
+                      <Typography sx={{ fontSize: "1rem" }}>
+                        <Typography
+                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                        >
+                          {data.tipoIngreso === "S"
+                            ? "Carrera:"
+                            : "Departamento:"}
+                        </Typography>
+                        {data.tipoIngreso === "S"
+                          ? data.career
+                          : data.department}
                       </Typography>
-                      {data.tipoIngreso === "S" ? data.career : data.department}
-                    </Typography>
-                    <Typography sx={{ fontSize: "1.2rem" }}>
-                      <Typography
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      >
-                        Genero:
+                      <Typography sx={{ fontSize: "1rem" }}>
+                        <Typography
+                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                        >
+                          Genero:
+                        </Typography>
+                        {data.gender}
                       </Typography>
-                      {data.gender}
-                    </Typography>
-                  </div>
-                </Box>
-              );
-            })}
-            {ingresos.length <= 0 ? (
-              <Grid container item spacing={2}>
-                <Grid item xs={12} md={6}>
-                  <Typography sx={{ fontWeight: "light" }}>
-                    No hay ningun ingreso por el momento
-                  </Typography>
-                </Grid>
-              </Grid>
-            ) : null}
+                    </div>
+                  </Box>
+                );
+              })
+            )}
           </div>
         </div>
       </Grid>
