@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SideBar from "../../shared/SideBar";
 import { useNavigate } from "react-router-dom";
 import "../../../App.css";
@@ -11,13 +11,52 @@ import {
 } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import dayjs from "dayjs";
+import { useAuth } from "../../../context/UserProvider";
 
 const AddContent = () => {
+  const { addData } = useAuth();
   const navigate = useNavigate();
   const [value, setValue] = React.useState(dayjs("2022-09-24T21:11:54"));
 
+  const [autores, setAutores] = useState({
+    nombre: "",
+    apellido_paterno: "",
+    apellido_materno: "",
+    fecha_nacimiento: dayjs("2022-09-24T21:11:54"),
+    genero: "",
+    nacionalidad: "",
+    correo: "",
+    telefono: "",
+  });
+  const [editoriales, setEditoriales] = useState({
+    nombre: "",
+    correo: "",
+    telefono: "",
+  });
+  const [libros, setLibros] = useState({
+    nombre: "",
+    volumen: "",
+    fecha_publicacion: "",
+    editorial: "",
+    autores: "",
+    categoria: "",
+  });
+  const [carreras, setCarreras] = useState({ nombre: "", codigo: "" });
+  const [deapartamentos, setDepartamentos] = useState({ nombre: "" });
+  const [categorias, setCategorias] = useState({ nombre: "" });
+
+  const handleChangeData = (e, setData, data) => {
+    e.preventDefault();
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
+
   const handleChange = (newValue) => {
     setValue(newValue);
+  };
+
+  const sendDataToFireStore = async (type, data) => {
+    console.log(data);
+    await addData(data, type);
   };
 
   return (
@@ -75,7 +114,13 @@ const AddContent = () => {
               <TextField label="Categoria" />
             </Grid>
             <Grid item style={{ display: "flex", alignContent: "center" }}>
-              <Button variant="contained" style={{ width: "100%" }}>
+              <Button
+                variant="contained"
+                style={{ width: "100%" }}
+                onClick={() => {
+                  sendDataToFireStore("libros", libros);
+                }}
+              >
                 Agregar
               </Button>
             </Grid>
@@ -92,37 +137,95 @@ const AddContent = () => {
 
           <Grid container spacing={2}>
             <Grid item>
-              <TextField label="Nombre" />
+              <TextField
+                label="Nombre"
+                name="nombre"
+                value={autores.nombre}
+                onChange={(e) => {
+                  handleChangeData(e, setAutores, autores);
+                }}
+              />
             </Grid>
             <Grid item>
-              <TextField label="Apellido paterno" />
+              <TextField
+                label="Apellido paterno"
+                name="apellido_paterno"
+                value={autores.apellido_paterno}
+                onChange={(e) => {
+                  handleChangeData(e, setAutores, autores);
+                }}
+              />
             </Grid>
             <Grid item>
-              <TextField label="Apellido materno" />
+              <TextField
+                label="Apellido materno"
+                name="apellido_materno"
+                value={autores.apellido_materno}
+                onChange={(e) => {
+                  handleChangeData(e, setAutores, autores);
+                }}
+              />
             </Grid>
             <Grid item>
               <DesktopDatePicker
                 label="Fecha de nacimiento"
                 inputFormat="MM/DD/YYYY"
-                value={value}
-                onChange={handleChange}
+                name="fecha_nacimiento"
+                value={autores.fecha_nacimiento.toDate()}
+                onChange={(e) => {
+                  handleChangeData(e, setAutores, autores);
+                }}
                 renderInput={(params) => <TextField {...params} />}
               />
             </Grid>
             <Grid item>
-              <TextField label="Genero" />
+              <TextField
+                label="Genero"
+                name="genero"
+                value={autores.genero}
+                onChange={(e) => {
+                  handleChangeData(e, setAutores, autores);
+                }}
+              />
             </Grid>
             <Grid item>
-              <TextField label="Nacionalidad" />
+              <TextField
+                label="Nacionalidad"
+                name="nacionalidad"
+                value={autores.nacionalidad}
+                onChange={(e) => {
+                  handleChangeData(e, setAutores, autores);
+                }}
+              />
             </Grid>
             <Grid item>
-              <TextField label="Correo" />
+              <TextField
+                label="Correo"
+                name="correo"
+                value={autores.correo}
+                onChange={(e) => {
+                  handleChangeData(e, setAutores, autores);
+                }}
+              />
             </Grid>
             <Grid item>
-              <TextField label="Telefono" />
+              <TextField
+                label="Telefono"
+                name="telefono"
+                value={autores.telefono}
+                onChange={(e) => {
+                  handleChangeData(e, setAutores, autores);
+                }}
+              />
             </Grid>
             <Grid item style={{ display: "flex", alignContent: "center" }}>
-              <Button variant="contained" style={{ width: "100%" }}>
+              <Button
+                variant="contained"
+                style={{ width: "100%" }}
+                onClick={() => {
+                  sendDataToFireStore("autores", autores);
+                }}
+              >
                 Agregar
               </Button>
             </Grid>
@@ -139,17 +242,44 @@ const AddContent = () => {
 
           <Grid container spacing={2}>
             <Grid item>
-              <TextField label="Nombre Editorial" />
+              <TextField
+                label="Nombre Editorial"
+                name="nombre"
+                value={editoriales.nombre}
+                onChange={(e) => {
+                  handleChangeData(e, setEditoriales, editoriales);
+                }}
+              />
             </Grid>
             <Grid item>
-              <TextField label="Correo" />
+              <TextField
+                label="Correo"
+                name="correo"
+                value={editoriales.correo}
+                onChange={(e) => {
+                  handleChangeData(e, setEditoriales, editoriales);
+                }}
+              />
             </Grid>
             <Grid item>
-              <TextField label="Telefono" />
+              <TextField
+                label="Telefono"
+                name="telefono"
+                value={editoriales.telefono}
+                onChange={(e) => {
+                  handleChangeData(e, setEditoriales, editoriales);
+                }}
+              />
             </Grid>
 
             <Grid item style={{ display: "flex", alignContent: "center" }}>
-              <Button variant="contained" style={{ width: "100%" }}>
+              <Button
+                variant="contained"
+                style={{ width: "100%" }}
+                onClick={() => {
+                  sendDataToFireStore("editorial", editoriales);
+                }}
+              >
                 Agregar
               </Button>
             </Grid>
@@ -165,11 +295,24 @@ const AddContent = () => {
 
           <Grid container spacing={2}>
             <Grid item>
-              <TextField label="Nombre de la categoria" />
+              <TextField
+                label="Nombre de la categoria"
+                name="nombre"
+                value={categorias.nombre}
+                onChange={(e) => {
+                  handleChangeData(e, setCategorias, categorias);
+                }}
+              />
             </Grid>
 
             <Grid item style={{ display: "flex", alignContent: "center" }}>
-              <Button variant="contained" style={{ width: "100%" }}>
+              <Button
+                variant="contained"
+                style={{ width: "100%" }}
+                onClick={() => {
+                  sendDataToFireStore("categorias", categorias);
+                }}
+              >
                 Agregar
               </Button>
             </Grid>
@@ -186,11 +329,36 @@ const AddContent = () => {
 
           <Grid container spacing={2}>
             <Grid item>
-              <TextField label="Nombre de la Carrera" />
+              <TextField
+                id="nombre"
+                label="Nombre de la Carrera"
+                name="nombre"
+                value={carreras.nombre}
+                onChange={(e) => {
+                  handleChangeData(e, setCarreras, carreras);
+                }}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                id="codigo"
+                label="Codigo"
+                name="codigo"
+                value={carreras.codigo}
+                onChange={(e) => {
+                  handleChangeData(e, setCarreras, carreras);
+                }}
+              />
             </Grid>
 
             <Grid item style={{ display: "flex", alignContent: "center" }}>
-              <Button variant="contained" style={{ width: "100%" }}>
+              <Button
+                variant="contained"
+                style={{ width: "100%" }}
+                onClick={() => {
+                  sendDataToFireStore("carrera", carreras);
+                }}
+              >
                 Agregar
               </Button>
             </Grid>
@@ -207,11 +375,24 @@ const AddContent = () => {
 
           <Grid container spacing={2}>
             <Grid item>
-              <TextField label="Nombre del departamento" />
+              <TextField
+                label="Nombre del departamento"
+                name="nombre"
+                value={deapartamentos.nombre}
+                onChange={(e) => {
+                  handleChangeData(e, setDepartamentos, deapartamentos);
+                }}
+              />
             </Grid>
 
             <Grid item style={{ display: "flex", alignContent: "center" }}>
-              <Button variant="contained" style={{ width: "100%" }}>
+              <Button
+                variant="contained"
+                style={{ width: "100%" }}
+                onClick={() => {
+                  sendDataToFireStore("departamento", deapartamentos);
+                }}
+              >
                 Agregar
               </Button>
             </Grid>

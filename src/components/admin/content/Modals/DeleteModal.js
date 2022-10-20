@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Modal,
@@ -9,22 +9,47 @@ import {
   FormGroup,
   Checkbox,
   Backdrop,
-} from '@mui/material';
+} from "@mui/material";
+import { useAuth } from "../../../../context/UserProvider";
 
-const DeleteModal = ({ disable, handleCheck, open, handleClose }) => {
+const DeleteModal = ({ disable, handleCheck, open, handleClose, id, type }) => {
+  const { deletFromCollection } = useAuth();
+
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     width: 500,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    bgcolor: "background.paper",
+    border: "2px solid #000",
     boxShadow: 24,
     p: 4,
   };
 
-  const DeleteContent = () => {
+  const deleteContent = (type, id) => {
+    let conn = "";
+    switch (type) {
+      case "Libros":
+        conn = "libros";
+        break;
+      case "Autores":
+        conn = "autores";
+        break;
+      case "Editoriales":
+        conn = "editorial";
+        break;
+      case "Categorias":
+        conn = "categorias";
+        break;
+      case "Carreras":
+        conn = "carrera";
+        break;
+      default:
+        conn = "departamento";
+        break;
+    }
+    deletFromCollection(conn, id);
     handleClose();
   };
 
@@ -56,8 +81,10 @@ const DeleteModal = ({ disable, handleCheck, open, handleClose }) => {
           <Button
             disabled={disable}
             variant="contained"
-            sx={{ mt: 5, width: '100%' }}
-            onClick={DeleteContent}
+            sx={{ mt: 5, width: "100%" }}
+            onClick={() => {
+              deleteContent(type, id);
+            }}
           >
             Eliminar
           </Button>

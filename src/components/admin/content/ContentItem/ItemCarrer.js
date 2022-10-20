@@ -17,6 +17,7 @@ const ItemCarrer = ({ data, key, handleOpenDelete, handleOpenUpdate }) => {
     >
       <div style={{ paddingLeft: "30px" }}>
         <Typography>Nombre carrera: {data.nombre}</Typography>
+        <Typography>Codigo carrera: {data.codigo}</Typography>
       </div>
       <div
         style={{
@@ -29,7 +30,12 @@ const ItemCarrer = ({ data, key, handleOpenDelete, handleOpenUpdate }) => {
         <Button variant="contained" sx={{ mr: 4 }} onClick={handleOpenUpdate}>
           Editar
         </Button>
-        <Button variant="contained" onClick={handleOpenDelete}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleOpenDelete(data.id);
+          }}
+        >
           Eliminar
         </Button>
       </div>

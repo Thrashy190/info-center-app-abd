@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Modal,
@@ -8,12 +8,12 @@ import {
   Backdrop,
   Grid,
   TextField,
-} from '@mui/material';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import dayjs from 'dayjs';
+} from "@mui/material";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import dayjs from "dayjs";
 
 const UpdateBooks = () => {
-  const [value, setValue] = React.useState(dayjs('2022-09-24T21:11:54'));
+  const [value, setValue] = React.useState(dayjs("2022-09-24T21:11:54"));
 
   const handleChange = (newValue) => {
     setValue(newValue);
@@ -48,7 +48,7 @@ const UpdateBooks = () => {
 };
 
 const UpdateAuthor = () => {
-  const [value, setValue] = React.useState(dayjs('2022-09-24T21:11:54'));
+  const [value, setValue] = React.useState(dayjs("2022-09-24T21:11:54"));
 
   const handleChange = (newValue) => {
     setValue(newValue);
@@ -109,15 +109,54 @@ const UpdateEditorial = () => {
   );
 };
 
+const UpdateCarrera = () => {
+  return (
+    <div>
+      <Grid container spacing={2}>
+        <Grid item>
+          <TextField label="Nombre Carrera" />
+        </Grid>
+        <Grid item>
+          <TextField label="Codigo de carrera" />
+        </Grid>
+      </Grid>
+    </div>
+  );
+};
+
+const UpdateDepartamento = () => {
+  return (
+    <div>
+      <Grid container spacing={2}>
+        <Grid item>
+          <TextField label="Nombre Departamento" />
+        </Grid>
+      </Grid>
+    </div>
+  );
+};
+
+const UpdateCategoria = () => {
+  return (
+    <div>
+      <Grid container spacing={2}>
+        <Grid item>
+          <TextField label="Nombre Categoria" />
+        </Grid>
+      </Grid>
+    </div>
+  );
+};
+
 const UpdateModal = ({ open, handleClose, typeSearch }) => {
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     width: 500,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    bgcolor: "background.paper",
+    border: "2px solid #000",
     boxShadow: 24,
     p: 4,
   };
@@ -149,17 +188,23 @@ const UpdateModal = ({ open, handleClose, typeSearch }) => {
             Actualizar informacion
           </Typography>
 
-          {typeSearch === 'Libros' ? (
+          {typeSearch === "Libros" ? (
             <UpdateBooks />
-          ) : typeSearch === 'Autores' ? (
+          ) : typeSearch === "Autores" ? (
             <UpdateAuthor />
-          ) : (
+          ) : typeSearch === "Editoriales" ? (
             <UpdateEditorial />
-          )}
+          ) : typeSearch === "Carreras" ? (
+            <UpdateCarrera />
+          ) : typeSearch === "Departamentos" ? (
+            <UpdateDepartamento />
+          ) : typeSearch === "Categorias" ? (
+            <UpdateCategoria />
+          ) : null}
 
           <Button
             variant="contained"
-            sx={{ mt: 5, width: '100%' }}
+            sx={{ mt: 5, width: "100%" }}
             onClick={UpdateContent}
           >
             Actualizar

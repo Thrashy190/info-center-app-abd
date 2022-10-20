@@ -1,5 +1,5 @@
-import React from 'react';
-import { Typography, Box, Button } from '@mui/material';
+import React from "react";
+import { Typography, Box, Button } from "@mui/material";
 
 const ItemEditorial = ({ data, key, handleOpenDelete, handleOpenUpdate }) => {
   return (
@@ -7,31 +7,36 @@ const ItemEditorial = ({ data, key, handleOpenDelete, handleOpenUpdate }) => {
       key={key}
       sx={{
         boxShadow: 2,
-        mb: '20px',
-        py: '20px',
-        px: '10px',
-        borderRadius: '5px',
-        display: 'flex',
-        justifyContent: 'space-between',
+        mb: "20px",
+        py: "20px",
+        px: "10px",
+        borderRadius: "5px",
+        display: "flex",
+        justifyContent: "space-between",
       }}
     >
-      <div style={{ paddingLeft: '30px' }}>
+      <div style={{ paddingLeft: "30px" }}>
         <Typography>Nombre: {data.nombre}</Typography>
         <Typography>Correo: {data.correo}</Typography>
         <Typography>Telefono: {data.telefono}</Typography>
       </div>
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignContent: 'center',
-          paddingRight: '30px',
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+          paddingRight: "30px",
         }}
       >
         <Button variant="contained" sx={{ mr: 4 }} onClick={handleOpenUpdate}>
           Editar
         </Button>
-        <Button variant="contained" onClick={handleOpenDelete}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleOpenDelete(data.id);
+          }}
+        >
           Eliminar
         </Button>
       </div>

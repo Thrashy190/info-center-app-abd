@@ -45,11 +45,11 @@ const tabsAdminData = [
     icon: <GroupAddIcon />,
     link: "/admin/dashboard/registro",
   },
-  {
-    title: "Perfil",
-    icon: <AccountBoxIcon />,
-    link: "/admin/dashboard/perfil",
-  },
+  // {
+  //   title: "Perfil",
+  //   icon: <AccountBoxIcon />,
+  //   link: "/admin/dashboard/perfil",
+  // },
 ];
 
 const SideBar = ({ type }) => {

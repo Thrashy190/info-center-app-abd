@@ -28,7 +28,12 @@ const ItemDepartments = ({ data, key, handleOpenDelete, handleOpenUpdate }) => {
         <Button variant="contained" sx={{ mr: 4 }} onClick={handleOpenUpdate}>
           Editar
         </Button>
-        <Button variant="contained" onClick={handleOpenDelete}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleOpenDelete(data.id);
+          }}
+        >
           Eliminar
         </Button>
       </div>

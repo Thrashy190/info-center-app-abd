@@ -7,17 +7,16 @@ import { Grid, Typography, ButtonGroup, Button } from "@mui/material";
 
 const RegisterAdmin = () => {
   const [id, setId] = useState("student");
-  const { signUpWithEmailPassword } = useAuth();
-
+  const { signUpWithEmailPassword, addData } = useAuth();
+  const [password, setpassword] = useState("");
   const [baseData, setBaseData] = useState({
-    type: id,
+    type: "",
     name: "",
     lastNameFather: "",
     lastNameMother: "",
     phone: "",
     email: "",
     gender: "",
-    password: "",
   });
 
   const [studentData, setStudentData] = useState({
@@ -83,28 +82,31 @@ const RegisterAdmin = () => {
     setEmployeeDatas({ ...employeeData, [e.target.name]: e.target.value });
   };
 
-  const createUser = async () => {
+  const createUser = async (id) => {
     const email = baseData.email;
-    const password = baseData.password;
-    if (id === "student") {
-      console.log({ ...baseData, ...studentData });
-      signUpWithEmailPassword(
-        email,
-        password,
-        { ...baseData, ...studentData },
-        id
-      );
-    } else if (id === "employees") {
-      console.log({ ...baseData, ...employeeData });
-      signUpWithEmailPassword(
-        email,
-        password,
-        { ...baseData, ...employeeData },
-        id
-      );
-    } else if (id === "other") {
+    let conn = "";
+    let data = {};
+
+    switch (id) {
+      case "student":
+        conn = "alumnos";
+        data = { ...baseData, ...studentData, type: id };
+        break;
+      case "employees":
+        conn = "empleado";
+        data = { ...baseData, ...employeeData, type: id };
+        break;
+      default:
+        conn = "otros";
+        data = { ...baseData, type: id };
+        break;
+    }
+
+    if (id === "admin") {
       console.log(baseData);
-      signUpWithEmailPassword(email, password, baseData, id);
+      await signUpWithEmailPassword(email, password, { ...baseData, type: id });
+    } else {
+      await addData(data, conn);
     }
   };
   return (
@@ -181,6 +183,8 @@ const RegisterAdmin = () => {
             handleChange={handleChange}
             handleChangeStudent={handleChangeStudent}
             handleChangeEmployee={handleChangeEmployee}
+            setpassword={setpassword}
+            password={password}
             id={id}
             errorText={errorText}
             errorValidation={errorValidation}
@@ -193,7 +197,7 @@ const RegisterAdmin = () => {
                 size="large"
                 variant="contained"
                 style={{ fontSize: "1rem" }}
-                onClick={() => createUser()}
+                onClick={() => createUser(id)}
               >
                 Registrarme
               </Button>

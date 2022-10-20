@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideBar from "../../shared/SideBar";
 import ItemEditorial from "./ContentItem/ItemEditorial";
 import ItemAuthor from "./ContentItem/ItemAuthor";
@@ -11,161 +11,31 @@ import UpdateModal from "./Modals/UpdateModal";
 import { useNavigate } from "react-router-dom";
 import "../../../App.css";
 
+import { useAuth } from "../../../context/UserProvider";
+
 import {
   Grid,
   Typography,
   TextField,
   Button,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
   ButtonGroup,
 } from "@mui/material";
 
 const ContentAdmin = () => {
   const navigate = useNavigate();
+  const { getDataFromCollection } = useAuth();
 
-  const dummycategories = [
-    { categoria: "Matematicas" },
-    { categoria: "Economia" },
-    { categoria: "Fisica" },
-  ];
-  const dummycarrer = [
-    { nombre: "Sistemas Computacionales" },
-    { nombre: "Mecatronica" },
-    { nombre: "Mecanica" },
-    { nombre: "Electronica" },
-    { nombre: "Electrica" },
-    { nombre: "Industrial" },
-    { nombre: "Gestion empresarial" },
-    { nombre: "Materiales" },
-  ];
-  const dummydepartment = [
-    { nombre: "Ciencias basicas" },
-    { nombre: "Laboratorio de computo" },
-    { nombre: "Vinculacion" },
-    { nombre: "Recursos humanos" },
-    { nombre: "Economicos" },
-    { nombre: "Sistemas" },
-  ];
-
-  const dummyDataBooks = [
-    {
-      nombre: "Calculo I",
-      volumen: "2",
-      fecha_publicacion: "23/12/2002",
-      editorial: "dwfwdcwde",
-      categoria: "Exactas",
-    },
-    {
-      nombre: "Calculo II",
-      volumen: "1",
-      fecha_publicacion: "23/12/2002",
-      editorial: "wdwbqwbdw",
-      categoria: "Exactas",
-    },
-    {
-      nombre: "Calculo III",
-      volumen: "2",
-      fecha_publicacion: "23/12/2002",
-      editorial: "wkjdcbowd",
-      categoria: "Exactas",
-    },
-    {
-      nombre: "Estatica",
-      volumen: "3",
-      fecha_publicacion: "23/12/2002",
-      editorial: "wdñkpnpwdkcnp",
-      categoria: "Mecanica",
-    },
-    {
-      nombre: "Dinamica",
-      volumen: "4",
-      fecha_publicacion: "23/12/2002",
-      editorial: "wdkcijowidcj",
-      categoria: "Mecanica",
-    },
-  ];
-
-  const dummyDataAuthors = [
-    {
-      apellido_materno: "Martinez",
-      apellido_paterno: "Lopez",
-      correo: "correo@correo",
-      fecha_nacimiento: "02/07/02",
-      genero: "Masculino",
-      nacionalidad: "Mexicana",
-      nombre: "Diego",
-      telefono: "84401039924",
-    },
-    {
-      apellido_materno: "Martinez",
-      apellido_paterno: "Lopez",
-      correo: "correo@correo",
-      fecha_nacimiento: "02/07/02",
-      genero: "Masculino",
-      nacionalidad: "Mexicana",
-      nombre: "Diego",
-      telefono: "84401039924",
-    },
-    {
-      apellido_materno: "Martinez",
-      apellido_paterno: "Lopez",
-      correo: "correo@correo",
-      fecha_nacimiento: "02/07/02",
-      genero: "Masculino",
-      nacionalidad: "Mexicana",
-      nombre: "Diego",
-      telefono: "84401039924",
-    },
-    {
-      apellido_materno: "Martinez",
-      apellido_paterno: "Lopez",
-      correo: "correo@correo",
-      fecha_nacimiento: "02/07/02",
-      genero: "Masculino",
-      nacionalidad: "Mexicana",
-      nombre: "Diego",
-      telefono: "84401039924",
-    },
-  ];
-
-  const dummyDataEditorial = [
-    {
-      correo: "correoEditorial@gmail.com",
-      nombre: "Azul",
-      telefono: "8111039924 ",
-    },
-    {
-      correo: "correoEditorial@gmail.com",
-      nombre: "Rojo",
-      telefono: "8111039924 ",
-    },
-    {
-      correo: "correoEditorial@gmail.com",
-      nombre: "Verde",
-      telefono: "8111039924 ",
-    },
-    {
-      correo: "correoEditorial@gmail.com",
-      nombre: "Negro",
-      telefono: "8111039924 ",
-    },
-    {
-      correo: "correoEditorial@gmail.com",
-      nombre: "Azul",
-      telefono: "8111039924 ",
-    },
-  ];
   const [typeSearch, setTypeSearch] = useState("Libros");
-  const [category, setCategory] = useState("Todas");
-  const [year, setYear] = useState(2022);
-  const [contentData, setContentData] = useState(dummyDataBooks);
+  const [contentData, setContentData] = useState([]);
+  const [id, setId] = useState();
+  const [data, setData] = useState();
 
   //Modals
   const [openDelete, setOpenDelete] = useState(false);
-  const handleOpenDelete = () => setOpenDelete(true);
+  const handleOpenDelete = (id) => {
+    setId(id);
+    setOpenDelete(true);
+  };
   const handleCloseDelete = () => {
     setOpenDelete(false);
     setDisable(true);
@@ -178,34 +48,38 @@ const ContentAdmin = () => {
   const [disable, setDisable] = useState(true);
   const handleCheck = () => setDisable(!disable);
 
-  const changeData = (type) => {
+  const changeData = async (type) => {
     switch (type) {
       case "Libros":
-        setContentData(dummyDataBooks);
+        setContentData(await getDataFromCollection("libros"));
         setTypeSearch(type);
         break;
       case "Autores":
-        setContentData(dummyDataAuthors);
+        setContentData(await getDataFromCollection("autores"));
         setTypeSearch(type);
         break;
       case "Editoriales":
-        setContentData(dummyDataEditorial);
+        setContentData(await getDataFromCollection("editorial"));
         setTypeSearch(type);
         break;
       case "Categorias":
-        setContentData(dummycategories);
+        setContentData(await getDataFromCollection("categorias"));
         setTypeSearch(type);
         break;
       case "Carreras":
-        setContentData(dummycarrer);
+        setContentData(await getDataFromCollection("carrera"));
         setTypeSearch(type);
         break;
       default:
-        setContentData(dummydepartment);
+        setContentData(await getDataFromCollection("departamento"));
         setTypeSearch(type);
         break;
     }
   };
+
+  useEffect(() => {
+    changeData("Libros");
+  }, []);
 
   return (
     <Grid container className="App">
@@ -237,7 +111,7 @@ const ContentAdmin = () => {
               </Button>
             </Grid>
           </Grid>
-          <Grid sx={{ pb: "30px" }} container item spacing={2}>
+          {/* <Grid sx={{ pb: "30px" }} container item spacing={2}>
             <Grid item xs={12} md={10}>
               <TextField fullWidth label="Ingrese la busqueda" />
             </Grid>
@@ -251,7 +125,7 @@ const ContentAdmin = () => {
                 Buscar
               </Button>
             </Grid>
-          </Grid>
+          </Grid> */}
 
           <Grid container spacing={2}>
             <Grid item xs={12} md={2}>
@@ -303,51 +177,6 @@ const ContentAdmin = () => {
                 </Button>
               </ButtonGroup>
             </Grid>
-            {/* {typeSearch === "Libros" ? (
-              <>
-                <Grid item xs={12} md={2}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Categoria
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      label="category"
-                      name="category"
-                      value={category}
-                      onChange={(e) => {
-                        setCategory(e.target.value);
-                      }}
-                    >
-                      <MenuItem value={"Todas"}>Todas</MenuItem>
-                      <MenuItem value={"Exactas"}>Exactas</MenuItem>
-                      <MenuItem value={"blabla"}>blabla</MenuItem>
-                      <MenuItem value={"blablabla"}>blablablac</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} md={2}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Año</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      label="year"
-                      name="year"
-                      value={year}
-                      onChange={(e) => {
-                        setYear(e.target.value);
-                      }}
-                    >
-                      <MenuItem value={2022}>2022</MenuItem>
-                      <MenuItem value={2021}>2021</MenuItem>
-                      <MenuItem value={2020}>2020</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-              </>
-            ) : null} */}
           </Grid>
           <div
             style={{
@@ -443,6 +272,8 @@ const ContentAdmin = () => {
         disable={disable}
         handleCheck={handleCheck}
         handleClose={handleCloseDelete}
+        type={typeSearch}
+        id={id}
       />
       <UpdateModal
         open={openUpdate}

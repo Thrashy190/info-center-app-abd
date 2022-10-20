@@ -14,6 +14,8 @@ const TextFieldRegister = ({
   handleChange,
   handleChangeStudent,
   handleChangeEmployee,
+  setPassword,
+  password,
   errorText,
   errorValidation,
   id,
@@ -335,62 +337,65 @@ const TextFieldRegister = ({
           </Grid>
         </>
       ) : null}
-
-      <Grid
-        item
-        xs={10}
-        md={5}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <TextField
-          id="password"
-          label="Contraseña"
-          variant="outlined"
-          name="password"
-          type={showPassword ? "text" : "password"}
-          helperText={errorValidation.password ? errorText.password : ""}
-          error={errorValidation.password}
-          value={baseData.password}
-          onChange={handleChange}
-          fullWidth
-          sx={{ fontSize: "1.5rem" }}
-        />
-      </Grid>
-      <Grid
-        item
-        xs={10}
-        md={5}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Button
-          variant="contained"
-          size="large"
-          style={{ height: "100%", fontSize: "1rem" }}
-          onClick={() => {
-            setShowPassword(!showPassword);
-          }}
-        >
-          {showPassword ? "Ocultar" : "Mostrar"}
-        </Button>
-      </Grid>
-      <Grid
-        item
-        xs={10}
-        md={2}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      ></Grid>
+      {id === "admin" ? (
+        <>
+          <Grid
+            item
+            xs={10}
+            md={5}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TextField
+              id="password"
+              label="Contraseña"
+              variant="outlined"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              helperText={errorValidation.password ? errorText.password : ""}
+              error={errorValidation.password}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              fullWidth
+              sx={{ fontSize: "1.5rem" }}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={10}
+            md={5}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              variant="contained"
+              size="large"
+              style={{ height: "100%", fontSize: "1rem" }}
+              onClick={() => {
+                setShowPassword(!showPassword);
+              }}
+            >
+              {showPassword ? "Ocultar" : "Mostrar"}
+            </Button>
+          </Grid>
+          <Grid
+            item
+            xs={10}
+            md={2}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          ></Grid>
+        </>
+      ) : null}
     </Grid>
   );
 };
