@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import SideBar from "../../shared/SideBar";
-import "../../../App.css";
+import React, { useState, useEffect } from 'react';
+import SideBar from '../Shared/SideBar';
+import '../../../App.css';
 import {
   Grid,
   Button,
@@ -14,15 +14,15 @@ import {
   Divider,
   Autocomplete,
   LinearProgress,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { useAuth } from "../../../context/UserProvider";
-import { convertUnixToCompleteDate } from "../../../helpers/DateConverter";
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { useAuth } from '../../../context/UserProvider';
+import { convertUnixToCompleteDate } from '../../../helpers/DateConverter';
 
 const LendingAdmin = () => {
   const { getStudents, getEmployees, getBooks, addLendings, getLendings } =
     useAuth();
-  const [user, setUser] = useState("A");
+  const [user, setUser] = useState('A');
   const [bookList, setBookList] = useState([]);
 
   const [selectedBooks, setSelectedBooks] = useState([]);
@@ -30,7 +30,7 @@ const LendingAdmin = () => {
   const [employeesList, setEmployeesList] = useState([]);
   const [book, setBook] = useState([]);
 
-  const [userType, setUserType] = useState("S");
+  const [userType, setUserType] = useState('S');
   const [prestamos, setPrestamos] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -75,48 +75,48 @@ const LendingAdmin = () => {
   return (
     <Grid container className="App">
       <Grid item xs={12} md={2}>
-        <SideBar type={"admin"}></SideBar>
+        <SideBar type={'admin'}></SideBar>
       </Grid>
       <Grid item xs={12} md={10}>
-        <div style={{ padding: "40px" }}>
-          <Grid sx={{ pb: "30px" }} container item spacing={2}>
+        <div style={{ padding: '40px' }}>
+          <Grid sx={{ pb: '30px' }} container item spacing={2}>
             <Grid item xs={12} md={8}>
-              <Typography sx={{ fontSize: "1.8rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
                 Prestamos de libros
               </Typography>
             </Grid>
             <Grid item xs={12} md={2}>
               <Button
                 variant="contained"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 onClick={generateLending}
               >
                 Agregar
               </Button>
             </Grid>
           </Grid>
-          <Grid sx={{ pb: "30px" }} container item spacing={2}>
+          <Grid sx={{ pb: '30px' }} container item spacing={2}>
             <Grid item xs={12} md={3}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Ususario</InputLabel>
                 <Select
-                  defaultValue={"S"}
+                  defaultValue={'S'}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Usuarios"
                   name="user"
                   value={userType}
                   onChange={(e) => {
-                    setUser("");
+                    setUser('');
                     setUserType(e.target.value);
                   }}
                 >
-                  <MenuItem value={"S"}>Alumnos</MenuItem>
-                  <MenuItem value={"E"}>Empleados</MenuItem>
+                  <MenuItem value={'S'}>Alumnos</MenuItem>
+                  <MenuItem value={'E'}>Empleados</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
-            {userType === "S" ? (
+            {userType === 'S' ? (
               <>
                 <Grid item xs={12} md={4}>
                   <Autocomplete
@@ -137,7 +137,7 @@ const LendingAdmin = () => {
                   />
                 </Grid>
               </>
-            ) : userType === "E" ? (
+            ) : userType === 'E' ? (
               <>
                 <Grid item xs={12} md={4}>
                   <Autocomplete
@@ -166,7 +166,7 @@ const LendingAdmin = () => {
               </>
             )}
           </Grid>
-          <Grid sx={{ pb: "30px" }} container item spacing={2}>
+          <Grid sx={{ pb: '30px' }} container item spacing={2}>
             <Grid item xs={12} md={4}>
               <Autocomplete
                 disablePortal
@@ -186,12 +186,12 @@ const LendingAdmin = () => {
               item
               xs={12}
               md={3}
-              style={{ display: "flex", alignContent: "center" }}
+              style={{ display: 'flex', alignContent: 'center' }}
             >
               <Button
                 variant="contained"
                 disabled={selectedBooks.length >= 3 ? true : false}
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 onClick={() => {
                   handleAddLibro();
                 }}
@@ -200,20 +200,20 @@ const LendingAdmin = () => {
               </Button>
             </Grid>
           </Grid>
-          <Grid sx={{ pb: "20px" }} container item spacing={2}>
+          <Grid sx={{ pb: '20px' }} container item spacing={2}>
             <Grid item xs={12} md={4}>
-              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
                 Libros
               </Typography>
             </Grid>
           </Grid>
-          <Grid sx={{ pb: "40px" }} container item>
+          <Grid sx={{ pb: '40px' }} container item>
             <Grid
               item
               xs={12}
               md={12}
               spacing={2}
-              sx={{ display: "flex", direction: "row" }}
+              sx={{ display: 'flex', direction: 'row' }}
             >
               {selectedBooks.map((data, key) => {
                 return (
@@ -222,19 +222,19 @@ const LendingAdmin = () => {
                     md={2}
                     key={key}
                     style={{
-                      display: "flex",
-                      justifyContent: "space-around",
-                      direction: "row",
-                      border: "2px solid black",
-                      textAlign: "center",
-                      borderRadius: "10px",
-                      padding: "10px",
-                      marginRight: "10px",
+                      display: 'flex',
+                      justifyContent: 'space-around',
+                      direction: 'row',
+                      border: '2px solid black',
+                      textAlign: 'center',
+                      borderRadius: '10px',
+                      padding: '10px',
+                      marginRight: '10px',
                     }}
                   >
                     <Typography>{data.nombre}</Typography>
                     <CloseIcon
-                      style={{ cursor: "pointer" }}
+                      style={{ cursor: 'pointer' }}
                       onClick={() => {
                         onDeleteBloque(data);
                       }}
@@ -245,16 +245,16 @@ const LendingAdmin = () => {
             </Grid>
             {selectedBooks.length === 0 ? (
               <Grid item xs={12} md={4}>
-                <Typography sx={{ fontWeight: "light" }}>
+                <Typography sx={{ fontWeight: 'light' }}>
                   Agregar libros
                 </Typography>
               </Grid>
             ) : null}
           </Grid>
           <Divider />
-          <Grid sx={{ py: "20px" }} container item spacing={2}>
+          <Grid sx={{ py: '20px' }} container item spacing={2}>
             <Grid item xs={12} md={4}>
-              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
                 Lista de prestamos
               </Typography>
             </Grid>
@@ -262,10 +262,10 @@ const LendingAdmin = () => {
 
           <div
             style={{
-              width: "100%",
-              marginTop: "40px",
-              height: "500px",
-              overflow: "auto",
+              width: '100%',
+              marginTop: '40px',
+              height: '500px',
+              overflow: 'auto',
             }}
           >
             {isLoading ? (
@@ -277,49 +277,49 @@ const LendingAdmin = () => {
                     key={key}
                     sx={{
                       boxShadow: 2,
-                      mb: "20px",
-                      py: "20px",
-                      px: "10px",
-                      borderRadius: "5px",
+                      mb: '20px',
+                      py: '20px',
+                      px: '10px',
+                      borderRadius: '5px',
                     }}
                   >
                     <div
                       style={{
-                        paddingLeft: "30px",
-                        display: "flex",
-                        direction: "row",
-                        justifyContent: "space-around",
+                        paddingLeft: '30px',
+                        display: 'flex',
+                        direction: 'row',
+                        justifyContent: 'space-around',
                       }}
                     >
-                      <Typography sx={{ fontSize: "1rem" }}>
+                      <Typography sx={{ fontSize: '1rem' }}>
                         <Typography
-                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
                         >
                           Identificador:
                         </Typography>
-                        {data.userType === "S"
+                        {data.userType === 'S'
                           ? data.numControl
                           : data.numEmployee}
                       </Typography>
-                      <Typography sx={{ fontSize: "1rem" }}>
+                      <Typography sx={{ fontSize: '1rem' }}>
                         <Typography
-                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
                         >
                           Fecha del prestamos:
                         </Typography>
                         {convertUnixToCompleteDate(data.fechaPrestamo)}
                       </Typography>
-                      <Typography sx={{ fontSize: "1rem" }}>
+                      <Typography sx={{ fontSize: '1rem' }}>
                         <Typography
-                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
                         >
                           Fecha de devolucion:
                         </Typography>
                         {convertUnixToCompleteDate(data.fechaDevolucion)}
                       </Typography>
-                      <Typography sx={{ fontSize: "1rem" }}>
+                      <Typography sx={{ fontSize: '1rem' }}>
                         <Typography
-                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
                         >
                           Empleado que hizo el prestamo:
                         </Typography>

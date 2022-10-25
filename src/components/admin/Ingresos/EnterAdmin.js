@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SideBar from '../../shared/SideBar';
+import SideBar from '../Shared/SideBar';
 import '../../../App.css';
 import {
   Grid,

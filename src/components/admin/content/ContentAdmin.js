@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import SideBar from '../../shared/SideBar';
+import SideBar from '../Shared/SideBar';
 import ItemEditorial from './ContentItem/ItemEditorial';
 import ItemAuthor from './ContentItem/ItemAuthor';
 import ItemBooks from './ContentItem/ItemBook';
 import ItemCategorie from './ContentItem/ItemCategorie';
 import ItemDepartments from './ContentItem/ItemDepartments';
 import ItemCarrer from './ContentItem/ItemCarrer';
-import DeleteModal from './Modals/DeleteModal';
-import UpdateModal from './Modals/UpdateModal';
+import DeleteModal from '../Shared/Modals/DeleteModal';
+import UpdateModal from '../Shared/Modals/UpdateModal';
 import { useNavigate } from 'react-router-dom';
 import '../../../App.css';
 

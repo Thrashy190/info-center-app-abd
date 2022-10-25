@@ -1,37 +1,36 @@
-import React, { useState } from "react";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import Button from "@mui/material/Button";
-import Autocomplete from "@mui/material/Autocomplete";
+import React, { useState } from 'react';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Button from '@mui/material/Button';
+import Autocomplete from '@mui/material/Autocomplete';
 
 const TextFieldRegister = ({
   baseData,
   studentData,
   employeeData,
-  handleChange,
-  handleChangeStudent,
-  handleChangeEmployee,
-  errorText,
-  errorValidation,
+  setBaseData,
+  setStudentData,
+  setEmployeeDatas,
+  handleChangeData,
   id,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [departments, setDepartments] = useState([{ name: "ahbsdi" }]);
+  const [departments, setDepartments] = useState([{ name: 'ahbsdi' }]);
 
   return (
     <Grid
       container
       spacing={3}
-      sx={{ py: "1.5em" }}
+      sx={{ py: '1.5em' }}
       style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "90%",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '90%',
       }}
     >
       <Grid
@@ -39,9 +38,9 @@ const TextFieldRegister = ({
         xs={10}
         md={4}
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <TextField
@@ -50,11 +49,11 @@ const TextFieldRegister = ({
           variant="outlined"
           name="name"
           value={baseData.name}
-          onChange={handleChange}
-          helperText={errorValidation.name ? errorText.name : ""}
-          error={errorValidation.name}
+          onChange={(e) => {
+            handleChangeData(e, setBaseData, baseData);
+          }}
           fullWidth
-          sx={{ fontSize: "1.5rem" }}
+          sx={{ fontSize: '1.5rem' }}
         />
       </Grid>
       <Grid
@@ -62,9 +61,9 @@ const TextFieldRegister = ({
         xs={10}
         md={4}
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <TextField
@@ -73,13 +72,11 @@ const TextFieldRegister = ({
           variant="outlined"
           name="lastNameFather"
           value={baseData.lastNameFather}
-          onChange={handleChange}
-          helperText={
-            errorValidation.lastNameFather ? errorText.lastNameFather : ""
-          }
-          error={errorValidation.lastNameFather}
+          onChange={(e) => {
+            handleChangeData(e, setBaseData, baseData);
+          }}
           fullWidth
-          sx={{ fontSize: "1.5rem" }}
+          sx={{ fontSize: '1.5rem' }}
         />
       </Grid>
       <Grid
@@ -87,9 +84,9 @@ const TextFieldRegister = ({
         xs={10}
         md={4}
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <TextField
@@ -98,13 +95,11 @@ const TextFieldRegister = ({
           variant="outlined"
           name="lastNameMother"
           value={baseData.lastNameMother}
-          onChange={handleChange}
-          helperText={
-            errorValidation.lastNameMother ? errorText.lastNameMother : ""
-          }
-          error={errorValidation.lastNameMother}
+          onChange={(e) => {
+            handleChangeData(e, setBaseData, baseData);
+          }}
           fullWidth
-          sx={{ fontSize: "1.5rem" }}
+          sx={{ fontSize: '1.5rem' }}
         />
       </Grid>
       <Grid
@@ -112,9 +107,9 @@ const TextFieldRegister = ({
         xs={10}
         md={5}
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <TextField
@@ -125,12 +120,10 @@ const TextFieldRegister = ({
           type="email"
           value={baseData.email}
           onChange={(e) => {
-            handleChange(e);
+            handleChangeData(e, setBaseData, baseData);
           }}
-          helperText={errorValidation.email ? errorText.email : ""}
-          error={errorValidation.email}
           fullWidth
-          sx={{ fontSize: "1.5rem" }}
+          sx={{ fontSize: '1.5rem' }}
         />
       </Grid>
       <Grid
@@ -138,9 +131,9 @@ const TextFieldRegister = ({
         xs={10}
         md={5}
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <TextField
@@ -149,11 +142,11 @@ const TextFieldRegister = ({
           variant="outlined"
           name="phone"
           value={baseData.phone}
-          onChange={handleChange}
-          helperText={errorValidation.phone ? errorText.phone : ""}
-          error={errorValidation.phone}
+          onChange={(e) => {
+            handleChangeData(e, setBaseData, baseData);
+          }}
           fullWidth
-          sx={{ fontSize: "1.5rem" }}
+          sx={{ fontSize: '1.5rem' }}
         />
       </Grid>
 
@@ -162,9 +155,9 @@ const TextFieldRegister = ({
         xs={10}
         md={2}
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <FormControl fullWidth>
@@ -175,24 +168,24 @@ const TextFieldRegister = ({
             label="gender"
             name="gender"
             value={baseData.gender}
-            onChange={handleChange}
-            helperText={errorValidation.gender ? errorText.gender : ""}
-            error={errorValidation.gender}
+            onChange={(e) => {
+              handleChangeData(e, setBaseData, baseData);
+            }}
           >
-            <MenuItem value={"Hombre"}>Hombre</MenuItem>
-            <MenuItem value={"Mujer"}>Mujer</MenuItem>
+            <MenuItem value={'Hombre'}>Hombre</MenuItem>
+            <MenuItem value={'Mujer'}>Mujer</MenuItem>
           </Select>
         </FormControl>
       </Grid>
 
-      {id === "employees" ? (
+      {id === 'employees' ? (
         <>
           <Grid
             item
             xs={10}
             md={6}
             style={{
-              display: "flex",
+              display: 'flex',
             }}
           >
             <Autocomplete
@@ -216,9 +209,9 @@ const TextFieldRegister = ({
             xs={10}
             md={6}
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <TextField
@@ -227,26 +220,24 @@ const TextFieldRegister = ({
               variant="outlined"
               name="numEmployee"
               value={employeeData.numEmployee}
-              onChange={handleChangeEmployee}
-              helperText={
-                errorValidation.numEmployee ? errorText.enumEmployee : ""
-              }
-              error={errorValidation.numEmployee}
+              onChange={(e) => {
+                handleChangeData(e, setEmployeeDatas, employeeData);
+              }}
               fullWidth
-              sx={{ fontSize: "1.5rem" }}
+              sx={{ fontSize: '1.5rem' }}
             />
           </Grid>
         </>
-      ) : id === "student" ? (
+      ) : id === 'student' ? (
         <>
           <Grid
             item
             xs={10}
             md={4}
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <FormControl fullWidth>
@@ -257,15 +248,15 @@ const TextFieldRegister = ({
                 label="career"
                 name="career"
                 value={studentData.career}
-                onChange={handleChangeStudent}
-                helperText={errorValidation.career ? errorText.career : ""}
-                error={errorValidation.career}
+                onChange={(e) => {
+                  handleChangeData(e, setStudentData, studentData);
+                }}
               >
-                <MenuItem value={"Sistemas computacionales"}>
+                <MenuItem value={'Sistemas computacionales'}>
                   Sistemas computacionales
                 </MenuItem>
-                <MenuItem value={"Industrial"}>Industrial</MenuItem>
-                <MenuItem value={"Mecatronica"}>Mecatronica</MenuItem>
+                <MenuItem value={'Industrial'}>Industrial</MenuItem>
+                <MenuItem value={'Mecatronica'}>Mecatronica</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -274,9 +265,9 @@ const TextFieldRegister = ({
             xs={10}
             md={4}
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <TextField
@@ -285,13 +276,11 @@ const TextFieldRegister = ({
               variant="outlined"
               name="numControl"
               value={studentData.numControl}
-              onChange={handleChangeStudent}
-              helperText={
-                errorValidation.numControl ? errorText.numControl : ""
-              }
-              error={errorValidation.numControl}
+              onChange={(e) => {
+                handleChangeData(e, setStudentData, studentData);
+              }}
               fullWidth
-              sx={{ fontSize: "1.5rem" }}
+              sx={{ fontSize: '1.5rem' }}
             />
           </Grid>
           <Grid
@@ -299,9 +288,9 @@ const TextFieldRegister = ({
             xs={10}
             md={4}
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <FormControl fullWidth>
@@ -312,11 +301,9 @@ const TextFieldRegister = ({
                 label="semester"
                 name="semester"
                 value={studentData.semester}
-                onChange={handleChangeStudent}
-                helperText={
-                  errorValidation.semester ? errorText.numControl : ""
-                }
-                error={errorValidation.numControl}
+                onChange={(e) => {
+                  handleChangeData(e, setStudentData, studentData);
+                }}
               >
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((item) => {
                   return (
@@ -330,16 +317,16 @@ const TextFieldRegister = ({
           </Grid>
         </>
       ) : null}
-      {id === "admin" ? (
+      {id === 'admin' ? (
         <>
           <Grid
             item
             xs={10}
             md={5}
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <TextField
@@ -347,13 +334,13 @@ const TextFieldRegister = ({
               label="Contraseña"
               variant="outlined"
               name="password"
-              type={showPassword ? "text" : "password"}
-              helperText={errorValidation.password ? errorText.password : ""}
-              error={errorValidation.password}
+              type={showPassword ? 'text' : 'password'}
               value={baseData.password}
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChangeData(e, setBaseData, baseData);
+              }}
               fullWidth
-              sx={{ fontSize: "1.5rem" }}
+              sx={{ fontSize: '1.5rem' }}
             />
           </Grid>
           <Grid
@@ -361,20 +348,20 @@ const TextFieldRegister = ({
             xs={10}
             md={5}
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <Button
               variant="contained"
               size="large"
-              style={{ height: "100%", fontSize: "1rem" }}
+              style={{ height: '100%', fontSize: '1rem' }}
               onClick={() => {
                 setShowPassword(!showPassword);
               }}
             >
-              {showPassword ? "Ocultar" : "Mostrar"}
+              {showPassword ? 'Ocultar' : 'Mostrar'}
             </Button>
           </Grid>
           <Grid
@@ -382,9 +369,9 @@ const TextFieldRegister = ({
             xs={10}
             md={2}
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           ></Grid>
         </>

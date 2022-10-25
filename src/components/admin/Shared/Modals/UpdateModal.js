@@ -12,6 +12,7 @@ import {
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import dayjs from 'dayjs';
 import { useAuth } from '../../../../context/UserProvider';
+import TextFieldRegister from '../../Users/TextFieldRegister';
 
 const UpdateBooks = ({ handleChangeData, data, setData }) => {
   const [value, setValue] = React.useState(dayjs('2022-09-24T21:11:54'));
@@ -263,7 +264,7 @@ const UpdateModal = ({ open, handleClose, typeSearch, data, setData }) => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 500,
+    width: 1200,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -293,6 +294,15 @@ const UpdateModal = ({ open, handleClose, typeSearch, data, setData }) => {
         break;
       case 'Carreras':
         collection = 'carrera';
+        break;
+      case 'student':
+        collection = 'alumnos';
+        break;
+      case 'employees':
+        collection = 'empleado';
+        break;
+      case 'others':
+        collection = 'otros';
         break;
       default:
         collection = 'departamento';
@@ -362,7 +372,34 @@ const UpdateModal = ({ open, handleClose, typeSearch, data, setData }) => {
               data={data}
               setData={setData}
             />
-          ) : null}
+          ) : typeSearch === 'student' ? (
+            <TextFieldRegister
+              baseData={data}
+              studentData={data}
+              setBaseData={setData}
+              setStudentData={setData}
+              handleChangeData={handleChangeData}
+              id={typeSearch}
+            />
+          ) : typeSearch === 'employees' ? (
+            <TextFieldRegister
+              baseData={data}
+              employeeData={data}
+              setBaseData={setData}
+              setEmployeeDatas={setData}
+              handleChangeData={handleChangeData}
+              id={typeSearch}
+            />
+          ) : typeSearch === 'others' ? (
+            <TextFieldRegister
+              baseData={data}
+              setBaseData={setData}
+              handleChangeData={handleChangeData}
+              id={typeSearch}
+            />
+          ) : (
+            'Edicion no disponible por el momento '
+          )}
 
           <Button
             variant="contained"

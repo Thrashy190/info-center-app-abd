@@ -16,7 +16,6 @@ import {
   doc,
   getDoc,
   deleteDoc,
-  updateDoc,
   setDoc,
   orderBy,
 } from 'firebase/firestore';
@@ -29,7 +28,6 @@ export const useAuth = () => useContext(UserContext);
 
 const UserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
-  const [loginType, setLoginType] = useState();
   const navigate = useNavigate();
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -120,40 +118,6 @@ const UserProvider = ({ children }) => {
       });
   };
 
-  const searchCategoria = async (input, data, id) => {
-    let categoria = [];
-    if (id === null) {
-      const categoriaRef = doc(db, 'categorias');
-      const q = query(categoriaRef, where(input, '==', data));
-      var id;
-
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        id = doc.id;
-        categoria.push({ ...doc.data(), id: doc.id });
-      });
-    }
-
-    return categoria;
-  };
-
-  const seachAutores = async (input, data, id) => {
-    let autores = [];
-    if (id === null) {
-      const autoresRef = doc(db, 'autores');
-      const q = query(autoresRef, where(input, '==', data));
-      var id;
-
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        id = doc.id;
-        autores.push({ ...doc.data(), id: doc.id });
-      });
-    }
-
-    return autores;
-  };
-
   const getBooks = async () => {
     const booksRef = collection(db, 'libros');
     let books = [];
@@ -203,9 +167,139 @@ const UserProvider = ({ children }) => {
     }
   };
 
-  const getLendings = async () => {
-    const prestamosRef = collection(db, 'prestamo');
+  const getEditorial = async () => {
+    const editorialRef = collection(db, 'editorial');
 
+    const q = query(editorialRef);
+
+    let editorial = [];
+
+    try {
+      const editorialSnap = await getDocs(q);
+      if (editorialSnap.docs.length > 0) {
+        editorialSnap.forEach(async (docItem) => {
+          await getDoc(doc(db, 'genero', docItem.id));
+
+          editorial.push({
+            id: docItem.id,
+            ...docItem.data(),
+          });
+        });
+      }
+      console.log(editorial);
+      return editorial;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getCategoria = async () => {
+    const categoriaRef = collection(db, 'categorias');
+
+    const q = query(categoriaRef);
+
+    let categoria = [];
+
+    try {
+      const categoriaSnap = await getDocs(q);
+      if (categoriaSnap.docs.length > 0) {
+        categoriaSnap.forEach(async (docItem) => {
+          await getDoc(doc(db, 'categorias', docItem.id));
+
+          categoria.push({
+            id: docItem.id,
+            ...docItem.data(),
+          });
+        });
+      }
+      console.log(categoria);
+      return categoria;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAutores = async () => {
+    const autoresRef = collection(db, 'autores');
+
+    const q = query(autoresRef);
+
+    let autores = [];
+
+    try {
+      const autoresSnap = await getDocs(q);
+      if (autoresSnap.docs.length > 0) {
+        autoresSnap.forEach(async (docItem) => {
+          await getDoc(doc(db, 'autores', docItem.id));
+
+          autores.push({
+            id: docItem.id,
+            ...docItem.data(),
+          });
+        });
+      }
+      console.log(autores);
+      return autores;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getNacionalidad = async () => {
+    const nacionalidadRef = collection(db, 'nacionalidad');
+
+    const q = query(nacionalidadRef);
+
+    let nacionalidad = [];
+
+    try {
+      const nacionalidadSnap = await getDocs(q);
+      if (nacionalidadSnap.docs.length > 0) {
+        nacionalidadSnap.forEach(async (docItem) => {
+          await getDoc(doc(db, 'nacionalidad', docItem.id));
+
+          nacionalidad.push({
+            id: docItem.id,
+            ...docItem.data(),
+          });
+        });
+      }
+      console.log(nacionalidad);
+      return nacionalidad;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getGender = async () => {
+    const genderRef = collection(db, 'genero');
+
+    const q = query(genderRef);
+
+    let gender = [];
+
+    try {
+      const genderSnap = await getDocs(q);
+      if (genderSnap.docs.length > 0) {
+        genderSnap.forEach(async (docItem) => {
+          await getDoc(doc(db, 'genero', docItem.id));
+
+          gender.push({
+            id: docItem.id,
+            ...docItem.data(),
+          });
+
+          console.log(docItem.data(), docItem.id);
+        });
+      }
+      console.log(gender);
+      return gender;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getLendings = async () => {
     const q = query(
       collection(db, 'prestamo'),
       orderBy('fechaPrestamo', 'desc')
@@ -479,14 +573,8 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
         setCurrentUser(user.uid);
-
-        // ...
       } else {
-        // User is signed out
-        // ...
         setCurrentUser(null);
       }
     });
@@ -494,7 +582,6 @@ const UserProvider = ({ children }) => {
 
   const values = {
     currentUser,
-    loginType,
     signUpWithEmailPassword,
     login,
     logout,
@@ -505,6 +592,11 @@ const UserProvider = ({ children }) => {
     getBooks,
     addLendings,
     getLendings,
+    getEditorial,
+    getCategoria,
+    getAutores,
+    getGender,
+    getNacionalidad,
     getDataFromCollection,
     deletFromCollection,
     addData,
@@ -522,134 +614,3 @@ const UserProvider = ({ children }) => {
 };
 
 export default UserProvider;
-
-// const bookConverter = {
-//   toFirestore: (book) => {
-//     return {
-//       nombre: book.nombre,
-//       categoria: book.categoria,
-//       editorial: book.editorial,
-//       volumen: book.volumen,
-//       fecha_publicacion: book.fecha_publicacion,
-//     };
-//   },
-//   fromFirestore: (snapshot, options) => {
-//     const book = snapshot.data(options);
-//     return new Books(
-//       book.nombre,
-//       book.categoria,
-//       book.editorial,
-//       book.volumen,
-//       book.fecha_publicacion
-//     );
-//   },
-// };
-
-// const searchAllBooks = async (type) => {
-//   try {
-//     const bookReference = collection(db, type);
-//     const q = query(bookReference);
-//     let id = [];
-
-//     const querySnapshot = await getDocs(q);
-//     querySnapshot.forEach(async (doc) => {
-//       id.push(doc.id);
-//     });
-
-//     for (let i = 0; i < id.length; i++) {
-//       const ref = doc(db, type, id[i]).withConverter(bookConverter);
-//       const docSnap = await getDoc(ref);
-//       if (docSnap.exists()) {
-//         // Convert to book object
-//         const book = docSnap.data();
-//         // Use a book instance method
-//         console.log(book.toString());
-//       } else {
-//         console.log("No such document!");
-//       }
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// const searchBook = async (input, data) => {
-//   try {
-//     const bookReference = collection(db, "libros");
-//     const q = query(bookReference, where(input, "==", data));
-//     var id;
-//     let book = [];
-
-//     const querySnapshot = await getDocs(q);
-//     querySnapshot.forEach((doc) => {
-//       id = doc.id;
-//     });
-
-//     const ref = doc(db, "libros", id).withConverter(bookConverter);
-//     const docSnap = await getDoc(ref);
-//     if (docSnap.exists()) {
-//       // Use a book instance method
-//       console.log(book.toString());
-//       // Convert to book object
-//       book.push({ ...docSnap.data(), id: docSnap.id });
-//       return book;
-//     } else {
-//       console.log("No such document!");
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// const searchUser = async (type, input, data, id) => {
-//   try {
-//     const userConverter = {
-//       toFirestore: (user) => {
-//         return {
-//           name: user.name,
-//           lastNameFather: user.lastNameFather,
-//           lastNameMother: user.lastNameMother,
-//           phone: user.phone,
-//           email: user.email,
-//           gender: user.gender,
-//           password: user.password,
-//         };
-//       },
-//       fromFirestore: (snapshot, options) => {
-//         const user = snapshot.data(options);
-//         return new User(
-//           user.name,
-//           user.lastNameFather,
-//           user.lastNameMother,
-//           user.phone,
-//           user.email,
-//           user.gender,
-//           user.password
-//         );
-//       },
-//     };
-
-//     if (id !== null) {
-//       const userReference = collection(db, type);
-//       const q = query(userReference, where(input, "==", data));
-
-//       const querySnapshot = await getDocs(q);
-//       querySnapshot.forEach((doc) => {
-//         id = doc.id;
-//       });
-//     }
-
-//     const ref = doc(db, type, id).withConverter(userConverter);
-//     const docSnap = await getDoc(ref);
-//     if (docSnap.exists()) {
-//       // Convert to user object
-//       const user = docSnap.data();
-//       // Use a user instance method
-//       console.log(user.toString());
-//     } else {
-//       console.log("No such document!");
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };

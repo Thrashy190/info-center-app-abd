@@ -1,28 +1,18 @@
-import "./App.css";
-import { Routes, Route, Navigate } from "react-router-dom";
+import './App.css';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 //auth
-import Login from "./components/auth/login/Login";
-import UserType from "./components/auth/UserType";
-import Register from "./components/auth/register/Register";
+import Login from './components/auth/Login';
 
-//DAshboard user
-import Home from "./components/user/Home";
-import Content from "./components/user/Content";
-import Profile from "./components/user/Profile";
-import Lendings from "./components/user/Lendings";
+//Dashboard
+import ContentAdmin from './components/admin/Content/ContentAdmin';
+import AddContent from './components/admin/Content/AddContent';
+import LendingAdmin from './components/admin/Prestamos/LendingsAdmin';
+import EnterAdmin from './components/admin/Ingresos/EnterAdmin';
+import UsersAdmin from './components/admin/Users/UsersAdmin';
 
-//Dashboard admin
-import HomeAdmin from "./components/admin/HomeAdmin";
-import ContentAdmin from "./components/admin/content/ContentAdmin";
-import AddContent from "./components/admin/content/AddContent";
-import LendingAdmin from "./components/admin/Prestamos/LendingsAdmin";
-import EnterAdmin from "./components/admin/Ingresos/EnterAdmin";
-import RegisterAdmin from "./components/admin/register/RegisterAdmin";
-import ProfileAdmin from "./components/admin/user/ProfileAdmin";
-
-//ruta protegida ususarios
-import ProtectedRoute from "./helpers/ProtectedRouter";
+//ruta protegida
+import ProtectedRoute from './helpers/ProtectedRouter';
 
 function App() {
   return (
@@ -37,15 +27,8 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
         {/* <Route path="/usertype" element={<UserType />} /> */}
         <Route path="/login" element={<Login />} />
-        <Route path="/register/:id" element={<Register />} />
         <Route element={<ProtectedRoute />}>
-          {/* rutas normales privadas */}
-          <Route path="/dashboard/inicio" element={<Home />} />
-          <Route path="/dashboard/contenido" element={<Content />} />
-          <Route path="/dashboard/prestamos" element={<Lendings />} />
-          <Route path="/dashboard/perfil" element={<Profile />} />
           {/* rutas admin privadas */}
-          <Route path="/admin/dashboard/inicio" element={<HomeAdmin />} />
           <Route path="/admin/dashboard/contenido" element={<ContentAdmin />} />
           <Route
             path="/admin/dashboard/contenido/agregar"
@@ -53,8 +36,7 @@ function App() {
           />
           <Route path="/admin/dashboard/prestamos" element={<LendingAdmin />} />
           <Route path="/admin/dashboard/ingresos" element={<EnterAdmin />} />
-          <Route path="/admin/dashboard/registro" element={<RegisterAdmin />} />
-          <Route path="/admin/dashboard/perfil" element={<ProfileAdmin />} />
+          <Route path="/admin/dashboard/registro" element={<UsersAdmin />} />
         </Route>
       </Routes>
     </div>
