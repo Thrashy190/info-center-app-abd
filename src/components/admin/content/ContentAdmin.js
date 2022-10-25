@@ -28,7 +28,7 @@ const ContentAdmin = () => {
   const [typeSearch, setTypeSearch] = useState("Libros");
   const [contentData, setContentData] = useState([]);
   const [id, setId] = useState();
-  const [data, setData] = useState();
+  const [data, setData] = useState({});
 
   //Modals
   const [openDelete, setOpenDelete] = useState(false);
@@ -42,7 +42,11 @@ const ContentAdmin = () => {
   };
 
   const [openUpdate, setOpenUpdate] = useState(false);
-  const handleOpenUpdate = () => setOpenUpdate(true);
+  const handleOpenUpdate = (data) => {
+    console.log({ ...data });
+    setData({ ...data });
+    setOpenUpdate(true);
+  };
   const handleCloseUpdate = () => setOpenUpdate(false);
 
   const [disable, setDisable] = useState(true);
@@ -279,6 +283,8 @@ const ContentAdmin = () => {
         open={openUpdate}
         handleClose={handleCloseUpdate}
         typeSearch={typeSearch}
+        data={data}
+        setData={setData}
       />
     </Grid>
   );

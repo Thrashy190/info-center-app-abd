@@ -6,6 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
+import Autocomplete from "@mui/material/Autocomplete";
 
 const TextFieldRegister = ({
   baseData,
@@ -14,13 +15,12 @@ const TextFieldRegister = ({
   handleChange,
   handleChangeStudent,
   handleChangeEmployee,
-  setPassword,
-  password,
   errorText,
   errorValidation,
   id,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [departments, setDepartments] = useState([{ name: "ahbsdi" }]);
 
   return (
     <Grid
@@ -193,30 +193,23 @@ const TextFieldRegister = ({
             md={6}
             style={{
               display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
             }}
           >
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
-                Departamento
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="department"
-                name="department"
-                value={employeeData.department}
-                onChange={handleChangeEmployee}
-                helperText={
-                  errorValidation.department ? errorText.department : ""
-                }
-                error={errorValidation.department}
-              >
-                <MenuItem value={"Ciencias basicas"}>Ciencias basicas</MenuItem>
-                <MenuItem value={"Escolares"}>Escolares</MenuItem>
-              </Select>
-            </FormControl>
+            <Autocomplete
+              fullWidth
+              disablePortal
+              id="combo-box-departments"
+              value={departments.name}
+              onChange={(e, newValue) => {
+                // setUser(
+                //   departments.filter((data) => data.name === newValue)
+                // );
+              }}
+              options={departments.map((option) => option.name)}
+              renderInput={(params) => (
+                <TextField {...params} label="Departamento" />
+              )}
+            />
           </Grid>
           <Grid
             item
@@ -357,8 +350,8 @@ const TextFieldRegister = ({
               type={showPassword ? "text" : "password"}
               helperText={errorValidation.password ? errorText.password : ""}
               error={errorValidation.password}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={baseData.password}
+              onChange={handleChange}
               fullWidth
               sx={{ fontSize: "1.5rem" }}
             />

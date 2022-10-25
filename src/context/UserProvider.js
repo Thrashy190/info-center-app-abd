@@ -120,22 +120,6 @@ const UserProvider = ({ children }) => {
       });
   };
 
-  const getBooks = async () => {
-    const booksRef = collection(db, "libros");
-    let books = [];
-    try {
-      const booksSnap = await getDocs(booksRef);
-      if (booksSnap.docs.length > 0) {
-        booksSnap.forEach((doc) => {
-          books.push({ ...doc.data(), id: doc.id });
-        });
-      }
-      return books;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const searchCategoria = async (input, data, id) => {
     let categoria = [];
     if (id === null) {
@@ -168,6 +152,22 @@ const UserProvider = ({ children }) => {
     }
 
     return autores;
+  };
+
+  const getBooks = async () => {
+    const booksRef = collection(db, "libros");
+    let books = [];
+    try {
+      const booksSnap = await getDocs(booksRef);
+      if (booksSnap.docs.length > 0) {
+        booksSnap.forEach((doc) => {
+          books.push({ ...doc.data(), id: doc.id });
+        });
+      }
+      return books;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getStudents = async () => {
@@ -204,8 +204,6 @@ const UserProvider = ({ children }) => {
   };
 
   const getAdmissions = async () => {
-    const ingresosRef = collection(db, "ingreso");
-
     const q = query(collection(db, "ingreso"), orderBy("fechaIngreso", "desc"));
 
     let ingresos = [];
@@ -317,21 +315,62 @@ const UserProvider = ({ children }) => {
   const addAdmissionToInfoCenter = async (data, type) => {
     console.log(data);
     try {
-      await addDoc(collection(db, "ingreso"), {
-        idUsuario: data.id,
-        fechaIngreso: Math.floor(new Date() / 1000),
-        tipoIngreso: type,
-      });
+      const ingresosRef = collection(db, "ingreso");
+      const q = query(
+        ingresosRef,
+        where("idUsuario", "==", data.id),
+        where("fechaSalida", "==", null)
+      );
+
+      const ingresosSnap = await getDocs(q);
+      if (ingresosSnap.docs.length === 0) {
+        await addDoc(collection(db, "ingreso"), {
+          idUsuario: data.id,
+          fechaIngreso: Math.floor(new Date() / 1000),
+          fechaSalida: null,
+          tipoIngreso: type,
+        });
+        setNotify({
+          isOpen: true,
+          message: "Ingreso agregado correctamente",
+          type: "success",
+        });
+
+        return;
+      }
       setNotify({
         isOpen: true,
-        message: "Ingreso agregado correctamente",
-        type: "success",
+        message: "No se registro salida",
+        type: "error",
       });
     } catch (error) {
       console.log(error);
       setNotify({
         isOpen: true,
         message: "Error al momento de agregar un ingreso",
+        type: "error",
+      });
+    }
+  };
+
+  const fechaSalida = async (data, id) => {
+    try {
+      await setDoc(doc(db, "ingreso", id), {
+        idUsuario: data.idUsuario,
+        fechaIngreso: data.fechaIngreso,
+        tipoIngreso: data.tipoIngreso,
+        fechaSalida: Math.floor(new Date() / 1000),
+      });
+      setNotify({
+        isOpen: true,
+        message: "Fecha generada",
+        type: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      setNotify({
+        isOpen: true,
+        message: "Error",
         type: "error",
       });
     }
@@ -393,6 +432,36 @@ const UserProvider = ({ children }) => {
     }
   };
 
+  const addDataWithoutRepeat = async (type, id, data, key) => {
+    try {
+      const docRef = collection(db, type);
+      const q = query(docRef, where(key, "==", id));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.docs.length === 0) {
+        setDoc(doc(db, type, id), data);
+        setNotify({
+          isOpen: true,
+          message: "Se agrego un ususario correctamente",
+          type: "success",
+        });
+        return;
+      }
+      setNotify({
+        isOpen: true,
+        message: "Usuario existente intente agregar uno nuevo",
+        type: "error",
+      });
+    } catch (error) {
+      console.log(error);
+      setNotify({
+        isOpen: true,
+        message: "Hubo un problema al agregar al usuario",
+        type: "error",
+      });
+    }
+  };
+
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -426,6 +495,8 @@ const UserProvider = ({ children }) => {
     deletFromCollection,
     addData,
     updateCollection,
+    addDataWithoutRepeat,
+    fechaSalida,
   };
 
   return (
