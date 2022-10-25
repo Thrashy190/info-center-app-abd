@@ -20,5 +20,7 @@ export const convertUnixToCompleteDate = (uDate) => {
   let month = d.getMonth();
   month = months[month];
   const year = d.getFullYear();
-  return `${day} ${month} ${year}`;
+  const hour = d.getHours();
+  const minute = d.getMinutes();
+  return `${day} ${month} ${year} ${hour}:${minute}`;
 };

@@ -18,8 +18,13 @@ import { useAuth } from "../../../context/UserProvider";
 import { convertUnixToCompleteDate } from "../../../helpers/DateConverter";
 
 const EnterAdmin = () => {
-  const { getStudents, getEmployees, addAdmissionToInfoCenter, getAdmissions } =
-    useAuth();
+  const {
+    getStudents,
+    getEmployees,
+    addAdmissionToInfoCenter,
+    getAdmissions,
+    fechaSalida,
+  } = useAuth();
 
   const [studentsList, setStudentsList] = useState([]);
   const [employeesList, setEmployeesList] = useState([]);
@@ -216,6 +221,19 @@ const EnterAdmin = () => {
                         </Typography>
                         {convertUnixToCompleteDate(data.fechaIngreso)}
                       </Typography>
+
+                      {/* Fecha de salida */}
+                      <Typography sx={{ fontSize: "1rem" }}>
+                        <Typography
+                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                        >
+                          Fecha de salida:
+                        </Typography>
+                        {data.fechaSalida === null
+                          ? "No registrada"
+                          : convertUnixToCompleteDate(data.fechaSalida)}
+                      </Typography>
+                      {/* salida */}
                       <Typography sx={{ fontSize: "1rem" }}>
                         <Typography
                           sx={{ fontSize: "1rem", fontWeight: "bold" }}
@@ -236,6 +254,15 @@ const EnterAdmin = () => {
                         </Typography>
                         {data.gender}
                       </Typography>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          fechaSalida(data, data.id);
+                        }}
+                      >
+                        Registrar salida
+                      </Button>
                     </div>
                   </Box>
                 );

@@ -91,18 +91,19 @@ const UpdateAuthor = () => {
   );
 };
 
-const UpdateEditorial = () => {
+const UpdateEditorial = (data) => {
   return (
     <div>
       <Grid container spacing={2}>
+        {data.nombre}
         <Grid item>
-          <TextField label="Nombre Editorial" />
+          <TextField label="Nombre Editorial" value={data.nombre} />
         </Grid>
         <Grid item>
-          <TextField label="Correo" />
+          <TextField label="Correo" value={data.correo} />
         </Grid>
         <Grid item>
-          <TextField label="Telefono" />
+          <TextField label="Telefono" value={data.telefono} />
         </Grid>
       </Grid>
     </div>
@@ -148,7 +149,7 @@ const UpdateCategoria = () => {
   );
 };
 
-const UpdateModal = ({ open, handleClose, typeSearch }) => {
+const UpdateModal = ({ open, handleClose, typeSearch, data, setData }) => {
   const style = {
     position: "absolute",
     top: "50%",
@@ -193,7 +194,7 @@ const UpdateModal = ({ open, handleClose, typeSearch }) => {
           ) : typeSearch === "Autores" ? (
             <UpdateAuthor />
           ) : typeSearch === "Editoriales" ? (
-            <UpdateEditorial />
+            <UpdateEditorial data={data} />
           ) : typeSearch === "Carreras" ? (
             <UpdateCarrera />
           ) : typeSearch === "Departamentos" ? (

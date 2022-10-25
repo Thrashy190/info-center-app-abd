@@ -25,7 +25,13 @@ const ItemDepartments = ({ data, key, handleOpenDelete, handleOpenUpdate }) => {
           paddingRight: "30px",
         }}
       >
-        <Button variant="contained" sx={{ mr: 4 }} onClick={handleOpenUpdate}>
+        <Button
+          variant="contained"
+          sx={{ mr: 4 }}
+          onClick={() => {
+            handleOpenUpdate(data);
+          }}
+        >
           Editar
         </Button>
         <Button

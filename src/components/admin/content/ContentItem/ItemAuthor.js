@@ -37,7 +37,7 @@ const ItemAuthor = ({ data, key, handleOpenDelete, handleOpenUpdate }) => {
           variant="contained"
           sx={{ mr: 4 }}
           onClick={() => {
-            handleOpenUpdate();
+            handleOpenUpdate(data);
           }}
         >
           Editar

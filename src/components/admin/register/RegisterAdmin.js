@@ -7,7 +7,7 @@ import { Grid, Typography, ButtonGroup, Button } from "@mui/material";
 
 const RegisterAdmin = () => {
   const [id, setId] = useState("student");
-  const { signUpWithEmailPassword, addData } = useAuth();
+  const { signUpWithEmailPassword, addDataWithoutRepeat } = useAuth();
   const [password, setpassword] = useState("");
   const [baseData, setBaseData] = useState({
     type: "",
@@ -17,6 +17,7 @@ const RegisterAdmin = () => {
     phone: "",
     email: "",
     gender: "",
+    password: "",
   });
 
   const [studentData, setStudentData] = useState({
@@ -85,28 +86,35 @@ const RegisterAdmin = () => {
   const createUser = async (id) => {
     const email = baseData.email;
     let conn = "";
+    let idUser;
     let data = {};
+    let name = "";
 
     switch (id) {
       case "student":
         conn = "alumnos";
         data = { ...baseData, ...studentData, type: id };
+        idUser = data.numControl;
+        name = "numControl";
         break;
       case "employees":
         conn = "empleado";
         data = { ...baseData, ...employeeData, type: id };
+        idUser = data.numEmployee;
+        name = "numEmployee";
         break;
       default:
         conn = "otros";
         data = { ...baseData, type: id };
+        idUser = data.email;
+        name = "email";
         break;
     }
 
     if (id === "admin") {
-      console.log(baseData);
       await signUpWithEmailPassword(email, password, { ...baseData, type: id });
     } else {
-      await addData(data, conn);
+      await addDataWithoutRepeat(conn, idUser.toLowerCase(), data, name);
     }
   };
   return (
@@ -119,7 +127,7 @@ const RegisterAdmin = () => {
           <Grid sx={{ pb: "30px" }} container item spacing={2}>
             <Grid item xs={12} md={10}>
               <Typography sx={{ fontSize: "1.8rem", fontWeight: "bold" }}>
-                Registrar usuarios
+                Usuarios
               </Typography>
             </Grid>
           </Grid>
