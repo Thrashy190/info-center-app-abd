@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import SideBar from "../../shared/SideBar";
-import "../../../App.css";
+import React, { useState, useEffect } from 'react';
+import SideBar from '../../shared/SideBar';
+import '../../../App.css';
 import {
   Grid,
   Button,
@@ -13,9 +13,9 @@ import {
   Box,
   Autocomplete,
   LinearProgress,
-} from "@mui/material";
-import { useAuth } from "../../../context/UserProvider";
-import { convertUnixToCompleteDate } from "../../../helpers/DateConverter";
+} from '@mui/material';
+import { useAuth } from '../../../context/UserProvider';
+import { convertUnixToCompleteDate } from '../../../helpers/DateConverter';
 
 const EnterAdmin = () => {
   const {
@@ -29,16 +29,12 @@ const EnterAdmin = () => {
   const [studentsList, setStudentsList] = useState([]);
   const [employeesList, setEmployeesList] = useState([]);
 
-  const [userType, setUserType] = useState("S");
+  const [userType, setUserType] = useState('S');
 
   const [ingresos, setIngresos] = useState([]);
   const [user, setUser] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
-
-  const UserText = (text) => {
-    return text === "S" ? "Estudiante" : text === "E" ? "Empleado" : "Otros";
-  };
 
   const getData = async () => {
     setStudentsList(await getStudents());
@@ -65,41 +61,41 @@ const EnterAdmin = () => {
   return (
     <Grid container className="App">
       <Grid item xs={12} md={2}>
-        <SideBar type={"admin"}></SideBar>
+        <SideBar type={'admin'}></SideBar>
       </Grid>
       <Grid item xs={12} md={10}>
-        <div style={{ padding: "40px" }}>
-          <Grid sx={{ pb: "30px" }} container item spacing={2}>
+        <div style={{ padding: '40px' }}>
+          <Grid sx={{ pb: '30px' }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: "1.8rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
                 Ingresos al centro de informacion
               </Typography>
             </Grid>
           </Grid>
-          <Grid sx={{ pb: "30px" }} container item spacing={2}>
+          <Grid sx={{ pb: '30px' }} container item spacing={2}>
             <Grid item xs={12} md={3}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Ususario</InputLabel>
                 <Select
-                  defaultValue={"S"}
+                  defaultValue={'S'}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Usuarios"
                   name="user"
                   value={userType}
                   onChange={(e) => {
-                    setUser("");
+                    setUser('');
                     setUserType(e.target.value);
                   }}
                 >
-                  <MenuItem value={"S"}>Alumnos</MenuItem>
-                  <MenuItem value={"E"}>Empleados</MenuItem>
+                  <MenuItem value={'S'}>Alumnos</MenuItem>
+                  <MenuItem value={'E'}>Empleados</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
           </Grid>
-          <Grid sx={{ pb: "30px" }} container item spacing={2}>
-            {userType === "S" ? (
+          <Grid sx={{ pb: '30px' }} container item spacing={2}>
+            {userType === 'S' ? (
               <>
                 <Grid item xs={12} md={4}>
                   <Autocomplete
@@ -120,7 +116,7 @@ const EnterAdmin = () => {
                   />
                 </Grid>
               </>
-            ) : userType === "E" ? (
+            ) : userType === 'E' ? (
               <>
                 <Grid item xs={12} md={4}>
                   <Autocomplete
@@ -152,11 +148,11 @@ const EnterAdmin = () => {
               item
               xs={12}
               md={3}
-              style={{ display: "flex", alignContent: "center" }}
+              style={{ display: 'flex', alignContent: 'center' }}
             >
               <Button
                 variant="contained"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 onClick={() => {
                   addEnter();
                 }}
@@ -165,19 +161,19 @@ const EnterAdmin = () => {
               </Button>
             </Grid>
           </Grid>
-          <Grid sx={{ pb: "20px" }} container item spacing={2}>
+          <Grid sx={{ pb: '20px' }} container item spacing={2}>
             <Grid item xs={12} md={4}>
-              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
                 Lista de ingresos
               </Typography>
             </Grid>
           </Grid>
           <div
             style={{
-              width: "100%",
-              marginTop: "40px",
-              height: "500px",
-              overflow: "auto",
+              width: '100%',
+              marginTop: '40px',
+              height: '500px',
+              overflow: 'auto',
             }}
           >
             {isLoading ? (
@@ -189,33 +185,33 @@ const EnterAdmin = () => {
                     key={key}
                     sx={{
                       boxShadow: 2,
-                      mb: "20px",
-                      py: "20px",
-                      px: "10px",
-                      borderRadius: "5px",
+                      mb: '20px',
+                      py: '20px',
+                      px: '10px',
+                      borderRadius: '5px',
                     }}
                   >
                     <div
                       style={{
-                        paddingLeft: "30px",
-                        display: "flex",
-                        direction: "row",
-                        justifyContent: "space-around",
+                        paddingLeft: '30px',
+                        display: 'flex',
+                        direction: 'row',
+                        justifyContent: 'space-around',
                       }}
                     >
-                      <Typography sx={{ fontSize: "1rem" }}>
+                      <Typography sx={{ fontSize: '1rem' }}>
                         <Typography
-                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
                         >
                           Identificador:
                         </Typography>
-                        {data.tipoIngreso === "S"
+                        {data.tipoIngreso === 'S'
                           ? data.numControl
                           : data.numEmployee}
                       </Typography>
-                      <Typography sx={{ fontSize: "1rem" }}>
+                      <Typography sx={{ fontSize: '1rem' }}>
                         <Typography
-                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
                         >
                           Fecha de ingreso:
                         </Typography>
@@ -223,38 +219,39 @@ const EnterAdmin = () => {
                       </Typography>
 
                       {/* Fecha de salida */}
-                      <Typography sx={{ fontSize: "1rem" }}>
+                      <Typography sx={{ fontSize: '1rem' }}>
                         <Typography
-                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
                         >
                           Fecha de salida:
                         </Typography>
                         {data.fechaSalida === null
-                          ? "No registrada"
+                          ? 'No registrada'
                           : convertUnixToCompleteDate(data.fechaSalida)}
                       </Typography>
                       {/* salida */}
-                      <Typography sx={{ fontSize: "1rem" }}>
+                      <Typography sx={{ fontSize: '1rem' }}>
                         <Typography
-                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
                         >
-                          {data.tipoIngreso === "S"
-                            ? "Carrera:"
-                            : "Departamento:"}
+                          {data.tipoIngreso === 'S'
+                            ? 'Carrera:'
+                            : 'Departamento:'}
                         </Typography>
-                        {data.tipoIngreso === "S"
+                        {data.tipoIngreso === 'S'
                           ? data.career
                           : data.department}
                       </Typography>
-                      <Typography sx={{ fontSize: "1rem" }}>
+                      <Typography sx={{ fontSize: '1rem' }}>
                         <Typography
-                          sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
                         >
                           Genero:
                         </Typography>
                         {data.gender}
                       </Typography>
                       <Button
+                        disabled={data.fechaSalida === null ? false : true}
                         variant="contained"
                         color="primary"
                         onClick={() => {

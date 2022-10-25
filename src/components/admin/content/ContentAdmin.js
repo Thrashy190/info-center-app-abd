@@ -1,31 +1,25 @@
-import React, { useState, useEffect } from "react";
-import SideBar from "../../shared/SideBar";
-import ItemEditorial from "./ContentItem/ItemEditorial";
-import ItemAuthor from "./ContentItem/ItemAuthor";
-import ItemBooks from "./ContentItem/ItemBook";
-import ItemCategorie from "./ContentItem/ItemCategorie";
-import ItemDepartments from "./ContentItem/ItemDepartments";
-import ItemCarrer from "./ContentItem/ItemCarrer";
-import DeleteModal from "./Modals/DeleteModal";
-import UpdateModal from "./Modals/UpdateModal";
-import { useNavigate } from "react-router-dom";
-import "../../../App.css";
+import React, { useState, useEffect } from 'react';
+import SideBar from '../../shared/SideBar';
+import ItemEditorial from './ContentItem/ItemEditorial';
+import ItemAuthor from './ContentItem/ItemAuthor';
+import ItemBooks from './ContentItem/ItemBook';
+import ItemCategorie from './ContentItem/ItemCategorie';
+import ItemDepartments from './ContentItem/ItemDepartments';
+import ItemCarrer from './ContentItem/ItemCarrer';
+import DeleteModal from './Modals/DeleteModal';
+import UpdateModal from './Modals/UpdateModal';
+import { useNavigate } from 'react-router-dom';
+import '../../../App.css';
 
-import { useAuth } from "../../../context/UserProvider";
+import { useAuth } from '../../../context/UserProvider';
 
-import {
-  Grid,
-  Typography,
-  TextField,
-  Button,
-  ButtonGroup,
-} from "@mui/material";
+import { Grid, Typography, Button, ButtonGroup } from '@mui/material';
 
 const ContentAdmin = () => {
   const navigate = useNavigate();
   const { getDataFromCollection } = useAuth();
 
-  const [typeSearch, setTypeSearch] = useState("Libros");
+  const [typeSearch, setTypeSearch] = useState('Libros');
   const [contentData, setContentData] = useState([]);
   const [id, setId] = useState();
   const [data, setData] = useState({});
@@ -47,54 +41,56 @@ const ContentAdmin = () => {
     setData({ ...data });
     setOpenUpdate(true);
   };
-  const handleCloseUpdate = () => setOpenUpdate(false);
+  const handleCloseUpdate = () => {
+    setOpenUpdate(false);
+  };
 
   const [disable, setDisable] = useState(true);
   const handleCheck = () => setDisable(!disable);
 
   const changeData = async (type) => {
     switch (type) {
-      case "Libros":
-        setContentData(await getDataFromCollection("libros"));
+      case 'Libros':
+        setContentData(await getDataFromCollection('libros'));
         setTypeSearch(type);
         break;
-      case "Autores":
-        setContentData(await getDataFromCollection("autores"));
+      case 'Autores':
+        setContentData(await getDataFromCollection('autores'));
         setTypeSearch(type);
         break;
-      case "Editoriales":
-        setContentData(await getDataFromCollection("editorial"));
+      case 'Editoriales':
+        setContentData(await getDataFromCollection('editorial'));
         setTypeSearch(type);
         break;
-      case "Categorias":
-        setContentData(await getDataFromCollection("categorias"));
+      case 'Categorias':
+        setContentData(await getDataFromCollection('categorias'));
         setTypeSearch(type);
         break;
-      case "Carreras":
-        setContentData(await getDataFromCollection("carrera"));
+      case 'Carreras':
+        setContentData(await getDataFromCollection('carrera'));
         setTypeSearch(type);
         break;
       default:
-        setContentData(await getDataFromCollection("departamento"));
+        setContentData(await getDataFromCollection('departamento'));
         setTypeSearch(type);
         break;
     }
   };
 
   useEffect(() => {
-    changeData("Libros");
+    changeData('Libros');
   }, []);
 
   return (
     <Grid container className="App">
       <Grid item xs={12} md={2}>
-        <SideBar type={"admin"}></SideBar>
+        <SideBar type={'admin'}></SideBar>
       </Grid>
       <Grid item xs={12} md={10}>
-        <div style={{ padding: "40px" }}>
-          <Grid sx={{ pb: "30px" }} container item spacing={2}>
+        <div style={{ padding: '40px' }}>
+          <Grid sx={{ pb: '30px' }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: "1.8rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
                 Contenido de la plataforma
               </Typography>
             </Grid>
@@ -102,13 +98,13 @@ const ContentAdmin = () => {
               item
               xs={12}
               md={2}
-              style={{ display: "flex", alignContent: "center" }}
+              style={{ display: 'flex', alignContent: 'center' }}
             >
               <Button
                 variant="contained"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 onClick={() => {
-                  navigate("/admin/dashboard/contenido/agregar");
+                  navigate('/admin/dashboard/contenido/agregar');
                 }}
               >
                 Agregar contenido
@@ -139,42 +135,42 @@ const ContentAdmin = () => {
               >
                 <Button
                   onClick={() => {
-                    changeData("Libros");
+                    changeData('Libros');
                   }}
                 >
                   Libros
                 </Button>
                 <Button
                   onClick={() => {
-                    changeData("Autores");
+                    changeData('Autores');
                   }}
                 >
                   Autores
                 </Button>
                 <Button
                   onClick={() => {
-                    changeData("Editoriales");
+                    changeData('Editoriales');
                   }}
                 >
                   Editoriales
                 </Button>
                 <Button
                   onClick={() => {
-                    changeData("Categorias");
+                    changeData('Categorias');
                   }}
                 >
                   Categorias
                 </Button>
                 <Button
                   onClick={() => {
-                    changeData("Carreras");
+                    changeData('Carreras');
                   }}
                 >
                   Carreras
                 </Button>
                 <Button
                   onClick={() => {
-                    changeData("Departamentos");
+                    changeData('Departamentos');
                   }}
                 >
                   Departamentos
@@ -184,13 +180,13 @@ const ContentAdmin = () => {
           </Grid>
           <div
             style={{
-              width: "100%",
-              marginTop: "40px",
-              height: "550px",
-              overflow: "auto",
+              width: '100%',
+              marginTop: '40px',
+              height: '550px',
+              overflow: 'auto',
             }}
           >
-            {typeSearch === "Libros"
+            {typeSearch === 'Libros'
               ? contentData.map((val, key) => {
                   return (
                     <ItemBooks
@@ -201,7 +197,7 @@ const ContentAdmin = () => {
                     />
                   );
                 })
-              : typeSearch === "Autores"
+              : typeSearch === 'Autores'
               ? contentData.map((val, key) => {
                   return (
                     <ItemAuthor
@@ -212,7 +208,7 @@ const ContentAdmin = () => {
                     />
                   );
                 })
-              : typeSearch === "Editoriales"
+              : typeSearch === 'Editoriales'
               ? contentData.map((val, key) => {
                   return (
                     <ItemEditorial
@@ -223,7 +219,7 @@ const ContentAdmin = () => {
                     />
                   );
                 })
-              : typeSearch === "Editoriales"
+              : typeSearch === 'Editoriales'
               ? contentData.map((val, key) => {
                   return (
                     <ItemEditorial
@@ -234,7 +230,7 @@ const ContentAdmin = () => {
                     />
                   );
                 })
-              : typeSearch === "Categorias"
+              : typeSearch === 'Categorias'
               ? contentData.map((val, key) => {
                   return (
                     <ItemCategorie
@@ -245,7 +241,7 @@ const ContentAdmin = () => {
                     />
                   );
                 })
-              : typeSearch === "Carreras"
+              : typeSearch === 'Carreras'
               ? contentData.map((val, key) => {
                   return (
                     <ItemCarrer
@@ -256,7 +252,7 @@ const ContentAdmin = () => {
                     />
                   );
                 })
-              : typeSearch === "Departamentos"
+              : typeSearch === 'Departamentos'
               ? contentData.map((val, key) => {
                   return (
                     <ItemDepartments
