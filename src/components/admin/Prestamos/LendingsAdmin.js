@@ -67,7 +67,6 @@ const LendingAdmin = () => {
     if (isLoading) {
       getData().then(() => {
         setIsLoading(false);
-        console.log(prestamos);
       });
     }
   }, [isLoading]);
@@ -325,7 +324,20 @@ const LendingAdmin = () => {
                         </Typography>
                         {data.name}
                       </Typography>
-                      <Button variant="contained">Ver libros</Button>
+                      <Typography key={key} sx={{ fontSize: '1rem' }}>
+                        <Typography
+                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
+                        >
+                          Lista de libros:
+                        </Typography>
+                        {data.books.map((book, key) => {
+                          return (
+                            <Typography key={key} sx={{ fontSize: '1rem' }}>
+                              {book.nombre}
+                            </Typography>
+                          );
+                        })}
+                      </Typography>
                     </div>
                   </Box>
                 );

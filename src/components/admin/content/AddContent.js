@@ -123,10 +123,26 @@ const AddContent = () => {
 
           <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
-              <TextField fullWidth label="Nombre Libro" />
+              <TextField
+                fullWidth
+                label="Nombre Libro"
+                name="nombre"
+                value={libros.nombre}
+                onChange={(e) => {
+                  handleChangeData(e, setLibros, libros);
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={4}>
-              <TextField fullWidth label="Volumen" />
+              <TextField
+                fullWidth
+                label="Volumen"
+                name="volumen"
+                value={libros.volumen}
+                onChange={(e) => {
+                  handleChangeData(e, setLibros, libros);
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={4}>
               <DesktopDatePicker

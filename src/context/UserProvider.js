@@ -271,34 +271,6 @@ const UserProvider = ({ children }) => {
     }
   };
 
-  const getGender = async () => {
-    const genderRef = collection(db, 'genero');
-
-    const q = query(genderRef);
-
-    let gender = [];
-
-    try {
-      const genderSnap = await getDocs(q);
-      if (genderSnap.docs.length > 0) {
-        genderSnap.forEach(async (docItem) => {
-          await getDoc(doc(db, 'genero', docItem.id));
-
-          gender.push({
-            id: docItem.id,
-            ...docItem.data(),
-          });
-
-          console.log(docItem.data(), docItem.id);
-        });
-      }
-      console.log(gender);
-      return gender;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const getLendings = async () => {
     const q = query(
       collection(db, 'prestamo'),
@@ -307,37 +279,38 @@ const UserProvider = ({ children }) => {
     let prestamos = [];
     let docRef = {};
 
-    //let libros = [];
+    let libros = [];
 
     try {
       const prestamosSnap = await getDocs(q);
       if (prestamosSnap.docs.length > 0) {
         prestamosSnap.forEach(async (docItem) => {
-          //libros = [];
+          libros = [];
+
+          docItem.data().booksList.forEach(async (id) => {
+            let bookSnap = await getDoc(doc(db, 'libros', id));
+            libros.push({ id: bookSnap.id, ...bookSnap.data() });
+          });
+
           if (docItem.data().userType === 'S') {
-            docRef = doc(db, 'alumnos', docItem.data().idUsuario);
+            docRef = 'alumnos';
           } else {
-            docRef = doc(db, 'empleado', docItem.data().idUsuario);
+            docRef = 'empleado';
           }
 
-          let userSnap = await getDoc(docRef);
-
-          // docItem.data().booksList.forEach(async (id) => {
-          //   let bookSnap = await getDoc(doc(db, "libros", id));
-          //   libros.push({ id: bookSnap.id, ...bookSnap.data() });
-          // });
-
-          //console.log(libros);
+          let userSnap = await getDoc(
+            doc(db, docRef, docItem.data().idUsuario)
+          );
 
           prestamos.push({
             ...docItem.data(),
             ...userSnap.data(),
             id: docItem.id,
-            //...libros,
+            books: libros,
           });
         });
       }
-      console.log(prestamos);
+      console.log('====', prestamos);
       return prestamos;
     } catch (error) {
       console.log(error);
@@ -595,7 +568,6 @@ const UserProvider = ({ children }) => {
     getEditorial,
     getCategoria,
     getAutores,
-    getGender,
     getNacionalidad,
     getDataFromCollection,
     deletFromCollection,
