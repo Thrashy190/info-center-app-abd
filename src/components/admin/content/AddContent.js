@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideBar from "../../shared/SideBar";
 import { useNavigate } from "react-router-dom";
 import "../../../App.css";
@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import { useAuth } from "../../../context/UserProvider";
 
 const AddContent = () => {
-  const { addData } = useAuth();
+  const { addData, getEditorial, getGender, getCategoria, getNacionalidad, getAutores } = useAuth();
   const navigate = useNavigate();
   const [value, setValue] = React.useState(dayjs("2022-09-24T21:11:54"));
 
@@ -41,9 +41,37 @@ const AddContent = () => {
     autores: "",
     categoria: "",
   });
+
+  const [categoria, setCategoria] = useState({
+    nombre: "",
+  });
+
+  const [nacionalidad, setNacionalidad] = useState({
+    pais: "",
+  });
+
+  const [genero, setGenero] = useState({
+    descripcion: "",
+  });
+
   const [carreras, setCarreras] = useState({ nombre: "", codigo: "" });
   const [deapartamentos, setDepartamentos] = useState({ nombre: "" });
   const [categorias, setCategorias] = useState({ nombre: "" });
+  const [editorialList, setEditorialList] = useState([]);
+  const [categoriaList, setCategoriaList] = useState([]);
+  const [nacionalidadList, setNacionalidadList] = useState([]);
+  const [genderList, setGenderList] = useState([]);
+  const [autoresList, setAutoresList] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getData = async () => {
+    setEditorialList(await getEditorial);
+    setCategoriaList(await getCategoria);
+    setNacionalidadList(await getNacionalidad);
+    setGenderList(await getGender);
+    setAutoresList(await getAutores);
+  };
 
   const handleChangeData = (e, setData, data) => {
     e.preventDefault();
@@ -58,6 +86,14 @@ const AddContent = () => {
     console.log(data);
     await addData(data, type);
   };
+
+  // const generateLists = () => {
+  //   setIsLoading(true);
+  // };
+
+  // useEffect(() => getData());
+
+  // generateLending();
 
   return (
     <Grid container className="App">
@@ -105,13 +141,58 @@ const AddContent = () => {
               />
             </Grid>
             <Grid item>
-              <TextField label="Editorial" />
+              <Autocomplete
+                disablePortal
+                id="combo-box-book"
+                value={libros.editorial}
+                onChange={(e, newValue) => {
+                  setLibros(
+                    editorialList.filter(
+                      (data) => data.nombre === newValue
+                    )
+                  );
+                }}
+                options={editorialList.map((option) => option.descripcion)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Editorial" />
+                )}
+              />
             </Grid>
             <Grid item>
-              <TextField label="Autores" />
+            <Autocomplete
+                disablePortal
+                id="combo-box-book"
+                value={autores.nombre}
+                onChange={(e, newValue) => {
+                  setLibros(
+                    autoresList.filter(
+                      (data) => data.nombre === newValue
+                    )
+                  );
+                }}
+                options={autoresList.map((option) => option.descripcion)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Autores" />
+                )}
+              />
             </Grid>
             <Grid item>
-              <TextField label="Categoria" />
+            <Autocomplete
+                disablePortal
+                id="combo-box-book"
+                value={categoria.nombre}
+                onChange={(e, newValue) => {
+                  setLibros(
+                    categoriaList.filter(
+                      (data) => data.nombre === newValue
+                    )
+                  );
+                }}
+                options={categoriaList.map((option) => option.descripcion)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Categoria" />
+                )}
+              />
             </Grid>
             <Grid item style={{ display: "flex", alignContent: "center" }}>
               <Button
@@ -179,23 +260,39 @@ const AddContent = () => {
               />
             </Grid>
             <Grid item>
-              <TextField
-                label="Genero"
-                name="genero"
-                value={autores.genero}
-                onChange={(e) => {
-                  handleChangeData(e, setAutores, autores);
+            <Autocomplete
+                disablePortal
+                id="combo-box-book"
+                value={genero.descripcion}
+                onChange={(e, newValue) => {
+                  setLibros(
+                    genderList.filter(
+                      (data) => data.nombre === newValue
+                    )
+                  );
                 }}
+                options={genderList.map((option) => option.descripcion)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Genero" />
+                )}
               />
             </Grid>
             <Grid item>
-              <TextField
-                label="Nacionalidad"
-                name="nacionalidad"
-                value={autores.nacionalidad}
-                onChange={(e) => {
-                  handleChangeData(e, setAutores, autores);
+            <Autocomplete
+                disablePortal
+                id="combo-box-book"
+                value={nacionalidad.pais}
+                onChange={(e, newValue) => {
+                  setLibros(
+                    nacionalidadList.filter(
+                      (data) => data.nombre === newValue
+                    )
+                  );
                 }}
+                options={nacionalidadList.map((option) => option.descripcion)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Nacionalidad" />
+                )}
               />
             </Grid>
             <Grid item>

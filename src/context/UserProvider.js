@@ -236,6 +236,138 @@ const UserProvider = ({ children }) => {
     }
   };
 
+  const getEditorial = async() => {
+    const editorialRef = collection(db, "editorial");
+
+    const q = query(editorialRef);
+
+    let editorial = [];
+
+    try {
+      const editorialSnap = await getDocs(q);
+      if (editorialSnap.docs.length > 0) {
+        editorialSnap.forEach(async (docItem) => {
+          await getDoc(doc(db, "genero", docItem.id));
+          
+          editorial.push({
+            id: docItem.id,
+            ...docItem.data(),
+          });
+        });
+      }
+      console.log(editorial);
+      return editorial;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getCategoria = async() => {
+    const categoriaRef = collection(db, "categorias");
+
+    const q = query(categoriaRef);
+
+    let categoria = [];
+
+    try {
+      const categoriaSnap = await getDocs(q);
+      if (categoriaSnap.docs.length > 0) {
+        categoriaSnap.forEach(async (docItem) => {
+          await getDoc(doc(db, "categorias", docItem.id));
+          
+          categoria.push({
+            id: docItem.id,
+            ...docItem.data(),
+          });
+        });
+      }
+      console.log(categoria);
+      return categoria;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAutores = async() => {
+    const autoresRef = collection(db, "autores");
+
+    const q = query(autoresRef);
+
+    let autores = [];
+
+    try {
+      const autoresSnap = await getDocs(q);
+      if (autoresSnap.docs.length > 0) {
+        autoresSnap.forEach(async (docItem) => {
+          await getDoc(doc(db, "autores", docItem.id));
+          
+          autores.push({
+            id: docItem.id,
+            ...docItem.data(),
+          });
+        });
+      }
+      console.log(autores);
+      return autores;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getNacionalidad = async() => {
+    const nacionalidadRef = collection(db, "nacionalidad");
+
+    const q = query(nacionalidadRef);
+
+    let nacionalidad = [];
+
+    try {
+      const nacionalidadSnap = await getDocs(q);
+      if (nacionalidadSnap.docs.length > 0) {
+        nacionalidadSnap.forEach(async (docItem) => {
+          await getDoc(doc(db, "nacionalidad", docItem.id));
+          
+          nacionalidad.push({
+            id: docItem.id,
+            ...docItem.data(),
+          });
+        });
+      }
+      console.log(nacionalidad);
+      return nacionalidad;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getGender = async() => {
+    const genderRef = collection(db, "genero");
+
+    const q = query(genderRef);
+
+    let gender = [];
+
+    try {
+      const genderSnap = await getDocs(q);
+      if (genderSnap.docs.length > 0) {
+        genderSnap.forEach(async (docItem) => {
+          await getDoc(doc(db, "genero", docItem.id));
+          
+          gender.push({
+            id: docItem.id,
+            ...docItem.data(),
+          });
+
+          console.log(docItem.data(), docItem.id);
+        });
+      }
+      console.log(gender);
+      return gender;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getLendings = async () => {
     const prestamosRef = collection(db, "prestamo");
 
@@ -422,6 +554,11 @@ const UserProvider = ({ children }) => {
     getBooks,
     addLendings,
     getLendings,
+    getEditorial,
+    getCategoria,
+    getAutores,
+    getGender,
+    getNacionalidad,
     getDataFromCollection,
     deletFromCollection,
     addData,
