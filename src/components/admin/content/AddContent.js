@@ -28,8 +28,6 @@ const AddContent = () => {
     apellido_paterno: '',
     apellido_materno: '',
     fecha_nacimiento: dayjs('2022-09-24T21:11:54'),
-    genero: '',
-    nacionalidad: '',
     correo: '',
     telefono: '',
   });
@@ -38,14 +36,7 @@ const AddContent = () => {
     correo: '',
     telefono: '',
   });
-  const [libros, setLibros] = useState({
-    nombre: '',
-    volumen: '',
-    fecha_publicacion: '',
-    editorial: '',
-    autores: '',
-    categoria: '',
-  });
+  const [libros, setLibros] = useState([]);
 
   const [carreras, setCarreras] = useState({ nombre: '', codigo: '' });
   const [deapartamentos, setDepartamentos] = useState({ nombre: '' });
@@ -157,20 +148,20 @@ const AddContent = () => {
               <Autocomplete
                 fullWidth
                 disablePortal
+                multiple={false}
                 id="combo-box-book"
                 value={libros.editorial}
                 onChange={(e, newValue) => {
                   setLibros({
                     ...libros,
-                    editorial: editorialList.filter(
-                      (data) => data.nombre === newValue
-                    ).id,
-                  });
+                    editorial: newValue
+                    });
                 }}
                 options={editorialList.map((option) => option.nombre)}
                 renderInput={(params) => (
-                  <TextField {...params} label="Editorial" />
+                  <TextField {...params} label="Editorial" variant='outlined'/>
                 )}
+                getOptionLabel={(option) => option}
               />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -182,12 +173,11 @@ const AddContent = () => {
                 onChange={(e, newValue) => {
                   setLibros({
                     ...libros,
-                    autores: autoresList.filter(
-                      (data) => data.nombre === newValue
-                    ).id,
+                    autores: newValue
                   });
                 }}
                 options={autoresList.map((option) => option.nombre)}
+                getOptionLabel={(option) => option}
                 renderInput={(params) => (
                   <TextField {...params} label="Autores" />
                 )}
@@ -202,12 +192,11 @@ const AddContent = () => {
                 onChange={(e, newValue) => {
                   setLibros({
                     ...libros,
-                    categoria: categoriaList.filter(
-                      (data) => data.nombre === newValue
-                    ).id,
+                    categoria: newValue
                   });
                 }}
                 options={categoriaList.map((option) => option.nombre)}
+                getOptionLabel={(option) => option}
                 renderInput={(params) => (
                   <TextField {...params} label="Categoria" />
                 )}
@@ -308,12 +297,11 @@ const AddContent = () => {
                 onChange={(e, newValue) => {
                   setAutores({
                     ...autores,
-                    nacionalidad: nacionalidadList.filter(
-                      (data) => data.nombre === newValue
-                    ).id,
+                    nacionalidad: newValue
                   });
                 }}
                 options={nacionalidadList.map((option) => option.nombre)}
+                getOptionLabel={(option) => option}
                 renderInput={(params) => (
                   <TextField {...params} label="Nacionalidad" />
                 )}
