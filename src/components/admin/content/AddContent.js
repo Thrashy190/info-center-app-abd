@@ -154,7 +154,9 @@ const AddContent = () => {
                 onChange={(e, newValue) => {
                   setLibros({
                     ...libros,
-                    editorial: newValue
+                    editorial: editorialList.filter(
+                      (data) => data.nombre === newValue
+                    )[0]
                     });
                 }}
                 options={editorialList.map((option) => option.nombre)}
@@ -172,8 +174,9 @@ const AddContent = () => {
                 value={libros.autores}
                 onChange={(e, newValue) => {
                   setLibros({
-                    ...libros,
-                    autores: newValue
+                    autores: autoresList.filter(
+                      (data) => data.nombre === newValue
+                    )[0]
                   });
                 }}
                 options={autoresList.map((option) => option.nombre)}
@@ -192,7 +195,9 @@ const AddContent = () => {
                 onChange={(e, newValue) => {
                   setLibros({
                     ...libros,
-                    categoria: newValue
+                    categoria: categoriaList.filter(
+                      (data) => data.nombre === newValue
+                    )[0]
                   });
                 }}
                 options={categoriaList.map((option) => option.nombre)}
@@ -297,7 +302,9 @@ const AddContent = () => {
                 onChange={(e, newValue) => {
                   setAutores({
                     ...autores,
-                    nacionalidad: newValue
+                    nacionalidad: nacionalidadList.filter(
+                      (data) => data.nombre === newValue
+                    )[0]
                   });
                 }}
                 options={nacionalidadList.map((option) => option.nombre)}
