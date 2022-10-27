@@ -19,7 +19,7 @@ const ItemBooks = ({ data, key, handleOpenDelete, handleOpenUpdate }) => {
       <div style={{ paddingLeft: "30px" }}>
         <Typography>Nombre: {data.nombre}</Typography>
         <Typography>Autor(es): {data.autor}</Typography>
-        <Typography>Editorial: {data.editorial}</Typography>
+        <Typography>Editorial: {data.editorial.nombre}</Typography>
         <Typography>Categoria: {data.categoria}</Typography>
         <Typography>
           Fecha de publicacion:{" "}
