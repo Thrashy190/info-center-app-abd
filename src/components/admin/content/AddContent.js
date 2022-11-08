@@ -36,7 +36,7 @@ const AddContent = () => {
     correo: '',
     telefono: '',
   });
-  const [libros, setLibros] = useState([]);
+  const [libros, setLibros] = useState({});
 
   const [carreras, setCarreras] = useState({ nombre: '', codigo: '' });
   const [deapartamentos, setDepartamentos] = useState({ nombre: '' });
@@ -140,7 +140,14 @@ const AddContent = () => {
                 label="Fecha de publicacion"
                 inputFormat="MM/DD/YYYY"
                 value={value}
-                onChange={handleChange}
+                onChange={(newValue) => {
+                  console.log(newValue.get('date'), newValue.get('month'), newValue.get('year'))
+                  setValue(newValue);
+                  setLibros({
+                    ...libros,
+                    fecha_publicacion: (newValue.get('date'), newValue.get('month'), newValue.get('year'))
+                  })
+                }}
                 renderInput={(params) => <TextField fullWidth {...params} />}
               />
             </Grid>
@@ -174,6 +181,7 @@ const AddContent = () => {
                 value={libros.autores}
                 onChange={(e, newValue) => {
                   setLibros({
+                    ...libros,
                     autores: autoresList.filter(
                       (data) => data.nombre === newValue
                     )[0]
