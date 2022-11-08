@@ -35,7 +35,7 @@ const tabsAdminData = [
   {
     title: "Reportes",
     icon: <AssessmentIcon />,
-    link: "/admin/dashboard/registro",
+    link: "/admin/dashboard/reportes",
   },
 ];
 

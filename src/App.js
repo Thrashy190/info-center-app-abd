@@ -1,18 +1,19 @@
-import './App.css';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import "./App.css";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 //auth
-import Login from './components/auth/Login';
+import Login from "./components/auth/Login";
 
 //Dashboard
-import ContentAdmin from './components/admin/Content/ContentAdmin';
-import AddContent from './components/admin/Content/AddContent';
-import LendingAdmin from './components/admin/Prestamos/LendingsAdmin';
-import EnterAdmin from './components/admin/Ingresos/EnterAdmin';
-import UsersAdmin from './components/admin/Users/UsersAdmin';
+import ContentAdmin from "./components/admin/Content/ContentAdmin";
+import AddContent from "./components/admin/Content/AddContent";
+import LendingAdmin from "./components/admin/Prestamos/LendingsAdmin";
+import EnterAdmin from "./components/admin/Ingresos/EnterAdmin";
+import UsersAdmin from "./components/admin/Users/UsersAdmin";
+import Reportes from "./components/admin/Reportes/Reportes";
 
 //ruta protegida
-import ProtectedRoute from './helpers/ProtectedRouter';
+import ProtectedRoute from "./helpers/ProtectedRouter";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="/admin/dashboard/prestamos" element={<LendingAdmin />} />
           <Route path="/admin/dashboard/ingresos" element={<EnterAdmin />} />
           <Route path="/admin/dashboard/registro" element={<UsersAdmin />} />
+          <Route path="/admin/dashboard/reportes" element={<Reportes />} />
         </Route>
       </Routes>
     </div>
