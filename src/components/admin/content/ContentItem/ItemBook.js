@@ -18,9 +18,9 @@ const ItemBooks = ({ data, key, handleOpenDelete, handleOpenUpdate }) => {
     >
       <div style={{ paddingLeft: "30px" }}>
         <Typography>Nombre: {data.nombre}</Typography>
-        <Typography>Autor(es): {data.autor}</Typography>
-        <Typography>Editorial: {data.editorial}</Typography>
-        <Typography>Categoria: {data.categoria}</Typography>
+        <Typography>Autor(es): {data.autores.nombre}</Typography>
+        <Typography>Editorial: {data.editorial.nombre}</Typography>
+        <Typography>Categoria: {data.categoria.nombre}</Typography>
         <Typography>
           Fecha de publicacion:{" "}
           {convertUnixToCompleteDate(data.fecha_publicacion)}

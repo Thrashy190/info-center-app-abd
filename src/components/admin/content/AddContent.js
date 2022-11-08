@@ -24,6 +24,7 @@ const AddContent = () => {
   const [value, setValue] = React.useState(dayjs("2022-09-24T21:11:54"));
 
   const [autores, setAutores] = useState({
+<<<<<<< HEAD
     nombre: "",
     apellido_paterno: "",
     apellido_materno: "",
@@ -32,12 +33,21 @@ const AddContent = () => {
     nacionalidad: "",
     correo: "",
     telefono: "",
+=======
+    nombre: '',
+    apellido_paterno: '',
+    apellido_materno: '',
+    fecha_nacimiento: dayjs('2022-09-24T21:11:54'),
+    correo: '',
+    telefono: '',
+>>>>>>> 3cefd4c782d626f3ea7798ba7f1e46e33f31901b
   });
   const [editoriales, setEditoriales] = useState({
     nombre: "",
     correo: "",
     telefono: "",
   });
+<<<<<<< HEAD
   const [libros, setLibros] = useState({
     nombre: "",
     volumen: "",
@@ -46,6 +56,9 @@ const AddContent = () => {
     autores: "",
     categoria: "",
   });
+=======
+  const [libros, setLibros] = useState({});
+>>>>>>> 3cefd4c782d626f3ea7798ba7f1e46e33f31901b
 
   const [carreras, setCarreras] = useState({ nombre: "", codigo: "" });
   const [deapartamentos, setDepartamentos] = useState({ nombre: "" });
@@ -149,7 +162,14 @@ const AddContent = () => {
                 label="Fecha de publicacion"
                 inputFormat="MM/DD/YYYY"
                 value={value}
-                onChange={handleChange}
+                onChange={(newValue) => {
+                  console.log(newValue.get('date'), newValue.get('month'), newValue.get('year'))
+                  setValue(newValue);
+                  setLibros({
+                    ...libros,
+                    fecha_publicacion: (newValue.get('date'), newValue.get('month'), newValue.get('year'))
+                  })
+                }}
                 renderInput={(params) => <TextField fullWidth {...params} />}
               />
             </Grid>
@@ -157,6 +177,7 @@ const AddContent = () => {
               <Autocomplete
                 fullWidth
                 disablePortal
+                multiple={false}
                 id="combo-box-book"
                 name="editorial"
                 value={libros.editorial}
@@ -165,13 +186,14 @@ const AddContent = () => {
                     ...libros,
                     [e.target.name]: editorialList.filter(
                       (data) => data.nombre === newValue
-                    ).id,
-                  });
+                    )[0]
+                    });
                 }}
                 options={editorialList.map((option) => option.nombre)}
                 renderInput={(params) => (
-                  <TextField {...params} label="Editorial" />
+                  <TextField {...params} label="Editorial" variant='outlined'/>
                 )}
+                getOptionLabel={(option) => option}
               />
             </Grid>
             <Grid item xs={12} md={4}>
@@ -185,10 +207,11 @@ const AddContent = () => {
                     ...libros,
                     autores: autoresList.filter(
                       (data) => data.nombre === newValue
-                    ).id,
+                    )[0]
                   });
                 }}
                 options={autoresList.map((option) => option.nombre)}
+                getOptionLabel={(option) => option}
                 renderInput={(params) => (
                   <TextField {...params} label="Autores" />
                 )}
@@ -205,10 +228,11 @@ const AddContent = () => {
                     ...libros,
                     categoria: categoriaList.filter(
                       (data) => data.nombre === newValue
-                    ).id,
+                    )[0]
                   });
                 }}
                 options={categoriaList.map((option) => option.nombre)}
+                getOptionLabel={(option) => option}
                 renderInput={(params) => (
                   <TextField {...params} label="Categoria" />
                 )}
@@ -311,10 +335,11 @@ const AddContent = () => {
                     ...autores,
                     nacionalidad: nacionalidadList.filter(
                       (data) => data.nombre === newValue
-                    ).id,
+                    )[0]
                   });
                 }}
                 options={nacionalidadList.map((option) => option.nombre)}
+                getOptionLabel={(option) => option}
                 renderInput={(params) => (
                   <TextField {...params} label="Nacionalidad" />
                 )}

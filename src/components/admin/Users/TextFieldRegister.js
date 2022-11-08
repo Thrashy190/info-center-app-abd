@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import InputLabel from '@mui/material/InputLabel';
@@ -7,6 +7,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
+import { useAuth } from '../../../context/UserProvider';
+
 
 const TextFieldRegister = ({
   baseData,
@@ -18,8 +20,27 @@ const TextFieldRegister = ({
   handleChangeData,
   id,
 }) => {
+  const { getCarrers, getDepartments } = useAuth();
+
   const [showPassword, setShowPassword] = useState(false);
-  const [departments, setDepartments] = useState([{ name: 'ahbsdi' }]);
+
+  const [carrerList, setCarrerList] = useState([]);
+  const [departmentList, setDepartmentList] = useState([]);
+
+  const getData = async() => {
+    setCarrerList(await getCarrers());
+    setDepartmentList(await getDepartments());
+  };
+  
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (isLoading) {
+      getData().then(() => {
+        setIsLoading(false);
+      });
+    }
+  }, [isLoading]);
 
   return (
     <Grid
@@ -184,25 +205,30 @@ const TextFieldRegister = ({
             item
             xs={10}
             md={6}
-            style={{
-              display: 'flex',
-            }}
+            // style={{
+            //   display: 'flex',
+            // }}
           >
             <Autocomplete
-              fullWidth
-              disablePortal
-              id="combo-box-departments"
-              value={departments.name}
-              onChange={(e, newValue) => {
-                // setUser(
-                //   departments.filter((data) => data.name === newValue)
-                // );
-              }}
-              options={departments.map((option) => option.name)}
-              renderInput={(params) => (
-                <TextField {...params} label="Departamento" />
-              )}
-            />
+                fullWidth
+                disablePortal
+                multiple={false}
+                id="combo-box-departament"
+                value={employeeData.department}
+                onChange={(e, newValue ) => {
+                  setEmployeeDatas({
+                    ...baseData,
+                    department: departmentList.filter(
+                      (data) => data.nombre === newValue
+                    )[0]
+                    });
+                }}
+                options={departmentList.map((option) => option.nombre)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Departamento" variant='outlined'/>
+                )}
+                getOptionLabel={(option) => option}
+              />
           </Grid>
           <Grid
             item
@@ -234,31 +260,27 @@ const TextFieldRegister = ({
             item
             xs={10}
             md={4}
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+            // style={{
+            //   display: 'flex',
+            //   justifyContent: 'center',
+            //   alignItems: 'center',
+            // }}
           >
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Carrera</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="career"
-                name="career"
-                value={studentData.career}
+            <Autocomplete
+                fullWidth
+                disablePortal
+                multiple={false}
+                id="combo-box-carrer"
+                value={studentData.carrer}
                 onChange={(e) => {
                   handleChangeData(e, setStudentData, studentData);
                 }}
-              >
-                <MenuItem value={'Sistemas computacionales'}>
-                  Sistemas computacionales
-                </MenuItem>
-                <MenuItem value={'Industrial'}>Industrial</MenuItem>
-                <MenuItem value={'Mecatronica'}>Mecatronica</MenuItem>
-              </Select>
-            </FormControl>
+                options={carrerList.map((option) => option.nombre)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Carrera" variant='outlined'/>
+                )}
+                getOptionLabel={(option) => option}
+              />
           </Grid>
           <Grid
             item

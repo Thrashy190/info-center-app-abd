@@ -178,7 +178,7 @@ const UserProvider = ({ children }) => {
       const editorialSnap = await getDocs(q);
       if (editorialSnap.docs.length > 0) {
         editorialSnap.forEach(async (docItem) => {
-          await getDoc(doc(db, 'genero', docItem.id));
+          await getDoc(doc(db, 'editorial', docItem.id));
 
           editorial.push({
             id: docItem.id,
@@ -270,6 +270,59 @@ const UserProvider = ({ children }) => {
       console.log(error);
     }
   };
+
+  
+const getDepartments = async () => {
+  const departmentsRef = collection(db, 'departamento');
+
+  const q = query(departmentsRef);
+
+  let departments = [];
+
+  try {
+    const departmentsSnap = await getDocs(q);
+    if (departmentsSnap.docs.length > 0) {
+      departmentsSnap.forEach(async (docItem) => {
+        await getDoc(doc(db, 'departamento', docItem.id));
+
+        departments.push({
+          id: docItem.id,
+          ...docItem.data(),
+        });
+      });
+    }
+    console.log(departments);
+    return departments;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getCarrers = async () => {
+  const carrerRef = collection(db, 'carrera');
+
+  const q = query(carrerRef);
+
+  let carrer = [];
+
+  try {
+    const carrerSnap = await getDocs(q);
+    if (carrerSnap.docs.length > 0) {
+      carrerSnap.forEach(async (docItem) => {
+        await getDoc(doc(db, 'carrera', docItem.id));
+
+        carrer.push({
+          id: docItem.id,
+          ...docItem.data(),
+        });
+      });
+    }
+    console.log(carrer);
+    return carrer;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const getLendings = async () => {
     const q = query(
@@ -569,6 +622,8 @@ const UserProvider = ({ children }) => {
     getCategoria,
     getAutores,
     getNacionalidad,
+    getCarrers,
+    getDepartments,
     getDataFromCollection,
     deletFromCollection,
     addData,
