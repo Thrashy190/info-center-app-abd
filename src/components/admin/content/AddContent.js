@@ -141,11 +141,10 @@ const AddContent = () => {
                 inputFormat="MM/DD/YYYY"
                 value={value}
                 onChange={(newValue) => {
-                  console.log(newValue.get('date'), newValue.get('month'), newValue.get('year'))
                   setValue(newValue);
                   setLibros({
                     ...libros,
-                    fecha_publicacion: (newValue.get('date'), newValue.get('month'), newValue.get('year'))
+                    fecha_publicacion: newValue.toDate()
                   })
                 }}
                 renderInput={(params) => <TextField fullWidth {...params} />}
@@ -276,9 +275,13 @@ const AddContent = () => {
                 label="Fecha de nacimiento"
                 inputFormat="MM/DD/YYYY"
                 name="fecha_nacimiento"
-                value={autores.fecha_nacimiento.toDate()}
-                onChange={(e) => {
-                  handleChangeData(e, setAutores, autores);
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                  setLibros({
+                    ...libros,
+                    fecha_nacimiento: newValue.toDate()
+                  })
                 }}
                 renderInput={(params) => <TextField fullWidth {...params} />}
               />
