@@ -1,5 +1,5 @@
-import React from 'react';
-import { Typography, Box, Button, Grid } from '@mui/material';
+import React from "react";
+import { Typography, Box, Button, Grid } from "@mui/material";
 
 const UserInfoDisplayer = ({
   data,
@@ -12,77 +12,78 @@ const UserInfoDisplayer = ({
       key={key}
       sx={{
         boxShadow: 2,
-        mb: '20px',
-        py: '20px',
-        px: '10px',
-        borderRadius: '5px',
-        display: 'flex',
-        justifyContent: 'space-between',
+        mb: "20px",
+        py: "20px",
+        px: "10px",
+        borderRadius: "5px",
+        display: "flex",
+        justifyContent: "space-between",
       }}
     >
-      <Grid container style={{ paddingLeft: '30px' }}>
-        <Grid key={key} item xs={3}>
-          <Typography
-            style={{
-              display: 'flex',
-              direction: 'row',
-            }}
-          >
-            <Typography sx={{ fontWeight: 'bold', pr: '10px' }}>
-              Nombre:
-            </Typography>
-            <Typography>
-              {data.name} {data.lastNameFather} {data.lastNameMother}
-            </Typography>
+      <Grid
+        container
+        style={{
+          paddingLeft: "30px",
+          display: "flex",
+          justifyContent: "space-around",
+          direction: "column",
+        }}
+      >
+        <Typography
+          style={{
+            display: "flex",
+            direction: "row",
+          }}
+        >
+          <Typography sx={{ fontWeight: "bold", pr: "10px" }}>
+            Nombre:
           </Typography>
-        </Grid>
+          <Typography>
+            {data.name} {data.lastNameFather} {data.lastNameMother}
+          </Typography>
+        </Typography>
+        <Typography
+          style={{
+            display: "flex",
+            direction: "row",
+          }}
+        >
+          <Typography sx={{ fontWeight: "bold", pr: "10px" }}>
+            Email:{" "}
+          </Typography>
+          {data.email}
+        </Typography>
 
-        <Grid key={key} item xs={3}>
-          <Typography
-            style={{
-              display: 'flex',
-              direction: 'row',
-            }}
-          >
-            <Typography sx={{ fontWeight: 'bold', pr: '10px' }}>
-              Email:{' '}
-            </Typography>
-            {data.email}
+        <Typography
+          style={{
+            display: "flex",
+            direction: "row",
+          }}
+        >
+          <Typography sx={{ fontWeight: "bold", pr: "10px" }}>
+            Telefono:{" "}
           </Typography>
-        </Grid>
-        <Grid key={key} item xs={2}>
-          <Typography
-            style={{
-              display: 'flex',
-              direction: 'row',
-            }}
-          >
-            <Typography sx={{ fontWeight: 'bold', pr: '10px' }}>
-              Telefono:{' '}
-            </Typography>
-            {data.phone}
+          {data.phone}
+        </Typography>
+
+        <Typography
+          style={{
+            display: "flex",
+            direction: "row",
+          }}
+        >
+          <Typography sx={{ fontWeight: "bold", pr: "10px" }}>
+            Genero:{" "}
           </Typography>
-        </Grid>
-        <Grid key={key} item xs={2}>
-          <Typography
-            style={{
-              display: 'flex',
-              direction: 'row',
-            }}
-          >
-            <Typography sx={{ fontWeight: 'bold', pr: '10px' }}>
-              Genero:{' '}
-            </Typography>
-            {data.gender}
-          </Typography>
-        </Grid>
+          {data.gender}
+        </Typography>
       </Grid>
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignContent: 'center',
-          paddingRight: '30px',
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+          paddingRight: "30px",
         }}
       >
         <Button
