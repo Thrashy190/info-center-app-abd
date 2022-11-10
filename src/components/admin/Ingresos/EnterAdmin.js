@@ -255,7 +255,8 @@ const EnterAdmin = () => {
                         variant="contained"
                         color="primary"
                         onClick={() => {
-                          fechaSalida(data, data.id);
+                          fechaSalida(data, data.idCol);
+                          setIsLoading(true);
                         }}
                       >
                         Registrar salida

@@ -17,11 +17,21 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from '../../../context/UserProvider';
-import { convertUnixToCompleteDate } from '../../../helpers/DateConverter';
+import {
+  convertUnixToCompleteDate,
+  getTodayDate,
+} from '../../../helpers/DateConverter';
 
 const LendingAdmin = () => {
-  const { getStudents, getEmployees, getBooks, addLendings, getLendings } =
-    useAuth();
+  const {
+    getStudents,
+    getEmployees,
+    getBooks,
+    addLendings,
+    getLendings,
+    currentUser,
+    cerrarPrestamos,
+  } = useAuth();
   const [user, setUser] = useState('A');
   const [bookList, setBookList] = useState([]);
 
@@ -78,7 +88,7 @@ const LendingAdmin = () => {
       </Grid>
       <Grid item xs={12} md={10}>
         <div style={{ padding: '40px' }}>
-          <Grid sx={{ pb: '30px' }} container item spacing={2}>
+          <Grid sx={{ pb: '20px' }} container item spacing={2}>
             <Grid item xs={12} md={8}>
               <Typography sx={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
                 Prestamos de libros
@@ -92,6 +102,17 @@ const LendingAdmin = () => {
               >
                 Agregar
               </Button>
+            </Grid>
+          </Grid>
+          <Grid sx={{ pb: '40px' }} container item spacing={2}>
+            <Grid item xs={12} md={8}>
+              <Typography sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+                Te atiende: {currentUser.name} {currentUser.lastNameFather}{' '}
+                {currentUser.lastNameMother}
+              </Typography>
+              <Typography sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+                Fecha de hoy: {getTodayDate()}
+              </Typography>
             </Grid>
           </Grid>
           <Grid sx={{ pb: '30px' }} container item spacing={2}>
@@ -136,7 +157,7 @@ const LendingAdmin = () => {
                   />
                 </Grid>
               </>
-            ) : userType === 'E' ? (
+            ) : (
               <>
                 <Grid item xs={12} md={4}>
                   <Autocomplete
@@ -157,13 +178,12 @@ const LendingAdmin = () => {
                   />
                 </Grid>
               </>
-            ) : (
-              <>
-                <Grid item xs={12} md={4}>
-                  <TextField fullWidth label="Correo" />
-                </Grid>
-              </>
             )}
+            {/* <Grid item xs={12} md={4}>
+              <Typography sx={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+                Nombre ususario: {user.name}
+              </Typography>
+            </Grid> */}
           </Grid>
           <Grid sx={{ pb: '30px' }} container item spacing={2}>
             <Grid item xs={12} md={4}>
@@ -322,7 +342,8 @@ const LendingAdmin = () => {
                         >
                           Empleado que hizo el prestamo:
                         </Typography>
-                        {data.name}
+                        {data.empleado.name} {data.empleado.lastNameFather}{' '}
+                        {data.empleado.lastNameMother}
                       </Typography>
                       <Typography key={key} sx={{ fontSize: '1rem' }}>
                         <Typography
@@ -330,7 +351,7 @@ const LendingAdmin = () => {
                         >
                           Lista de libros:
                         </Typography>
-                        {data.books.map((book, key) => {
+                        {data.booksList.map((book, key) => {
                           return (
                             <Typography key={key} sx={{ fontSize: '1rem' }}>
                               {book.nombre}
@@ -338,6 +359,16 @@ const LendingAdmin = () => {
                           );
                         })}
                       </Typography>
+                      <Button
+                        disabled={data.estanDevueltos}
+                        variant="contained"
+                        onClick={() => {
+                          cerrarPrestamos(data, data.id);
+                          setIsLoading(true);
+                        }}
+                      >
+                        {data.estanDevueltos ? 'Entregados' : 'Entregar'}
+                      </Button>
                     </div>
                   </Box>
                 );
