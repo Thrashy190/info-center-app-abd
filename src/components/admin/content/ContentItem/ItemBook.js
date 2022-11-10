@@ -1,6 +1,6 @@
-import React from "react";
-import { Typography, Box, Button } from "@mui/material";
-import { convertUnixToCompleteDate } from "../../../../helpers/DateConverter";
+import React from 'react';
+import { Typography, Box, Button } from '@mui/material';
+import { convertUnixToCompleteDate } from '../../../../helpers/DateConverter';
 
 const ItemBooks = ({ data, key, handleOpenDelete, handleOpenUpdate }) => {
   return (
@@ -8,31 +8,32 @@ const ItemBooks = ({ data, key, handleOpenDelete, handleOpenUpdate }) => {
       key={key}
       sx={{
         boxShadow: 2,
-        mb: "20px",
-        py: "20px",
-        px: "10px",
-        borderRadius: "5px",
-        display: "flex",
-        justifyContent: "space-between",
+        mb: '20px',
+        py: '20px',
+        px: '10px',
+        borderRadius: '5px',
+        display: 'flex',
+        justifyContent: 'space-between',
       }}
     >
-      <div style={{ paddingLeft: "30px" }}>
+      <div style={{ paddingLeft: '30px' }}>
         <Typography>Nombre: {data.nombre}</Typography>
         <Typography>Autor(es): {data.autores.nombre}</Typography>
         <Typography>Editorial: {data.editorial.nombre}</Typography>
         <Typography>Categoria: {data.categoria.nombre}</Typography>
         <Typography>
-          Fecha de publicacion:{" "}
+          Fecha de publicacion:{' '}
           {convertUnixToCompleteDate(data.fecha_publicacion)}
         </Typography>
         <Typography>Volumen: {data.volumen}</Typography>
+        <Typography>Disponible: {data.status ? 'Si' : 'No'}</Typography>
       </div>
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignContent: "center",
-          paddingRight: "30px",
+          display: 'flex',
+          justifyContent: 'center',
+          alignContent: 'center',
+          paddingRight: '30px',
         }}
       >
         <Button

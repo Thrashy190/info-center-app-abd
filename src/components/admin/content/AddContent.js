@@ -1,46 +1,46 @@
-import React, { useEffect, useState } from "react";
-import SideBar from "../Shared/SideBar";
-import { useNavigate } from "react-router-dom";
-import "../../../App.css";
+import React, { useEffect, useState } from 'react';
+import SideBar from '../Shared/SideBar';
+import { useNavigate } from 'react-router-dom';
+import '../../../App.css';
 import {
   Grid,
   TextField,
   Typography,
   Button,
   Autocomplete,
-} from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import FormControl from "@mui/material/FormControl";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import dayjs from "dayjs";
-import { useAuth } from "../../../context/UserProvider";
+} from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import dayjs from 'dayjs';
+import { useAuth } from '../../../context/UserProvider';
 
 const AddContent = () => {
   const { addData, getEditorial, getCategoria, getNacionalidad, getAutores } =
     useAuth();
   const navigate = useNavigate();
-  const [value, setValue] = React.useState(dayjs("2022-09-24T21:11:54"));
+  const [value, setValue] = React.useState(dayjs('2022-09-24T21:11:54'));
 
   const [autores, setAutores] = useState({
-    nombre: "",
-    apellido_paterno: "",
-    apellido_materno: "",
-    fecha_nacimiento: dayjs("2022-09-24T21:11:54"),
-    correo: "",
-    telefono: "",
+    nombre: '',
+    apellido_paterno: '',
+    apellido_materno: '',
+    fecha_nacimiento: dayjs('2022-09-24T21:11:54'),
+    correo: '',
+    telefono: '',
   });
   const [editoriales, setEditoriales] = useState({
-    nombre: "",
-    correo: "",
-    telefono: "",
+    nombre: '',
+    correo: '',
+    telefono: '',
   });
-  const [libros, setLibros] = useState({});
+  const [libros, setLibros] = useState({ status: true });
 
-  const [carreras, setCarreras] = useState({ nombre: "", codigo: "" });
-  const [deapartamentos, setDepartamentos] = useState({ nombre: "" });
-  const [categorias, setCategorias] = useState({ nombre: "" });
+  const [carreras, setCarreras] = useState({ nombre: '', codigo: '' });
+  const [deapartamentos, setDepartamentos] = useState({ nombre: '' });
+  const [categorias, setCategorias] = useState({ nombre: '' });
 
   const [editorialList, setEditorialList] = useState([]);
   const [categoriaList, setCategoriaList] = useState([]);
@@ -59,13 +59,8 @@ const AddContent = () => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const handleChange = (newValue) => {
-    setValue(newValue);
-  };
-
   const [isLoading, setIsLoading] = useState(true);
   const sendDataToFireStore = async (type, data) => {
-    console.log(data);
     await addData(data, type);
   };
 
@@ -86,13 +81,13 @@ const AddContent = () => {
   return (
     <Grid container className="App">
       <Grid item xs={12} md={2}>
-        <SideBar type={"admin"}></SideBar>
+        <SideBar type={'admin'}></SideBar>
       </Grid>
       <Grid item xs={12} md={10}>
-        <div style={{ padding: "50px" }}>
-          <Grid sx={{ pb: "25x" }} container item spacing={2}>
+        <div style={{ padding: '50px' }}>
+          <Grid sx={{ pb: '25x' }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: "1.8rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
                 Agregar contenido
               </Typography>
             </Grid>
@@ -104,9 +99,9 @@ const AddContent = () => {
           </Grid>
 
           {/* Libros */}
-          <Grid sx={{ py: "20px" }} container item spacing={2}>
+          <Grid sx={{ py: '20px' }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
                 Agregar libros
               </Typography>
             </Grid>
@@ -141,18 +136,13 @@ const AddContent = () => {
                 inputFormat="MM/DD/YYYY"
                 value={value}
                 onChange={(newValue) => {
-                  console.log(
-                    newValue.get("date"),
-                    newValue.get("month"),
-                    newValue.get("year")
-                  );
                   setValue(newValue);
                   setLibros({
                     ...libros,
                     fecha_publicacion:
-                      (newValue.get("date"),
-                      newValue.get("month"),
-                      newValue.get("year")),
+                      (newValue.get('date'),
+                      newValue.get('month'),
+                      newValue.get('year')),
                   });
                 }}
                 renderInput={(params) => <TextField fullWidth {...params} />}
@@ -164,12 +154,11 @@ const AddContent = () => {
                 disablePortal
                 multiple={false}
                 id="combo-box-book"
-                name="editorial"
                 value={libros.editorial}
                 onChange={(e, newValue) => {
                   setLibros({
                     ...libros,
-                    [e.target.name]: editorialList.filter(
+                    editorial: editorialList.filter(
                       (data) => data.nombre === newValue
                     )[0],
                   });
@@ -223,12 +212,12 @@ const AddContent = () => {
                 )}
               />
             </Grid>
-            <Grid item style={{ display: "flex", alignContent: "center" }}>
+            <Grid item style={{ display: 'flex', alignContent: 'center' }}>
               <Button
                 variant="contained"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 onClick={() => {
-                  sendDataToFireStore("libros", libros);
+                  sendDataToFireStore('libros', libros);
                 }}
               >
                 Agregar
@@ -237,9 +226,9 @@ const AddContent = () => {
           </Grid>
 
           {/* Autores */}
-          <Grid sx={{ py: "20px" }} container item spacing={2}>
+          <Grid sx={{ py: '20px' }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
                 Agregar autores
               </Typography>
             </Grid>
@@ -304,8 +293,8 @@ const AddContent = () => {
                     handleChangeData(e, setAutores, autores);
                   }}
                 >
-                  <MenuItem value={"Hombre"}>Hombre</MenuItem>
-                  <MenuItem value={"Mujer"}>Mujer</MenuItem>
+                  <MenuItem value={'Hombre'}>Hombre</MenuItem>
+                  <MenuItem value={'Mujer'}>Mujer</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -352,12 +341,12 @@ const AddContent = () => {
                 }}
               />
             </Grid>
-            <Grid item style={{ display: "flex", alignContent: "center" }}>
+            <Grid item style={{ display: 'flex', alignContent: 'center' }}>
               <Button
                 variant="contained"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 onClick={() => {
-                  sendDataToFireStore("autores", autores);
+                  sendDataToFireStore('autores', autores);
                 }}
               >
                 Agregar
@@ -366,11 +355,11 @@ const AddContent = () => {
           </Grid>
 
           {/* Editorial */}
-          <Grid sx={{ py: "20px" }} container item spacing={2}>
+          <Grid sx={{ py: '20px' }} container item spacing={2}>
             <Grid item xs={12} md={10}>
               <Typography
                 fullWidth
-                sx={{ fontSize: "1.4rem", fontWeight: "bold" }}
+                sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}
               >
                 Agregar editorial
               </Typography>
@@ -412,12 +401,12 @@ const AddContent = () => {
               />
             </Grid>
 
-            <Grid item style={{ display: "flex", alignContent: "center" }}>
+            <Grid item style={{ display: 'flex', alignContent: 'center' }}>
               <Button
                 variant="contained"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 onClick={() => {
-                  sendDataToFireStore("editorial", editoriales);
+                  sendDataToFireStore('editorial', editoriales);
                 }}
               >
                 Agregar
@@ -425,9 +414,9 @@ const AddContent = () => {
             </Grid>
           </Grid>
           {/* Categorias */}
-          <Grid sx={{ py: "20px" }} container item spacing={2}>
+          <Grid sx={{ py: '20px' }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
                 Agregar Categorias
               </Typography>
             </Grid>
@@ -446,12 +435,12 @@ const AddContent = () => {
               />
             </Grid>
 
-            <Grid item style={{ display: "flex", alignContent: "center" }}>
+            <Grid item style={{ display: 'flex', alignContent: 'center' }}>
               <Button
                 variant="contained"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 onClick={() => {
-                  sendDataToFireStore("categorias", categorias);
+                  sendDataToFireStore('categorias', categorias);
                 }}
               >
                 Agregar
@@ -460,9 +449,9 @@ const AddContent = () => {
           </Grid>
 
           {/* Carreras */}
-          <Grid sx={{ py: "20px" }} container item spacing={2}>
+          <Grid sx={{ py: '20px' }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
                 Agregar Carreras
               </Typography>
             </Grid>
@@ -494,12 +483,12 @@ const AddContent = () => {
               />
             </Grid>
 
-            <Grid item style={{ display: "flex", alignContent: "center" }}>
+            <Grid item style={{ display: 'flex', alignContent: 'center' }}>
               <Button
                 variant="contained"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 onClick={() => {
-                  sendDataToFireStore("carrera", carreras);
+                  sendDataToFireStore('carrera', carreras);
                 }}
               >
                 Agregar
@@ -507,9 +496,9 @@ const AddContent = () => {
             </Grid>
           </Grid>
 
-          <Grid sx={{ py: "20px" }} container item spacing={2}>
+          <Grid sx={{ py: '20px' }} container item spacing={2}>
             <Grid item xs={12} md={10}>
-              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+              <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
                 Agregar Departamentos
               </Typography>
             </Grid>
@@ -528,12 +517,12 @@ const AddContent = () => {
               />
             </Grid>
 
-            <Grid item style={{ display: "flex", alignContent: "center" }}>
+            <Grid item style={{ display: 'flex', alignContent: 'center' }}>
               <Button
                 variant="contained"
-                style={{ width: "100%" }}
+                style={{ width: '100%' }}
                 onClick={() => {
-                  sendDataToFireStore("departamento", deapartamentos);
+                  sendDataToFireStore('departamento', deapartamentos);
                 }}
               >
                 Agregar

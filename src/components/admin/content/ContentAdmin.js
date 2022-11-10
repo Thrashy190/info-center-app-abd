@@ -37,7 +37,6 @@ const ContentAdmin = () => {
 
   const [openUpdate, setOpenUpdate] = useState(false);
   const handleOpenUpdate = (data) => {
-    console.log({ ...data });
     setData({ ...data });
     setOpenUpdate(true);
   };
