@@ -273,9 +273,13 @@ const AddContent = () => {
                 label="Fecha de nacimiento"
                 inputFormat="MM/DD/YYYY"
                 name="fecha_nacimiento"
-                value={autores.fecha_nacimiento.toDate()}
-                onChange={(e) => {
-                  handleChangeData(e, setAutores, autores);
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                  setLibros({
+                    ...libros,
+                    fecha_nacimiento: newValue.toDate(),
+                  });
                 }}
                 renderInput={(params) => <TextField fullWidth {...params} />}
               />
