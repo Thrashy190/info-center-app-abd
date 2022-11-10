@@ -22,7 +22,8 @@ const AddContent = () => {
     useAuth();
   const navigate = useNavigate();
   const [value, setValue] = React.useState(dayjs('2022-09-24T21:11:54'));
-
+  const [value2, setValue2] = React.useState(dayjs('2022-09-24T21:11:54'));
+  
   const [autores, setAutores] = useState({
     nombre: '',
     apellido_paterno: '',
@@ -270,11 +271,11 @@ const AddContent = () => {
                 label="Fecha de nacimiento"
                 inputFormat="MM/DD/YYYY"
                 name="fecha_nacimiento"
-                value={value}
+                value={value2}
                 onChange={(newValue) => {
-                  setValue(newValue);
-                  setLibros({
-                    ...libros,
+                  setValue2(newValue);
+                  setAutores({
+                    ...autores,
                     fecha_nacimiento: newValue.toDate(),
                   });
                 }}
@@ -308,9 +309,7 @@ const AddContent = () => {
                 onChange={(e, newValue) => {
                   setAutores({
                     ...autores,
-                    nacionalidad: nacionalidadList.filter(
-                      (data) => data.nombre === newValue
-                    )[0],
+                    nacionalidad: newValue
                   });
                 }}
                 options={nacionalidadList.map((option) => option.nombre)}
