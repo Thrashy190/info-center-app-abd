@@ -141,27 +141,11 @@ const AddContent = () => {
                 inputFormat="MM/DD/YYYY"
                 value={value}
                 onChange={(newValue) => {
-<<<<<<< HEAD
                   setValue(newValue);
                   setLibros({
                     ...libros,
                     fecha_publicacion: newValue.toDate()
                   })
-=======
-                  console.log(
-                    newValue.get("date"),
-                    newValue.get("month"),
-                    newValue.get("year")
-                  );
-                  setValue(newValue);
-                  setLibros({
-                    ...libros,
-                    fecha_publicacion:
-                      (newValue.get("date"),
-                      newValue.get("month"),
-                      newValue.get("year")),
-                  });
->>>>>>> 00f894c99d287c4522a822ea787eeef0ee051b0f
                 }}
                 renderInput={(params) => <TextField fullWidth {...params} />}
               />
