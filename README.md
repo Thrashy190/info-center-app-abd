@@ -1,6 +1,6 @@
 # Aplicacion para administracion del centro de informacion del Instituto tecnologico de Saltillo
 
-## Proposito 
+## Propósito 
 
 Este proyecto fue hecho para optimizar el registro, entradas y prestamos al centro de informacion.
 Esto fue desarrollado para la materia de administracion de base de datos
