@@ -16,37 +16,37 @@ Esto fue desarrollado para la materia de administracion de base de datos
 ### Ver contenido
 
 <div align="center">
-  <img src="./anime-coding.gif" alt="gif"/>
+  <img src="./content.png" alt="content"/>
 </div>
 
 ### Registrar contenido
 
 <div align="center">
-  <img src="./anime-coding.gif" alt="gif"/>
+  <img src="./addContent.png" alt="addC"/>
 </div>
 
 ### Registrar entradas
 
 <div align="center">
-  <img src="./anime-coding.gif" alt="gif"/>
+  <img src="./ingreso.png" alt="in"/>
 </div>
 
 ### Registrar prestamos
 
 <div align="center">
-  <img src="./anime-coding.gif" alt="gif"/>
+  <img src="./prestamo.png" alt="pres"/>
 </div>
 
 ### Leer y registrar ususarios
 
 <div align="center">
-  <img src="./anime-coding.gif" alt="gif"/>
+  <img src="./usuarios.png" alt="user"/>
 </div>
 
 ### Reportes de prestamos
 
 <div align="center">
-  <img src="./anime-coding.gif" alt="gif"/>
+  <img src="./reportes.png" alt="repo"/>
 </div>
 
 
