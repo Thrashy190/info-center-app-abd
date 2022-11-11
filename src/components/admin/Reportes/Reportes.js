@@ -3,56 +3,65 @@ import SideBar from '../Shared/SideBar';
 import '../../../App.css';
 import {
   Grid,
-  Button,
   Typography,
+  Button,
   TextField,
   MenuItem,
   Select,
   FormControl,
   InputLabel,
-  Box,
+  Divider,
   Autocomplete,
   LinearProgress,
+  Box,
 } from '@mui/material';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import dayjs from 'dayjs';
 import { useAuth } from '../../../context/UserProvider';
-import { convertUnixToCompleteDate } from '../../../helpers/DateConverter';
+import {
+  convertUnixToCompleteDate,
+  convertDateToUnix,
+} from '../../../helpers/DateConverter';
 
-const EnterAdmin = () => {
-  const {
-    getStudents,
-    getEmployees,
-    addAdmissionToInfoCenter,
-    getAdmissions,
-    fechaSalida,
-  } = useAuth();
+const Reportes = () => {
+  const { getStudents, getEmployees, getDataFiltered, currentUser } = useAuth();
+
+  const [from, setFrom] = useState(dayjs('2022-09-24T21:11:54'));
+  const [to, setTo] = useState(dayjs('2022-09-24T21:11:54'));
+
+  const [search, setSearch] = useState('');
+  const [searchType, setSearchType] = useState('A');
 
   const [studentsList, setStudentsList] = useState([]);
   const [employeesList, setEmployeesList] = useState([]);
 
-  const [userType, setUserType] = useState('S');
-
-  const [ingresos, setIngresos] = useState([]);
-  const [user, setUser] = useState([]);
+  const [dataFiltered, setDataFiltered] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const getData = async () => {
+  const getInitData = async () => {
     setStudentsList(await getStudents());
     setEmployeesList(await getEmployees());
-    setIngresos(await getAdmissions());
-    await getAdmissions().then((data) => {
-      setIngresos(data);
-    });
   };
 
-  const addEnter = () => {
-    addAdmissionToInfoCenter(user[0], userType);
-    setIsLoading(true);
+  const getSearchData = async () => {
+    if (searchType === 'L') {
+      setDataFiltered(
+        await getDataFiltered(
+          0,
+          'L',
+          convertDateToUnix(from),
+          convertDateToUnix(to)
+        )
+      );
+    } else {
+      setDataFiltered(await getDataFiltered(search[0].id, 'O', 0, 0));
+    }
   };
 
   useEffect(() => {
     if (isLoading) {
-      getData().then(() => {
+      getInitData().then(() => {
         setIsLoading(false);
       });
     }
@@ -66,9 +75,9 @@ const EnterAdmin = () => {
       <Grid item xs={12} md={10}>
         <div style={{ padding: '40px' }}>
           <Grid sx={{ pb: '30px' }} container item spacing={2}>
-            <Grid item xs={12} md={10}>
+            <Grid item xs={12} md={8}>
               <Typography sx={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
-                Ingresos al centro de informacion
+                Reportes
               </Typography>
             </Grid>
           </Grid>
@@ -80,30 +89,29 @@ const EnterAdmin = () => {
                   defaultValue={'S'}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  label="Usuarios"
+                  label="Busquedas"
                   name="user"
-                  value={userType}
+                  value={searchType}
                   onChange={(e) => {
-                    setUser('');
-                    setUserType(e.target.value);
+                    setSearch('');
+                    setSearchType(e.target.value);
                   }}
                 >
-                  <MenuItem value={'S'}>Alumnos</MenuItem>
+                  <MenuItem value={'A'}>Alumnos</MenuItem>
                   <MenuItem value={'E'}>Empleados</MenuItem>
+                  <MenuItem value={'L'}>Fechas</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
-          </Grid>
-          <Grid sx={{ pb: '30px' }} container item spacing={2}>
-            {userType === 'S' ? (
+            {searchType === 'A' ? (
               <>
                 <Grid item xs={12} md={4}>
                   <Autocomplete
                     disablePortal
                     id="combo-box-student"
-                    value={user.numControl}
+                    value={search.numControl}
                     onChange={(e, newValue) => {
-                      setUser(
+                      setSearch(
                         studentsList.filter(
                           (data) => data.numControl === newValue
                         )
@@ -116,15 +124,15 @@ const EnterAdmin = () => {
                   />
                 </Grid>
               </>
-            ) : userType === 'E' ? (
+            ) : searchType === 'E' ? (
               <>
                 <Grid item xs={12} md={4}>
                   <Autocomplete
                     disablePortal
                     id="combo-box-employee"
-                    value={user.numEmployee}
+                    value={search.numEmployee}
                     onChange={(e, newValue) => {
-                      setUser(
+                      setSearch(
                         employeesList.filter(
                           (data) => data.numEmployee === newValue
                         )
@@ -139,35 +147,58 @@ const EnterAdmin = () => {
               </>
             ) : (
               <>
-                <Grid item xs={12} md={4}>
-                  <TextField fullWidth label="Correo" />
+                <Grid item xs={12} md={2}>
+                  <DesktopDatePicker
+                    label="Desde"
+                    inputFormat="MM/DD/YYYY"
+                    value={from}
+                    onChange={(newValue) => {
+                      setFrom(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField fullWidth {...params} />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12} md={2}>
+                  <DesktopDatePicker
+                    label="Hasta"
+                    inputFormat="MM/DD/YYYY"
+                    value={to}
+                    onChange={(newValue) => {
+                      setTo(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField fullWidth {...params} />
+                    )}
+                  />
                 </Grid>
               </>
             )}
             <Grid
               item
               xs={12}
-              md={3}
+              md={2}
               style={{ display: 'flex', alignContent: 'center' }}
             >
-              <Button
-                variant="contained"
-                style={{ width: '100%' }}
-                onClick={() => {
-                  addEnter();
-                }}
-              >
-                Agregar
+              <Button fullWidth variant="contained" onClick={getSearchData}>
+                Buscar
               </Button>
             </Grid>
           </Grid>
-          <Grid sx={{ pb: '20px' }} container item spacing={2}>
+          <Grid sx={{ pb: '30px' }} container item spacing={2}>
+            <Grid item xs={12} md={4}></Grid>
+          </Grid>
+
+          <Divider />
+          <Grid sx={{ py: '20px' }} container item spacing={2}>
             <Grid item xs={12} md={4}>
               <Typography sx={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
-                Lista de ingresos
+                Lista de reportes
               </Typography>
             </Grid>
           </Grid>
+
           <div
             style={{
               width: '100%',
@@ -179,7 +210,7 @@ const EnterAdmin = () => {
             {isLoading ? (
               <LinearProgress />
             ) : (
-              ingresos.map((data, key) => {
+              dataFiltered.map((data, key) => {
                 return (
                   <Box
                     key={key}
@@ -205,7 +236,7 @@ const EnterAdmin = () => {
                         >
                           Identificador:
                         </Typography>
-                        {data.tipoIngreso === 'S'
+                        {data.searchType === 'A'
                           ? data.numControl
                           : data.numEmployee}
                       </Typography>
@@ -213,54 +244,41 @@ const EnterAdmin = () => {
                         <Typography
                           sx={{ fontSize: '1rem', fontWeight: 'bold' }}
                         >
-                          Fecha de ingreso:
+                          Fecha del prestamo:
                         </Typography>
-                        {convertUnixToCompleteDate(data.fechaIngreso)}
-                      </Typography>
-
-                      {/* Fecha de salida */}
-                      <Typography sx={{ fontSize: '1rem' }}>
-                        <Typography
-                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
-                        >
-                          Fecha de salida:
-                        </Typography>
-                        {data.fechaSalida === null
-                          ? 'No registrada'
-                          : convertUnixToCompleteDate(data.fechaSalida)}
-                      </Typography>
-                      {/* salida */}
-                      <Typography sx={{ fontSize: '1rem' }}>
-                        <Typography
-                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
-                        >
-                          {data.tipoIngreso === 'S'
-                            ? 'Carrera:'
-                            : 'Departamento:'}
-                        </Typography>
-                        {data.tipoIngreso === 'S'
-                          ? data.career
-                          : data.department}
+                        {convertUnixToCompleteDate(data.fechaPrestamo)}
                       </Typography>
                       <Typography sx={{ fontSize: '1rem' }}>
                         <Typography
                           sx={{ fontSize: '1rem', fontWeight: 'bold' }}
                         >
-                          Genero:
+                          Fecha de devolucion:
                         </Typography>
-                        {data.gender}
+                        {convertUnixToCompleteDate(data.fechaDevolucion)}
                       </Typography>
-                      <Button
-                        disabled={data.fechaSalida === null ? false : true}
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          fechaSalida(data, data.idCol);
-                          setIsLoading(true);
-                        }}
-                      >
-                        Registrar salida
-                      </Button>
+                      <Typography sx={{ fontSize: '1rem' }}>
+                        <Typography
+                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
+                        >
+                          Empleado que hizo el prestamo:
+                        </Typography>
+                        {data.empleado.name} {data.empleado.lastNameFather}{' '}
+                        {data.empleado.lastNameMother}
+                      </Typography>
+                      <Typography key={key} sx={{ fontSize: '1rem' }}>
+                        <Typography
+                          sx={{ fontSize: '1rem', fontWeight: 'bold' }}
+                        >
+                          Libros que le fueron prestados:
+                        </Typography>
+                        {data.booksList.map((book, key) => {
+                          return (
+                            <Typography key={key} sx={{ fontSize: '1rem' }}>
+                              {book.nombre}
+                            </Typography>
+                          );
+                        })}
+                      </Typography>
                     </div>
                   </Box>
                 );
@@ -273,4 +291,4 @@ const EnterAdmin = () => {
   );
 };
 
-export default EnterAdmin;
+export default Reportes;

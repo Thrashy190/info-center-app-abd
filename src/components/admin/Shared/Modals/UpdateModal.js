@@ -274,7 +274,6 @@ const UpdateModal = ({ open, handleClose, typeSearch, data, setData }) => {
   const handleChangeData = (e, setData, data) => {
     e.preventDefault();
     setData({ ...data, [e.target.name]: e.target.value });
-    console.log(data);
   };
 
   const updateContent = async (type) => {

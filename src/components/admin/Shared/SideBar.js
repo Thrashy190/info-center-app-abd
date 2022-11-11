@@ -1,35 +1,41 @@
-import React from 'react';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import LogoutIcon from '@mui/icons-material/Logout';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import { useNavigate } from 'react-router-dom';
-import { Typography } from '@mui/material';
-import Logo from '../../../assets/shared/its.png';
-import { useAuth } from '../../../context/UserProvider';
-import { useLocation } from 'react-router-dom';
+import React from "react";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import LogoutIcon from "@mui/icons-material/Logout";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import { useNavigate } from "react-router-dom";
+import { Typography } from "@mui/material";
+import Logo from "../../../assets/shared/its.png";
+import { useAuth } from "../../../context/UserProvider";
+import { useLocation } from "react-router-dom";
+import AssessmentIcon from "@mui/icons-material/Assessment";
 
 const tabsAdminData = [
   {
-    title: 'Contenido',
+    title: "Contenido",
     icon: <LibraryBooksIcon />,
-    link: '/admin/dashboard/contenido',
+    link: "/admin/dashboard/contenido",
   },
   {
-    title: 'Prestamos',
+    title: "Prestamos",
     icon: <CheckBoxIcon />,
-    link: '/admin/dashboard/prestamos',
+    link: "/admin/dashboard/prestamos",
   },
   {
-    title: 'Ingresos',
+    title: "Ingresos",
     icon: <AccessTimeIcon />,
-    link: '/admin/dashboard/ingresos',
+    link: "/admin/dashboard/ingresos",
   },
   {
-    title: 'Usuarios',
+    title: "Usuarios",
     icon: <GroupAddIcon />,
-    link: '/admin/dashboard/registro',
+    link: "/admin/dashboard/registro",
+  },
+  {
+    title: "Reportes",
+    icon: <AssessmentIcon />,
+    link: "/admin/dashboard/reportes",
   },
 ];
 
@@ -42,10 +48,10 @@ const SideBar = ({ type }) => {
     <div className="SideBar">
       <div
         style={{
-          paddingTop: '20px',
-          display: 'flex',
-          direction: 'column',
-          justifyContent: 'center',
+          paddingTop: "20px",
+          display: "flex",
+          direction: "column",
+          justifyContent: "center",
         }}
       >
         <img src={Logo} alt="Logo its" className="logo"></img>
@@ -55,7 +61,7 @@ const SideBar = ({ type }) => {
           return (
             <li
               key={key}
-              className={val.link === location.pathname ? 'row active' : 'row'}
+              className={val.link === location.pathname ? "row active" : "row"}
               onClick={() => {
                 navigate(val.link);
               }}

@@ -1,5 +1,6 @@
 import React from "react";
 import { Typography, Box, Button } from "@mui/material";
+import { convertUnixToCompleteDate } from "../../../../helpers/DateConverter";
 
 const ItemAuthor = ({ data, key, handleOpenDelete, handleOpenUpdate }) => {
   return (
@@ -21,7 +22,7 @@ const ItemAuthor = ({ data, key, handleOpenDelete, handleOpenUpdate }) => {
         </Typography>
         <Typography>Nacionalidad: {data.nacionalidad}</Typography>
         <Typography>Genero: {data.genero}</Typography>
-        <Typography>Fecha de nacimiento: {data.fecha_nacimiento}</Typography>
+        <Typography>Fecha de nacimiento: {convertUnixToCompleteDate(data.fecha_nacimiento)}</Typography>
         <Typography>Telefono: {data.telefono}</Typography>
         <Typography>Correo: {data.corre}</Typography>
       </div>
