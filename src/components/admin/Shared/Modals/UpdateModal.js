@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Modal,
@@ -8,14 +8,14 @@ import {
   Backdrop,
   Grid,
   TextField,
-} from '@mui/material';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import dayjs from 'dayjs';
-import { useAuth } from '../../../../context/UserProvider';
-import TextFieldRegister from '../../Users/TextFieldRegister';
+} from "@mui/material";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import dayjs from "dayjs";
+import { useAuth } from "../../../../context/UserProvider";
+import TextFieldRegister from "../../Users/TextFieldRegister";
 
 const UpdateBooks = ({ handleChangeData, data, setData }) => {
-  const [value, setValue] = React.useState(dayjs('2022-09-24T21:11:54'));
+  const [value, setValue] = React.useState(dayjs("2022-09-24T21:11:54"));
 
   const handleChange = (newValue) => {
     setValue(newValue);
@@ -53,7 +53,7 @@ const UpdateBooks = ({ handleChangeData, data, setData }) => {
 };
 
 const UpdateAuthor = ({ handleChangeData, data, setData }) => {
-  const [value, setValue] = React.useState(dayjs('2022-09-24T21:11:54'));
+  const [value, setValue] = React.useState(dayjs("2022-09-24T21:11:54"));
 
   const handleChange = (newValue) => {
     setValue(newValue);
@@ -260,13 +260,13 @@ const UpdateModal = ({ open, handleClose, typeSearch, data, setData }) => {
   const { updateCollection } = useAuth();
 
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     width: 1200,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    bgcolor: "background.paper",
+    border: "2px solid #000",
     boxShadow: 24,
     p: 4,
   };
@@ -279,32 +279,35 @@ const UpdateModal = ({ open, handleClose, typeSearch, data, setData }) => {
   const updateContent = async (type) => {
     let collection;
     switch (type) {
-      case 'Libros':
-        collection = 'libros';
+      case "Libros":
+        collection = "libros";
         break;
-      case 'Autores':
-        collection = 'autores';
+      case "Autores":
+        collection = "autores";
         break;
-      case 'Editoriales':
-        collection = 'editorial';
+      case "Editoriales":
+        collection = "editorial";
         break;
-      case 'Categorias':
-        collection = 'categorias';
+      case "Categorias":
+        collection = "categorias";
         break;
-      case 'Carreras':
-        collection = 'carrera';
+      case "Carreras":
+        collection = "carrera";
         break;
-      case 'student':
-        collection = 'alumnos';
+      case "student":
+        collection = "alumnos";
         break;
-      case 'employees':
-        collection = 'empleado';
+      case "employees":
+        collection = "empleado";
         break;
-      case 'others':
-        collection = 'otros';
+      case "others":
+        collection = "otros";
+        break;
+      case "admin":
+        collection = "administrador";
         break;
       default:
-        collection = 'departamento';
+        collection = "departamento";
         break;
     }
 
@@ -335,43 +338,43 @@ const UpdateModal = ({ open, handleClose, typeSearch, data, setData }) => {
             Actualizar informacion
           </Typography>
 
-          {typeSearch === 'Libros' ? (
+          {typeSearch === "Libros" ? (
             <UpdateBooks
               handleChangeData={handleChangeData}
               data={data}
               setData={setData}
             />
-          ) : typeSearch === 'Autores' ? (
+          ) : typeSearch === "Autores" ? (
             <UpdateAuthor
               handleChangeData={handleChangeData}
               data={data}
               setData={setData}
             />
-          ) : typeSearch === 'Editoriales' ? (
+          ) : typeSearch === "Editoriales" ? (
             <UpdateEditorial
               handleChangeData={handleChangeData}
               data={data}
               setData={setData}
             />
-          ) : typeSearch === 'Carreras' ? (
+          ) : typeSearch === "Carreras" ? (
             <UpdateCarrera
               handleChangeData={handleChangeData}
               data={data}
               setData={setData}
             />
-          ) : typeSearch === 'Departamentos' ? (
+          ) : typeSearch === "Departamentos" ? (
             <UpdateDepartamento
               handleChangeData={handleChangeData}
               data={data}
               setData={setData}
             />
-          ) : typeSearch === 'Categorias' ? (
+          ) : typeSearch === "Categorias" ? (
             <UpdateCategoria
               handleChangeData={handleChangeData}
               data={data}
               setData={setData}
             />
-          ) : typeSearch === 'student' ? (
+          ) : typeSearch === "student" ? (
             <TextFieldRegister
               baseData={data}
               studentData={data}
@@ -380,7 +383,7 @@ const UpdateModal = ({ open, handleClose, typeSearch, data, setData }) => {
               handleChangeData={handleChangeData}
               id={typeSearch}
             />
-          ) : typeSearch === 'employees' ? (
+          ) : typeSearch === "employees" ? (
             <TextFieldRegister
               baseData={data}
               employeeData={data}
@@ -389,7 +392,7 @@ const UpdateModal = ({ open, handleClose, typeSearch, data, setData }) => {
               handleChangeData={handleChangeData}
               id={typeSearch}
             />
-          ) : typeSearch === 'others' ? (
+          ) : typeSearch === "others" ? (
             <TextFieldRegister
               baseData={data}
               setBaseData={setData}
@@ -397,12 +400,17 @@ const UpdateModal = ({ open, handleClose, typeSearch, data, setData }) => {
               id={typeSearch}
             />
           ) : (
-            'Edicion no disponible por el momento '
+            <TextFieldRegister
+              baseData={data}
+              setBaseData={setData}
+              handleChangeData={handleChangeData}
+              id={typeSearch}
+            />
           )}
 
           <Button
             variant="contained"
-            sx={{ mt: 5, width: '100%' }}
+            sx={{ mt: 5, width: "100%" }}
             onClick={() => {
               updateContent(typeSearch);
             }}

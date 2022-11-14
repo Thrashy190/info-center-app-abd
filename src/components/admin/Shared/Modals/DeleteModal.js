@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Modal,
@@ -9,53 +9,56 @@ import {
   FormGroup,
   Checkbox,
   Backdrop,
-} from '@mui/material';
-import { useAuth } from '../../../../context/UserProvider';
+} from "@mui/material";
+import { useAuth } from "../../../../context/UserProvider";
 
 const DeleteModal = ({ disable, handleCheck, open, handleClose, id, type }) => {
   const { deletFromCollection } = useAuth();
 
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     width: 500,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    bgcolor: "background.paper",
+    border: "2px solid #000",
     boxShadow: 24,
     p: 4,
   };
 
   const deleteContent = (type, id) => {
-    let conn = '';
+    let conn = "";
     switch (type) {
-      case 'Libros':
-        conn = 'libros';
+      case "Libros":
+        conn = "libros";
         break;
-      case 'Autores':
-        conn = 'autores';
+      case "Autores":
+        conn = "autores";
         break;
-      case 'Editoriales':
-        conn = 'editorial';
+      case "Editoriales":
+        conn = "editorial";
         break;
-      case 'Categorias':
-        conn = 'categorias';
+      case "Categorias":
+        conn = "categorias";
         break;
-      case 'Carreras':
-        conn = 'carrera';
+      case "Carreras":
+        conn = "carrera";
         break;
-      case 'student':
-        conn = 'alumnos';
+      case "student":
+        conn = "alumnos";
         break;
-      case 'employees':
-        conn = 'empleado';
+      case "employees":
+        conn = "empleado";
         break;
-      case 'others':
-        conn = 'otros';
+      case "others":
+        conn = "otros";
+        break;
+      case "admin":
+        conn = "administrador";
         break;
       default:
-        conn = 'departamento';
+        conn = "departamento";
         break;
     }
     deletFromCollection(conn, id);
@@ -90,7 +93,7 @@ const DeleteModal = ({ disable, handleCheck, open, handleClose, id, type }) => {
           <Button
             disabled={disable}
             variant="contained"
-            sx={{ mt: 5, width: '100%' }}
+            sx={{ mt: 5, width: "100%" }}
             onClick={() => {
               deleteContent(type, id);
             }}
