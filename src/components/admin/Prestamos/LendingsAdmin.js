@@ -20,6 +20,7 @@ import { useAuth } from "../../../context/UserProvider";
 import {
   convertUnixToCompleteDate,
   getTodayDate,
+  sumarDias,
 } from "../../../helpers/DateConverter";
 
 const LendingAdmin = () => {
@@ -78,6 +79,7 @@ const LendingAdmin = () => {
       getData().then(() => {
         setIsLoading(false);
       });
+      console.log(bookList);
     }
   }, [isLoading]);
 
@@ -266,7 +268,72 @@ const LendingAdmin = () => {
               </Grid>
             ) : null}
           </Grid>
-
+          <Grid sx={{ py: "20px" }} container item spacing={2}>
+            <Grid item xs={12} md={4}>
+              <Typography sx={{ fontSize: "1.4rem", fontWeight: "bold" }}>
+                Pretamos actual
+              </Typography>
+            </Grid>
+          </Grid>
+          <Box
+            sx={{
+              boxShadow: 2,
+              mb: "20px",
+              py: "20px",
+              px: "10px",
+              borderRadius: "5px",
+            }}
+          >
+            <div
+              style={{
+                paddingLeft: "30px",
+                display: "flex",
+                direction: "row",
+                justifyContent: "space-around",
+              }}
+            >
+              <Typography sx={{ fontSize: "0.9rem" }}>
+                <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
+                  Identificador:
+                </Typography>
+                {user[0].name} {user[0].lastNameFather} {user[0].lastNameMother}
+              </Typography>
+              <div style={{ display: "flex", direction: "column" }}>
+                <Typography sx={{ fontSize: "0.9rem" }}>
+                  <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
+                    Fecha del prestamos:
+                  </Typography>
+                  {getTodayDate()}
+                </Typography>
+                <br />
+                <Typography sx={{ fontSize: "0.9rem" }}>
+                  <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
+                    Fecha de devolucion:
+                  </Typography>
+                  {sumarDias()}
+                </Typography>
+              </div>
+              <Typography sx={{ fontSize: "0.9rem" }}>
+                <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
+                  Empleado que hizo el prestamo:
+                </Typography>
+                {currentUser.name} {currentUser.lastNameFather}{" "}
+                {currentUser.lastNameMother}
+              </Typography>
+              <Typography sx={{ fontSize: "0.9rem" }}>
+                <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
+                  Lista de libros:
+                </Typography>
+                {selectedBooks.map((book, key) => {
+                  return (
+                    <Typography key={key} sx={{ fontSize: "0.9rem" }}>
+                      {book.nombre}
+                    </Typography>
+                  );
+                })}
+              </Typography>{" "}
+            </div>
+          </Box>
           <Divider />
           <Grid sx={{ py: "20px" }} container item spacing={2}>
             <Grid item xs={12} md={4}>

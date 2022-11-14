@@ -1,16 +1,16 @@
 const months = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
 ];
 
 //unix to dd month yyyy
@@ -28,9 +28,9 @@ export const convertUnixToCompleteDate = (uDate) => {
 //unix to dd month yyyy
 export const convertDateToUnix = (value) => {
   const d = new Date(
-    value.get('year'),
-    value.get('month'),
-    value.get('date'),
+    value.get("year"),
+    value.get("month"),
+    value.get("date"),
     23,
     59,
     59,
@@ -41,10 +41,20 @@ export const convertDateToUnix = (value) => {
 
 export const getTodayDate = () => {
   var today = new Date();
-  var dd = String(today.getDate()).padStart(2, '0');
-  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var dd = String(today.getDate()).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
   var yyyy = today.getFullYear();
 
-  today = mm + '/' + dd + '/' + yyyy;
+  today = dd + "/" + mm + "/" + yyyy;
   return today;
 };
+
+export function sumarDias() {
+  var today = new Date();
+  var dd = String(today.getDate() + 5).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = today.getFullYear();
+
+  today = dd + "/" + mm + "/" + yyyy;
+  return today;
+}
