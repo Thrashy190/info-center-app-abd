@@ -5,11 +5,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { useNavigate } from "react-router-dom";
-import { Typography } from "@mui/material";
+import { Typography, Grid } from "@mui/material";
 import Logo from "../../../assets/shared/its.png";
 import { useAuth } from "../../../context/UserProvider";
 import { useLocation } from "react-router-dom";
 import AssessmentIcon from "@mui/icons-material/Assessment";
+import { getTodayDate } from "../../../helpers/DateConverter";
 
 const tabsAdminData = [
   {
@@ -41,7 +42,7 @@ const tabsAdminData = [
 
 const SideBar = ({ type }) => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, currentUser } = useAuth();
   const location = useLocation();
 
   return (
@@ -56,6 +57,17 @@ const SideBar = ({ type }) => {
       >
         <img src={Logo} alt="Logo its" className="logo"></img>
       </div>
+
+      <div className="infoconteiner">
+        <Typography id="info">Te atiende:</Typography>
+        <Typography id="info">
+          {currentUser.name} {currentUser.lastNameFather}{" "}
+          {currentUser.lastNameMother}
+        </Typography>
+        <Typography id="info">Fecha de hoy: </Typography>
+        <Typography id="info">{getTodayDate()}</Typography>
+      </div>
+
       <ul className="SidebarList">
         {tabsAdminData.map((val, key) => {
           return (

@@ -49,6 +49,14 @@ body {
   font-size: larger;
 }
 
+#info {
+  color: white;
+  font-size: larger;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .logo {
   width: 50%;
 }

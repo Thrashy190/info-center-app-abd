@@ -20,6 +20,7 @@ import {
   orderBy,
   updateDoc,
 } from "firebase/firestore";
+import { getAuth, deleteUser } from "firebase/auth";
 import { db } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { Info } from "@mui/icons-material";
@@ -50,7 +51,7 @@ const UserProvider = ({ children }) => {
       .then((userCredential) => {
         setDoc(doc(db, "administrador", userCredential.user.uid), data)
           .then(() => {
-            setCurrentUser(userCredential.user.uid);
+            //setCurrentUser();
             setNotify({
               isOpen: true,
               message: "Se creo la cuenta de adminitrador correctamente",
@@ -84,15 +85,20 @@ const UserProvider = ({ children }) => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setCurrentUser(docSnap.data());
+          setCurrentUser({ id: docSnap.id, ...docSnap.data() });
+          setNotify({
+            isOpen: true,
+            message: "Se inicio sesion correctamente",
+            type: "success",
+          });
+          navigate("/admin/dashboard/contenido");
+        } else {
+          setNotify({
+            isOpen: true,
+            message: "No existe el usuario",
+            type: "error",
+          });
         }
-
-        setNotify({
-          isOpen: true,
-          message: "Se inicio sesion correctamente",
-          type: "success",
-        });
-        navigate("/admin/dashboard/contenido");
       })
       .catch((error) => {
         setNotify({
@@ -611,6 +617,35 @@ const UserProvider = ({ children }) => {
               type: "success",
             });
           }
+        }
+      }
+      if (type === "administrador") {
+        if (id !== currentUser.id) {
+          const docRef = doc(db, type, id);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            if (!docSnap.data()) {
+              setNotify({
+                isOpen: true,
+                message: "Error al eliminar coleccion",
+                type: "error",
+              });
+            } else {
+              await deleteDoc(doc(db, "administrador", id));
+              setNotify({
+                isOpen: true,
+                message: "Se elimino correctamente",
+                type: "success",
+              });
+            }
+          }
+        } else {
+          setNotify({
+            isOpen: true,
+            message: "No se puede eliminar a si mismo",
+            type: "error",
+          });
         }
       }
     } catch (error) {
